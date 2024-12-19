@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Sidebar from './Sidebar';
 
 const ExamAttendance = () => {
   const [exam, setExam] = useState('');
@@ -12,8 +13,12 @@ const ExamAttendance = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto p-6">
-      {/* Title */}
+    <div className="flex h-screen">
+    {/* Sidebar */}
+    <Sidebar /> {/* Sidebar added here */}
+
+    {/* Main Content */}
+    <div className="flex-1 p-6 ml-64"> {/* Add ml-64 to shift the content right */}      {/* Title */}      {/* Title */}
       <h1 className="text-xl text-gray-700 font-semibold mb-4">Exam Attendance</h1>
 
       {/* Select Criteria Section */}
@@ -102,6 +107,7 @@ const ExamAttendance = () => {
           </button>
         </div>
       </div>
+    </div>
     </div>
   );
 };

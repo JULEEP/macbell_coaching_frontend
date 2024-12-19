@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Sidebar from './Sidebar';
 
 const ComplaintBook = () => {
   const [formData, setFormData] = useState({
@@ -40,9 +41,12 @@ const ComplaintBook = () => {
   };
 
   return (
-    <div className="flex gap-8 p-8">
-      {/* Form Section */}
-      <div className="w-1/4 bg-white p-6 rounded-md shadow-md">
+    <div className="flex h-screen">
+    {/* Sidebar */}
+    <Sidebar /> {/* Sidebar added here */}
+
+    {/* Main Content */}
+    <div className="flex-1 p-6 ml-64"> {/* Add ml-64 to shift the content right */}
         <h2 className="text-lg text-gray-700 mb-4">Add Complaint</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>

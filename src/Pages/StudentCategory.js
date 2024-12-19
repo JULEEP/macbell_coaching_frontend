@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Sidebar from "./Sidebar";
 
 const StudentCategory = () => {
   const [category, setCategory] = useState("");
@@ -13,8 +14,12 @@ const StudentCategory = () => {
   };
 
   return (
-    <div className="flex gap-6 p-6">
-      {/* Left Side: Add Student Category Form */}
+    <div className="flex h-screen">
+    {/* Sidebar */}
+    <Sidebar /> {/* Sidebar added here */}
+
+    {/* Main Content */}
+    <div className="flex-1 p-6 ml-64"> {/* Add ml-64 to shift the content right */}      {/* Left Side: Add Student Category Form */}
       <div className="w-1/3 bg-white p-4 shadow-md rounded">
         <h2 className="mb-4 text-gray-700">Add Student Category</h2>
         <div className="mb-4">
@@ -83,6 +88,7 @@ const StudentCategory = () => {
           </tbody>
         </table>
       </div>
+    </div>
     </div>
   );
 };

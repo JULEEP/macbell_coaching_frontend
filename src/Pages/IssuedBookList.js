@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Sidebar from "./Sidebar";
 
 const IssuedBookList = () => {
   const [searchBookID, setSearchBookID] = useState("");
@@ -47,8 +48,12 @@ const IssuedBookList = () => {
   };
 
   return (
-    <div className="p-6 bg-white shadow-lg rounded-lg space-y-6">
-      {/* Title */}
+    <div className="flex h-screen">
+    {/* Sidebar */}
+    <Sidebar /> {/* Sidebar added here */}
+
+    {/* Main Content */}
+    <div className="flex-1 p-6 ml-64"> {/* Add ml-64 to shift the content right */}      {/* Title */}      {/* Title */}
       <h1 className="text-xl text-gray-700 mb-4">Issued Book List</h1>
 
       {/* Select Criteria */}
@@ -144,6 +149,7 @@ const IssuedBookList = () => {
       <div className="mt-4 text-gray-500 text-sm">
         Showing {issuedBooks.length} entries
       </div>
+    </div>
     </div>
   );
 };

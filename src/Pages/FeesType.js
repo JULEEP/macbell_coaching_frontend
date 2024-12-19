@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Sidebar from "./Sidebar";
 
 const FeesType = () => {
   const [name, setName] = useState("");
@@ -28,8 +29,12 @@ const FeesType = () => {
   );
 
   return (
-    <div className="p-6 space-y-6">
-      {/* Title */}
+    <div className="flex h-screen">
+    {/* Sidebar */}
+    <Sidebar /> {/* Sidebar added here */}
+
+    {/* Main Content */}
+    <div className="flex-1 p-6 ml-64"> {/* Add ml-64 to shift the content right */}      {/* Title */}      {/* Title */}
       <h1 className="text-xl text-gray-700">Fees Type</h1>
 
       <div className="flex gap-6">
@@ -132,6 +137,7 @@ const FeesType = () => {
           )}
         </div>
       </div>
+    </div>
     </div>
   );
 };

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Sidebar from "./Sidebar";
 
 const VideoPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -50,8 +51,12 @@ const VideoPage = () => {
   };
 
   return (
-    <div className="container mx-auto p-5 bg-white rounded-lg shadow-md">
-      <h2 className="text-2xl font-semibold text-gray-700 mb-4">Video</h2>
+    <div className="flex h-screen">
+    {/* Sidebar */}
+    <Sidebar /> {/* Sidebar added here */}
+
+    {/* Main Content */}
+    <div className="flex-1 p-6 ml-64"> {/* Add ml-64 to shift the content right */}      <h2 className="text-2xl font-semibold text-gray-700 mb-4">Video</h2>
 
       {/* Search Section */}
       <div className="flex space-x-4 mb-6">
@@ -259,6 +264,7 @@ const VideoPage = () => {
           </div>
         </div>
       )}
+    </div>
     </div>
   );
 };

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Sidebar from './Sidebar';
 
 const MarksheetReport = () => {
   const [exam, setExam] = useState('');
@@ -12,8 +13,12 @@ const MarksheetReport = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto p-6">
-      {/* Title */}
+    <div className="flex h-screen">
+    {/* Sidebar */}
+    <Sidebar /> {/* Sidebar added here */}
+
+    {/* Main Content */}
+    <div className="flex-1 p-6 ml-64"> {/* Add ml-64 to shift the content right */}      {/* Title */}      {/* Title */}
       <h1 className="text-2xl font-semibold text-gray-700 mb-6">Marksheet Report</h1>
 
       {/* Select Criteria */}
@@ -97,6 +102,7 @@ const MarksheetReport = () => {
         {/* You can show the report after the search button is clicked */}
         <div className="text-center text-gray-700">Marksheet Report will appear here after search</div>
       </div>
+    </div>
     </div>
   );
 };

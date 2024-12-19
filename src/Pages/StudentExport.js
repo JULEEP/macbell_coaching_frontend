@@ -1,4 +1,5 @@
 import React from "react";
+import Sidebar from "./Sidebar";
 
 const StudentExport = () => {
   const handleExportCSV = () => {
@@ -12,8 +13,12 @@ const StudentExport = () => {
   };
 
   return (
-    <div className="p-6 space-y-6">
-      {/* Title */}
+    <div className="flex h-screen">
+    {/* Sidebar */}
+    <Sidebar /> {/* Sidebar added here */}
+
+    {/* Main Content */}
+    <div className="flex-1 p-6 ml-64"> {/* Add ml-64 to shift the content right */}      {/* Title */}
       <h1 className="text-xl text-gray-700">Student Export</h1>
 
       {/* All Student Export Section */}
@@ -36,6 +41,7 @@ const StudentExport = () => {
           </button>
         </div>
       </div>
+    </div>
     </div>
   );
 };

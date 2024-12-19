@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Sidebar from "./Sidebar";
 
 const FeesInvoiceBulkPrint = () => {
   const [className, setClassName] = useState("");
@@ -11,8 +12,12 @@ const FeesInvoiceBulkPrint = () => {
   };
 
   return (
-    <div className="container mx-auto p-5 bg-white shadow-2xl rounded-lg">
-      {/* Title */}
+    <div className="flex h-screen">
+    {/* Sidebar */}
+    <Sidebar /> {/* Sidebar added here */}
+
+    {/* Main Content */}
+    <div className="flex-1 p-6 ml-64"> {/* Add ml-64 to shift the content right */}      {/* Title */}      {/* Title */}
       <h2 className="text-center text-3xl font-semibold text-gray-500 mb-6">
         Fees Invoice Bulk Print
       </h2>
@@ -76,6 +81,7 @@ const FeesInvoiceBulkPrint = () => {
           Print
         </button>
       </div>
+    </div>
     </div>
   );
 };

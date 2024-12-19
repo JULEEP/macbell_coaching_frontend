@@ -1,9 +1,14 @@
 import React from "react";
+import Sidebar from "./Sidebar";
 
 const AddBook = () => {
   return (
-    <div className="p-6 shadow-lg bg-white rounded-lg space-y-6">
-      {/* Title */}
+    <div className="flex h-screen">
+    {/* Sidebar */}
+    <Sidebar /> {/* Sidebar added here */}
+
+    {/* Main Content */}
+    <div className="flex-1 p-6 ml-64"> {/* Add ml-64 to shift the content right */}      {/* Title */}      {/* Title */}
       <h1 className="text-xl text-gray-700">Add Book</h1>
 
       {/* Form Container */}
@@ -157,6 +162,7 @@ const AddBook = () => {
           </div>
         </form>
       </div>
+    </div>
     </div>
   );
 };

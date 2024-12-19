@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Sidebar from "./Sidebar";
 
 const MultiClassStudent = () => {
   const [academicYear, setAcademicYear] = useState("");
@@ -23,8 +24,12 @@ const MultiClassStudent = () => {
   });
 
   return (
-    <div className="p-6 space-y-6">
-      {/* Title */}
+    <div className="flex h-screen">
+    {/* Sidebar */}
+    <Sidebar /> {/* Sidebar added here */}
+
+    {/* Main Content */}
+    <div className="flex-1 p-6 ml-64"> {/* Add ml-64 to shift the content right */}      {/* Title */}      {/* Title */}
       <h1 className="text-xl text-gray-700">Multi Class Student</h1>
 
       {/* Select Criteria Section */}
@@ -105,6 +110,7 @@ const MultiClassStudent = () => {
           </tbody>
         </table>
       </div>
+    </div>
     </div>
   );
 };

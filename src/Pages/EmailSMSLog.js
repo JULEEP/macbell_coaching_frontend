@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Sidebar from "./Sidebar";
 
 const EmailSMSLogPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -33,8 +34,12 @@ const EmailSMSLogPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6 space-y-6">
-      {/* Page Title */}
+    <div className="flex h-screen">
+    {/* Sidebar */}
+    <Sidebar /> {/* Sidebar added here */}
+
+    {/* Main Content */}
+    <div className="flex-1 p-6 ml-64"> {/* Add ml-64 to shift the content right */}      {/* Title */}      {/* Page Title */}
       <h1 className="text-2xl font-semibold text-gray-800 text-center mb-6">
         Email/SMS Log List
       </h1>
@@ -84,6 +89,7 @@ const EmailSMSLogPage = () => {
           </table>
         </div>
       </div>
+    </div>
     </div>
   );
 };

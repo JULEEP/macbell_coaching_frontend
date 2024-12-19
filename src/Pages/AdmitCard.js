@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Sidebar from './Sidebar';
 
 const GenerateAdmitCard = () => {
   const [exam, setExam] = useState('');
@@ -11,8 +12,12 @@ const GenerateAdmitCard = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto p-6">
-      {/* Title */}
+    <div className="flex h-screen">
+    {/* Sidebar */}
+    <Sidebar /> {/* Sidebar added here */}
+
+    {/* Main Content */}
+    <div className="flex-1 p-6 ml-64"> {/* Add ml-64 to shift the content right */}      {/* Title */}      {/* Title */}
       <h1 className="text-2xl font-semibold text-gray-700 mb-6">Generate Admit Card</h1>
 
       {/* Select Criteria */}
@@ -80,6 +85,7 @@ const GenerateAdmitCard = () => {
         {/* You can show the admit card details after the search button is clicked */}
         <div className="text-center text-gray-700">Admit Card details will appear here after search</div>
       </div>
+    </div>
     </div>
   );
 };

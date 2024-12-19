@@ -1,11 +1,16 @@
 import React, { useState } from "react";
+import Sidebar from "./Sidebar";
 
 const StudentAdmission = () => {
   const [showForm, setShowForm] = useState(false); // State to toggle the form
 
   return (
-    <div className="p-6 space-y-6">
-      {/* Title */}
+    <div className="flex h-screen">
+    {/* Sidebar */}
+    <Sidebar /> {/* Sidebar added here */}
+
+    {/* Main Content */}
+    <div className="flex-1 p-6 ml-64"> {/* Add ml-64 to shift the content right */}      {/* Title */}
       <h1 className="text-xl text-gray-700">Student Admission</h1>
 
       {/* Buttons: Add Student & Import Student */}
@@ -261,6 +266,7 @@ const StudentAdmission = () => {
           </div>
         </div>
       )}
+    </div>
     </div>
   );
 };

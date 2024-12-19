@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Sidebar from "./Sidebar";
 
 const CertificateTemplatesPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -47,8 +48,12 @@ const CertificateTemplatesPage = () => {
   };
 
   return (
-    <div className="container mx-auto p-6 bg-white rounded-lg">
-      <h2 className="text-2xl font-semibold text-gray-700 mb-6">Certificate Templates</h2>
+    <div className="flex h-screen">
+    {/* Sidebar */}
+    <Sidebar /> {/* Sidebar added here */}
+
+    {/* Main Content */}
+    <div className="flex-1 p-6 ml-64"> {/* Add ml-64 to shift the content right */}      {/* Title */}      <h2 className="text-2xl font-semibold text-gray-700 mb-6">Certificate Templates</h2>
 
       {/* Search Bar */}
       <div className="mb-4 flex justify-between items-center">
@@ -120,6 +125,7 @@ const CertificateTemplatesPage = () => {
           Showing {templates.length} to {templates.length} of {templates.length} entries
         </div>
       </div>
+    </div>
     </div>
   );
 };

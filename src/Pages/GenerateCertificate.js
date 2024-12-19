@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Sidebar from './Sidebar';
 
 const GenerateCertificate = () => {
   const [formData, setFormData] = useState({
@@ -26,8 +27,12 @@ const GenerateCertificate = () => {
   };
 
   return (
-    <div className="p-8">
-      <div className="bg-white p-6 rounded-md shadow-md">
+    <div className="flex h-screen">
+    {/* Sidebar */}
+    <Sidebar /> {/* Sidebar added here */}
+
+    {/* Main Content */}
+    <div className="flex-1 p-6 ml-64"> {/* Add ml-64 to shift the content right */}      {/* Title */}      <div className="bg-white p-6 rounded-md shadow-md">
         <h2 className="text-lg text-gray-700 mb-4">Generate Certificate</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Class, Section, and Certificate in one row */}
@@ -103,6 +108,7 @@ const GenerateCertificate = () => {
           </div>
         </form>
       </div>
+    </div>
     </div>
   );
 };

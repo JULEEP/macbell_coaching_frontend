@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Sidebar from "./Sidebar";
 
 const ContentTypePg = () => {
   const [searchName, setSearchName] = useState("");
@@ -24,8 +25,12 @@ const ContentTypePg = () => {
   };
 
   return (
-    <div className="container mx-auto p-5 bg-white rounded-lg">
-      {/* Search Bar */}
+    <div className="flex h-screen">
+    {/* Sidebar */}
+    <Sidebar /> {/* Sidebar added here */}
+
+    {/* Main Content */}
+    <div className="flex-1 p-6 ml-64"> {/* Add ml-64 to shift the content right */}      {/* Title */}      {/* Search Bar */}
       <div className="mb-6">
         <h2 className="text-2xl font-semibold text-gray-700 mb-4">Content Type</h2>
         <div className="flex space-x-4 mb-4">
@@ -181,6 +186,7 @@ const ContentTypePg = () => {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 };

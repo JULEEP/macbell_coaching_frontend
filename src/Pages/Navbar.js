@@ -1,6 +1,7 @@
 // Navbar.jsx
 import React, { useState } from 'react';
 import { FaSearch } from 'react-icons/fa'; // Importing the search icon from react-icons
+import Sidebar from './Sidebar';
 
 const Navbar = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false); // State to toggle profile dropdown
@@ -10,8 +11,12 @@ const Navbar = () => {
   };
 
   return (
-    <div className="bg-blue-600 p-4 shadow-md">
-      <div className="flex justify-between items-center">
+    <div className="flex h-screen">
+    {/* Sidebar */}
+    <Sidebar /> {/* Sidebar added here */}
+
+    {/* Main Content */}
+    <div className="flex-1 p-6 ml-64"> {/* Add ml-64 to shift the content right */}      {/* Title */}      <div className="flex justify-between items-center">
         {/* Logo */}
         <div className="text-white text-2xl font-semibold">
           InfixEdu
@@ -66,6 +71,7 @@ const Navbar = () => {
           <button className="text-white">☰</button>
         </div>
       </div>
+    </div>
     </div>
   );
 };

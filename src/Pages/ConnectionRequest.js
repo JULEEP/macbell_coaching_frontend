@@ -1,9 +1,14 @@
 import React from "react";
+import Sidebar from "./Sidebar";
 
 const ConnectionRequestsPage = () => {
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
-      {/* Page Title */}
+    <div className="flex h-screen">
+    {/* Sidebar */}
+    <Sidebar /> {/* Sidebar added here */}
+
+    {/* Main Content */}
+    <div className="flex-1 p-6 ml-64"> {/* Add ml-64 to shift the content right */}      {/* Title */}      {/* Page Title */}
       <h1 className="text-2xl font-semibold text-gray-800 text-center mb-6">
         Connection Requests
       </h1>
@@ -34,6 +39,7 @@ const ConnectionRequestsPage = () => {
           <p className="text-gray-500">No Connection Connected Request Found!</p>
         </div>
       </div>
+    </div>
     </div>
   );
 };

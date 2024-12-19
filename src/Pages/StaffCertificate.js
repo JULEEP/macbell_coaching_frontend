@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Sidebar from "./Sidebar";
 
 const StaffCertificatePage = () => {
   const [role, setRole] = useState("");
@@ -12,8 +13,13 @@ const StaffCertificatePage = () => {
   };
 
   return (
-    <div className="container mx-auto p-6 bg-white rounded-lg shadow-md">
-      <h2 className="text-2xl font-semibold text-gray-700 mb-6">Generate Certificate</h2>
+    <div className="flex h-screen">
+    {/* Sidebar */}
+    <Sidebar /> {/* Sidebar added here */}
+
+    {/* Main Content */}
+    <div className="flex-1 p-6 ml-64"> {/* Add ml-64 to shift the content right */}
+    <h2 className="text-2xl font-semibold text-gray-700 mb-6">Generate Certificate</h2>
 
       {/* Select Criteria Section */}
       <div className="p-6 bg-gray-50 rounded-lg shadow-md">
@@ -68,6 +74,7 @@ const StaffCertificatePage = () => {
           </button>
         </div>
       </div>
+    </div>
     </div>
   );
 };

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Sidebar from './Sidebar';
 
 const ClassRoutineCreate = () => {
   const [selectedClass, setSelectedClass] = useState('');
@@ -17,8 +18,12 @@ const ClassRoutineCreate = () => {
   };
 
   return (
-    <div className="p-8">
-      <div className="bg-white p-8 rounded-lg shadow-lg">
+    <div className="flex h-screen">
+    {/* Sidebar */}
+    <Sidebar /> {/* Sidebar added here */}
+
+    {/* Main Content */}
+    <div className="flex-1 p-6 ml-64"> {/* Add ml-64 to shift the content right */}      {/* Title */}      <div className="bg-white p-8 rounded-lg shadow-lg">
         <h2 className="text-xl font-semibold text-gray-700 mb-4">Class Routine Create</h2>
         <h4 className="text-xl text-gray-700 mb-4">Select Criteria</h4>
 
@@ -76,6 +81,7 @@ const ClassRoutineCreate = () => {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 };

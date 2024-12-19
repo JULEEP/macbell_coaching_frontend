@@ -1,11 +1,16 @@
 import React, { useState } from "react";
+import Sidebar from "./Sidebar";
 
 const IssueBooks = () => {
   const [search, setSearch] = useState("");
 
   return (
-    <div className="p-6 bg-white shadow-lg rounded-lg">
-      {/* Title */}
+    <div className="flex h-screen">
+    {/* Sidebar */}
+    <Sidebar /> {/* Sidebar added here */}
+
+    {/* Main Content */}
+    <div className="flex-1 p-6 ml-64"> {/* Add ml-64 to shift the content right */}      {/* Title */}      {/* Title */}
       <h1 className="text-xl text-gray-700 mb-4">Issue Books</h1>
 
       {/* Search Input */}
@@ -46,6 +51,7 @@ const IssueBooks = () => {
       <div className="mt-4 text-gray-500 text-sm">
         Showing 0 to 0 of 0 entries
       </div>
+    </div>
     </div>
   );
 };

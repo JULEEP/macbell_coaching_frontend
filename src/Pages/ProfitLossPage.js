@@ -1,9 +1,14 @@
 import React from 'react';
+import Sidebar from './Sidebar';
 
 const ProfitLossPage = () => {
   return (
-    <div className="min-h-screen bg-gray-100 p-4">
-      {/* Page Title */}
+    <div className="flex h-screen">
+    {/* Sidebar */}
+    <Sidebar /> {/* Sidebar added here */}
+
+    {/* Main Content */}
+    <div className="flex-1 p-6 ml-64"> {/* Add ml-64 to shift the content right */}      {/* Page Title */}
       <h1 className="text-2xl font-semibold text-gray-800 mb-6">Profit & Loss</h1>
 
       {/* Select Criteria Section */}
@@ -52,6 +57,7 @@ const ProfitLossPage = () => {
           Showing 1 to 1 of 1 entries
         </div>
       </div>
+    </div>
     </div>
   );
 };

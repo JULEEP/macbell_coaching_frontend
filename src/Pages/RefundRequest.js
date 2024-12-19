@@ -1,9 +1,14 @@
 import React from 'react';
+import Sidebar from './Sidebar';
 
 const RefundRequestTable = () => {
   return (
-    <div className="min-h-screen bg-gray-100 p-4">
-      {/* Page Title */}
+    <div className="flex h-screen">
+    {/* Sidebar */}
+    <Sidebar /> {/* Sidebar added here */}
+
+    {/* Main Content */}
+    <div className="flex-1 p-6 ml-64"> {/* Add ml-64 to shift the content right */}      {/* Page Title */}
       <h1 className="text-2xl font-semibold text-gray-800 mb-4">Refund Request</h1>
 
       {/* Table Container */}
@@ -39,6 +44,7 @@ const RefundRequestTable = () => {
           Result: Showing 0 to 0 of 0 entries
         </div>
       </div>
+    </div>
     </div>
   );
 };

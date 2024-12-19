@@ -1,9 +1,14 @@
 import React from "react";
+import Sidebar from "./Sidebar";
 
 const UnassignedStudentList = () => {
   return (
-    <div className="p-6 space-y-6">
-      {/* Title */}
+    <div className="flex h-screen">
+    {/* Sidebar */}
+    <Sidebar /> {/* Sidebar added here */}
+
+    {/* Main Content */}
+    <div className="flex-1 p-6 ml-64"> {/* Add ml-64 to shift the content right */}      {/* Title */}
       <h1 className="text-xl text-gray-700">Unassigned Student List</h1>
 
       {/* Table Section */}
@@ -39,6 +44,7 @@ const UnassignedStudentList = () => {
           Showing 0 to 0 of 0 entries
         </div>
       </div>
+    </div>
     </div>
   );
 };

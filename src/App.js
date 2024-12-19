@@ -137,7 +137,7 @@ import StudnetSidebar from './Sidebar';
 function App() {
   return (
     <Router> {/* Wrap everything in Router to enable routing */}        
-        <div className="flex-1 bg-gray-100 p-6">
+        <div>
           <Routes>
             {/* Define the route for the dashboard */}
             <Route path="/dashboard" element={<Dashboard />} />
@@ -271,6 +271,8 @@ function App() {
             <Route path="/student-transport" element={<TransportPage/>} />
             <Route path="/student-booklist" element={<StudentBookListPage/>} />
             <Route path="/student-dormitory" element={<DormitoryPage/>} />
+            <Route path="/sidebar" element={<Sidebar/>} />
+
 
 
 

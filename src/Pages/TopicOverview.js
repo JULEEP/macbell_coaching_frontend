@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Sidebar from "./Sidebar";
 
 const TopicOverview = () => {
   const [searchTerm, setSearchTerm] = useState({
@@ -29,8 +30,12 @@ const TopicOverview = () => {
   };
 
   return (
-    <div className="container mx-auto p-5 bg-white shadow-2xl rounded-lg">
-      <h2 className="text-center text-3xl font-semibold mb-6">Topic Overview</h2>
+    <div className="flex h-screen">
+    {/* Sidebar */}
+    <Sidebar /> {/* Sidebar added here */}
+
+    {/* Main Content */}
+    <div className="flex-1 p-6 ml-64"> {/* Add ml-64 to shift the content right */}      <h2 className="text-center text-3xl font-semibold mb-6">Topic Overview</h2>
 
       {/* Search Section */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
@@ -129,6 +134,7 @@ const TopicOverview = () => {
           Showing {data.length} of {data.length} entries
         </p>
       </div>
+    </div>
     </div>
   );
 };

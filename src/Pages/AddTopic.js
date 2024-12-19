@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Sidebar from './Sidebar';
 
 const AddTopic = () => {
   const [selectedClass, setSelectedClass] = useState('');
@@ -19,9 +20,14 @@ const AddTopic = () => {
   };
 
   return (
-    <div className="p-8 flex gap-8">
-      {/* Left Side: Form */}
-      <div className="w-1/3 bg-white p-6 rounded-lg shadow-lg">
+    <div className="flex h-screen">
+    {/* Sidebar */}
+    <Sidebar /> {/* Sidebar added here */}
+
+    {/* Main Content */}
+    <div className="flex-1 p-6 ml-64">
+    <div className="flex gap-6">
+    <div className="w-1/3 bg-white p-6 rounded-md shadow-md">
         <h2 className="text-xl font-semibold text-gray-700 mb-4">Add Topic</h2>
         <div className="space-y-4">
           {/* Class Dropdown */}
@@ -164,6 +170,8 @@ const AddTopic = () => {
           Showing 0 to 0 of 0 entries
         </div>
       </div>
+    </div>
+    </div>
     </div>
   );
 };

@@ -1,9 +1,14 @@
 import React from 'react';
+import Sidebar from './Sidebar';
 
 const AssignmentList = () => {
   return (
-    <div className="p-8">
-      <h1 className="text-2xl font-bold text-gray-800 mb-6">Assignment List</h1>
+    <div className="flex h-screen">
+    {/* Sidebar */}
+    <Sidebar /> {/* Sidebar added here */}
+
+    {/* Main Content */}
+    <div className="flex-1 p-6 ml-64"> {/* Add ml-64 to shift the content right */}      {/* Title */}      <h1 className="text-2xl font-bold text-gray-800 mb-6">Assignment List</h1>
 
       {/* Quick Search */}
       <div className="mb-4 flex items-center gap-4">
@@ -43,6 +48,7 @@ const AssignmentList = () => {
           </tbody>
         </table>
       </div>
+    </div>
     </div>
   );
 };

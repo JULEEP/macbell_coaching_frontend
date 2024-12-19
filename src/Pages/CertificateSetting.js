@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Sidebar from "./Sidebar";
 
 const CertificateSettings = () => {
   const [certificatePrefix, setCertificatePrefix] = useState("");
@@ -10,8 +11,12 @@ const CertificateSettings = () => {
   };
 
   return (
-    <div className="container mx-auto p-6 bg-white rounded-lg shadow-md">
-      <h2 className="text-2xl font-semibold text-gray-700 mb-6">Certificate Settings</h2>
+    <div className="flex h-screen">
+    {/* Sidebar */}
+    <Sidebar /> {/* Sidebar added here */}
+
+    {/* Main Content */}
+    <div className="flex-1 p-6 ml-64"> {/* Add ml-64 to shift the content right */}      {/* Title */}      <h2 className="text-2xl font-semibold text-gray-700 mb-6">Certificate Settings</h2>
 
       <div className="p-6 bg-gray-50 rounded-lg shadow-md">
         <h3 className="text-xl font-semibold text-gray-700 mb-4">Update Settings</h3>
@@ -63,6 +68,7 @@ const CertificateSettings = () => {
           Update Settings
         </button>
       </div>
+    </div>
     </div>
   );
 };

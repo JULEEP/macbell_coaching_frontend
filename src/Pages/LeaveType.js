@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Sidebar from './Sidebar';
 
 const LeaveTypePage = () => {
   const [typeName, setTypeName] = useState('');
@@ -18,9 +19,14 @@ const LeaveTypePage = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto p-6 flex gap-6">
-      {/* Left side: Add Leave Type Form with rounded and small width */}
-      <div className="bg-white p-6 rounded-xl shadow-md w-full sm:w-80">
+    <div className="flex h-screen">
+    {/* Sidebar */}
+    <Sidebar /> {/* Sidebar added here */}
+
+    {/* Main Content */}
+    <div className="flex-1 p-6 ml-64">
+    <div className="flex gap-6">
+    <div className="w-1/3 bg-white p-6 rounded-md shadow-md">
         <h2 className="text-xl font-semibold text-gray-600 mb-4">Add Leave Type</h2>
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 gap-4">
@@ -101,6 +107,8 @@ const LeaveTypePage = () => {
           Showing {leaveTypes.length} entries
         </div>
       </div>
+    </div>
+    </div>
     </div>
   );
 };

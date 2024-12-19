@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Sidebar from './Sidebar';
 
 const OptionalSubject = () => {
   const [formData, setFormData] = useState({
@@ -25,8 +26,12 @@ const OptionalSubject = () => {
   };
 
   return (
-    <div className="p-8 flex justify-center">
-      {/* Main Wrapper with rounded corners and shadow */}
+    <div className="flex h-screen">
+    {/* Sidebar */}
+    <Sidebar /> {/* Sidebar added here */}
+
+    {/* Main Content */}
+    <div className="flex-1 p-6 ml-64"> {/* Add ml-64 to shift the content right */}      {/* Title */}      {/* Main Wrapper with rounded corners and shadow */}
       <div className="w-full max-w-5xl bg-white p-8 rounded-xl shadow-lg">
         {/* Select Criteria Section */}
         <div className="mb-8">
@@ -107,6 +112,7 @@ const OptionalSubject = () => {
           </button>
         </div>
       </div>
+    </div>
     </div>
   );
 };

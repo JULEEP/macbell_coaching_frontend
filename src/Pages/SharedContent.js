@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Sidebar from "./Sidebar";
 
 const SharedContentPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -30,8 +31,12 @@ const SharedContentPage = () => {
   };
 
   return (
-    <div className="container mx-auto p-5 bg-white rounded-lg">
-      {/* Title */}
+    <div className="flex h-screen">
+    {/* Sidebar */}
+    <Sidebar /> {/* Sidebar added here */}
+
+    {/* Main Content */}
+    <div className="flex-1 p-6 ml-64"> {/* Add ml-64 to shift the content right */}      {/* Title */}
       <h2 className="text-2xl font-semibold text-gray-700 mb-4">Shared Content</h2>
 
       {/* Search Bar */}
@@ -97,6 +102,7 @@ const SharedContentPage = () => {
       <div className="mt-4 text-sm text-gray-600 text-center">
         Showing 0 to 0 of {sharedContentList.length} entries
       </div>
+    </div>
     </div>
   );
 };

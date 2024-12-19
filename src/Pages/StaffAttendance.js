@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Sidebar from './Sidebar';
 
 const StaffAttendancePage = () => {
   const [formData, setFormData] = useState({
@@ -17,8 +18,12 @@ const StaffAttendancePage = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto p-6">
-      {/* Title */}
+    <div className="flex h-screen">
+    {/* Sidebar */}
+    <Sidebar /> {/* Sidebar added here */}
+
+    {/* Main Content */}
+    <div className="flex-1 p-6 ml-64"> {/* Add ml-64 to shift the content right */}      {/* Title */}
       <h1 className="text-2xl font-semibold text-gray-700 mb-6">Staff Attendance</h1>
 
       {/* Select Criteria Section */}
@@ -102,6 +107,7 @@ const StaffAttendancePage = () => {
           </table>
         </div>
       </div>
+    </div>
     </div>
   );
 };

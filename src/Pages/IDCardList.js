@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Sidebar from './Sidebar';
 
 const IdCardList = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -20,8 +21,12 @@ const IdCardList = () => {
   );
 
   return (
-    <div className="p-8">
-      {/* Search Section */}
+    <div className="flex h-screen">
+    {/* Sidebar */}
+    <Sidebar /> {/* Sidebar added here */}
+
+    {/* Main Content */}
+    <div className="flex-1 p-6 ml-64"> {/* Add ml-64 to shift the content right */}      {/* Title */}      {/* Search Section */}
       <div className="mb-4">
         <input
           type="text"
@@ -51,6 +56,7 @@ const IdCardList = () => {
               </tr>
         </table>
       </div>
+    </div>
     </div>
   );
 };

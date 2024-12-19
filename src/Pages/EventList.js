@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Sidebar from "./Sidebar";
 
 const EventListPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -33,8 +34,12 @@ const EventListPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6 space-y-6 flex">
-      {/* Left Side - Add Event Form */}
+    <div className="flex h-screen">
+    {/* Sidebar */}
+    <Sidebar /> {/* Sidebar added here */}
+
+    {/* Main Content */}
+    <div className="flex-1 p-6 ml-64"> {/* Add ml-64 to shift the content right */}      {/* Title */}      {/* Left Side - Add Event Form */}
       <div className="w-1/3 bg-white shadow-md rounded-lg p-6 space-y-6">
         <h2 className="text-xl font-semibold text-gray-800">Add Event</h2>
 
@@ -172,6 +177,7 @@ const EventListPage = () => {
           </table>
         </div>
       </div>
+    </div>
     </div>
   );
 };

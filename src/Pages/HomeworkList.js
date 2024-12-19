@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Sidebar from "./Sidebar";
 
 const HomeworkList = () => {
   const [homeworks, setHomeworks] = useState([
@@ -33,8 +34,12 @@ const HomeworkList = () => {
   );
 
   return (
-    <div className="p-6 space-y-6 shadow-lg bg-white rounded-lg">
-      {/* Title */}
+    <div className="flex h-screen">
+    {/* Sidebar */}
+    <Sidebar /> {/* Sidebar added here */}
+
+    {/* Main Content */}
+    <div className="flex-1 p-6 ml-64"> {/* Add ml-64 to shift the content right */}      {/* Title */}      {/* Title */}
       <h1 className="text-xl text-gray-700">Homework List</h1>
 
       {/* Select Criteria */}
@@ -141,6 +146,7 @@ const HomeworkList = () => {
           </div>
         )}
       </div>
+    </div>
     </div>
   );
 };

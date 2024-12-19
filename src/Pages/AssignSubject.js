@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Sidebar from './Sidebar';
 
 const AssignSubjectPage = () => {
   const [formData, setFormData] = useState({
@@ -23,8 +24,12 @@ const AssignSubjectPage = () => {
   };
 
   return (
-    <div className="p-8">
-      {/* Left side - Criteria Selection */}
+    <div className="flex h-screen">
+    {/* Sidebar */}
+    <Sidebar /> {/* Sidebar added here */}
+
+    {/* Main Content */}
+    <div className="flex-1 p-6 ml-64"> {/* Add ml-64 to shift the content right */}      {/* Title */}      {/* Left side - Criteria Selection */}
       <div className="w-full max-w-4xl bg-white p-6 rounded-md shadow-lg mx-auto">
         <h2 className="text-lg text-gray-700 mb-4">Select Criteria</h2>
         <form className="space-y-4">
@@ -77,6 +82,7 @@ const AssignSubjectPage = () => {
           </div>
         </form>
       </div>
+    </div>
     </div>
   );
 };

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Sidebar from "./Sidebar";
 
 const ExamSetup = () => {
   const [examTitle, setExamTitle] = useState("");
@@ -50,8 +51,12 @@ const ExamSetup = () => {
   );
 
   return (
-    <div className="p-6 bg-white shadow-lg rounded-lg space-y-6">
-      {/* Title */}
+    <div className="flex h-screen">
+    {/* Sidebar */}
+    <Sidebar /> {/* Sidebar added here */}
+
+    {/* Main Content */}
+    <div className="flex-1 p-6 ml-64"> {/* Add ml-64 to shift the content right */}      {/* Title */}      {/* Title */}
       <h1 className="text-xl text-gray-700 mb-4">Exam Setup</h1>
 
       <div className="flex gap-8">
@@ -195,6 +200,7 @@ const ExamSetup = () => {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 };

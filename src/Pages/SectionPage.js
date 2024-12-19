@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Sidebar from './Sidebar';
 
 const SectionPage = () => {
   const [formData, setFormData] = useState({
@@ -35,9 +36,14 @@ const SectionPage = () => {
   };
 
   return (
-    <div className="flex gap-8 p-8">
-      {/* Left side - Form */}
-      <div className="w-1/3 bg-white p-6 rounded-md shadow-lg">
+    <div className="flex h-screen">
+    {/* Sidebar */}
+    <Sidebar /> {/* Sidebar added here */}
+
+    {/* Main Content */}
+    <div className="flex-1 p-6 ml-64">
+    <div className="flex gap-6">
+    <div className="w-1/3 bg-white p-6 rounded-md shadow-md">
         <h2 className="text-lg text-gray-700 mb-4">Add Section</h2>
         <form className="space-y-4">
           {/* Name Input */}
@@ -110,6 +116,8 @@ const SectionPage = () => {
           </tbody>
         </table>
       </div>
+    </div>
+    </div>
     </div>
   );
 };

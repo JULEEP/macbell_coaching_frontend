@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Sidebar from "./Sidebar";
 
 const LessonPlanCreate = () => {
   const [teacher, setTeacher] = useState("");
@@ -9,8 +10,12 @@ const LessonPlanCreate = () => {
   };
 
   return (
-    <div className="container mx-auto p-5 bg-white shadow-2xl rounded-lg">
-      <h2 className="text-center text-3xl font-semibold mb-6">Lesson Plan Create</h2>
+    <div className="flex h-screen">
+    {/* Sidebar */}
+    <Sidebar /> {/* Sidebar added here */}
+
+    {/* Main Content */}
+    <div className="flex-1 p-6 ml-64"> {/* Add ml-64 to shift the content right */}      {/* Title */}      <h2 className="text-center text-3xl font-semibold mb-6">Lesson Plan Create</h2>
 
       {/* Select Criteria Section */}
       <div className="p-4 shadow-lg rounded-lg mb-6">
@@ -39,6 +44,7 @@ const LessonPlanCreate = () => {
           Search
         </button>
       </div>
+    </div>
     </div>
   );
 };
