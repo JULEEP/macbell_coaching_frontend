@@ -51,7 +51,7 @@ const StudnetSidebar = () => {
       </div>
 
       {/* Sidebar Links */}
-      <ul className="space-y-6">
+      <ul className="space-y-0">
         {/* Dashboard Link */}
         <li className="flex items-center text-lg text-gray-400 p-3 rounded-md">
           <NavLink 

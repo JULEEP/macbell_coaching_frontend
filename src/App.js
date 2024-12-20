@@ -133,6 +133,23 @@ import TransportPage from './Student/StudentTransport';
 import StudentBookListPage from './Student/BookList';
 import DormitoryPage from './Student/Dometory';
 import StudnetSidebar from './Sidebar';
+import ParentSidebar from './Parents/ParentSidebar';
+import ParentDashboard from './Parents/ParentDashboard';
+import MyChildProfile from './Parents/MyChildProfile';
+import MyChildrenFees from './Parents/MyChildrenFees';
+import MyChildLessonPlan from './Parents/MyChildLessonPlan';
+import MyChildLessonPlanOverviewStudent from './Parents/MyChildLessonOverview';
+import MyChildStudentHomeworkList from './Parents/MyChildStudentHomeworkList';
+import MyChildClassRoutinePage from './Parents/MyChildClassRoutinePage';
+import MyChildAttendance from './Parents/MyChildAttendance';
+import MyChildExamSchedule from './Parents/MyChildExamSchedule';
+import MyChildApplyLeave from './Parents/MyChildApplyLeave';
+import MyChildPendingLeaveRequest from './Parents/MyChildPendingLeaveRequest';
+import ParentNoticeBoard from './Parents/ParentNoticeBoard';
+import ParentSubjectDetails from './Parents/ParentSubjectDetails';
+import ParentTeachersList from './Parents/ParentTeachersList';
+import ParentStudentBookListPage from './Parents/ParentStudentBookListPage';
+import ParentTransportPage from './Parents/ParentTransportPage';
 
 function App() {
   return (
@@ -272,6 +289,45 @@ function App() {
             <Route path="/student-booklist" element={<StudentBookListPage/>} />
             <Route path="/student-dormitory" element={<DormitoryPage/>} />
             <Route path="/sidebar" element={<Sidebar/>} />
+
+
+           {/* Parents Sections */}  
+           <Route path="/parent-sidebar" element={<ParentSidebar/>} />
+           <Route path="/parent-dashboard" element={<ParentDashboard/>} />
+           <Route path="/mychild-profile" element={<MyChildProfile/>} />
+           <Route path="/mychild-fees" element={<MyChildrenFees/>} />
+           <Route path="/mychild-lesson-plan" element={<MyChildLessonPlan/>} />
+           <Route path="/mychild-lesson-plan-overview" element={<MyChildLessonPlanOverviewStudent/>} />
+           <Route path="/mychild-homework" element={<MyChildStudentHomeworkList/>} />
+           <Route path="/mychild-routine" element={<MyChildClassRoutinePage/>} />
+           <Route path="/mychild-attendance" element={<MyChildAttendance/>} />
+           <Route path="/mychild-exam-schedule" element={<MyChildExamSchedule/>} />
+           <Route path="/mychild-leave-apply" element={<MyChildApplyLeave/>} />
+           <Route path="/mychild-pendingleave" element={<MyChildPendingLeaveRequest/>} />
+           <Route path="/parent-noticeboard" element={<ParentNoticeBoard/>} />
+           <Route path="/parent-subjects" element={<ParentSubjectDetails/>} />
+           <Route path="/parent-teachers" element={<ParentTeachersList/>} />
+           <Route path="/parent-booklist" element={<ParentStudentBookListPage/>} />
+           <Route path="/parent-transport" element={<ParentTransportPage/>} />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            
 
 
 
