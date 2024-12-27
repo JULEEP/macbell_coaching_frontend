@@ -1,9 +1,38 @@
-import React, { useState } from "react";
-import StudentSidebar from "../Sidebar"; // Import the StudentSidebar component
+import React, { useState, useEffect } from "react";
+import StudentSidebar from "../Sidebar"; // Import the Sidebar component
 
 const StudentAttendanceList = () => {
+  const [attendance, setAttendance] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const [selectedMonth, setSelectedMonth] = useState("");
   const [selectedYear, setSelectedYear] = useState("");
+
+  const studentId = "676cf56dfd1eb1caa8426205"; // Static studentId
+
+  // Fetch attendance data from API
+  useEffect(() => {
+    const fetchAttendance = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:4000/api/students/get-attendance/${studentId}`
+        );
+        const data = await response.json();
+
+        if (response.ok) {
+          setAttendance(data.attendance);
+        } else {
+          setError(data.message || "Error fetching attendance");
+        }
+      } catch (err) {
+        setError("An error occurred while fetching attendance");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAttendance();
+  }, [studentId]);
 
   const handleMonthChange = (event) => {
     setSelectedMonth(event.target.value);
@@ -17,6 +46,26 @@ const StudentAttendanceList = () => {
     console.log(`Searching for attendance in ${selectedMonth}, ${selectedYear}`);
     // Add your search logic here
   };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div className="text-red-500">{error}</div>;
+  }
+
+  // Filter attendance by selected month and year (if any)
+  const filteredAttendance = attendance.filter((entry) => {
+    const date = new Date(entry.date);
+    const month = date.toLocaleString("default", { month: "long" });
+    const year = date.getFullYear();
+
+    const matchesMonth = selectedMonth ? month === selectedMonth : true;
+    const matchesYear = selectedYear ? year === selectedYear : true;
+
+    return matchesMonth && matchesYear;
+  });
 
   return (
     <div className="min-h-screen flex bg-gray-100">
@@ -83,14 +132,34 @@ const StudentAttendanceList = () => {
           </button>
         </div>
 
-        {/* Results Section (can be populated with dynamic data after search) */}
+        {/* Results Section (Attendance Table) */}
         <div className="mt-8">
-          {/* Placeholder for Attendance Table or Results */}
           <h2 className="text-xl font-semibold text-gray-800">Attendance Results</h2>
           <div className="mt-4 p-6 bg-white shadow-md rounded-lg">
-            <p className="text-gray-600">
-              No results to display. Please select a month and year, then click Search.
-            </p>
+            {filteredAttendance.length > 0 ? (
+              <div className="overflow-x-auto">
+                <table className="min-w-full table-auto border-collapse">
+                  <thead className="bg-gray-100">
+                    <tr>
+                      <th className="px-4 py-2 text-left text-gray-400">Date</th>
+                      <th className="px-4 py-2 text-left text-gray-400">Attendance Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredAttendance.map((entry, index) => (
+                      <tr key={index}>
+                        <td className="px-4 py-2 text-gray-600">
+                          {new Date(entry.date).toLocaleDateString()}
+                        </td>
+                        <td className="px-4 py-2 text-gray-600">{entry.attendanceStatus}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <p className="text-gray-600">No attendance records available for the selected month and year.</p>
+            )}
           </div>
         </div>
       </div>

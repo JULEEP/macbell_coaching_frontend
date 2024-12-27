@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import Sidebar from './Sidebar'
+import axios from 'axios'; // Import axios
+import Sidebar from './Sidebar';
 
 const PhoneCallLog = () => {
   const [formData, setFormData] = useState({
@@ -13,6 +14,7 @@ const PhoneCallLog = () => {
   });
 
   const [phoneCallList, setPhoneCallList] = useState([]);
+  const [message, setMessage] = useState(''); // To display feedback
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -29,31 +31,56 @@ const PhoneCallLog = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setPhoneCallList([...phoneCallList, formData]);
-    setFormData({
-      name: '',
-      phone: '',
-      date: '12/15/2024',
-      followUpDate: '12/15/2024',
-      callDuration: '',
-      description: '',
-      type: 'Incoming',
-    });
+
+    try {
+      // Call the API to add a phone call
+      const response = await axios.post('http://localhost:4000/api/admin/add-phones', formData);
+
+      // Update the phone call list with the newly added entry
+      setPhoneCallList([...phoneCallList, response.data.phoneCall]);
+
+      // Clear the form and show success message
+      setFormData({
+        name: '',
+        phone: '',
+        date: '12/15/2024',
+        followUpDate: '12/15/2024',
+        callDuration: '',
+        description: '',
+        type: 'Incoming',
+      });
+      setMessage('Phone call added successfully!');
+    } catch (error) {
+      // Show error message
+      setMessage(error.response?.data?.message || 'Error adding phone call.');
+    }
   };
 
   return (
     <div className="flex h-screen">
-    {/* Sidebar */}
-    <Sidebar /> {/* Sidebar added here */}
+      {/* Sidebar */}
+      <Sidebar />
 
-    {/* Main Content */}
-    <div className="flex-1 p-6 ml-64"> {/* Add ml-64 to shift the content right */}
+      {/* Main Content */}
+      <div className="flex-1 p-6 ml-64">
         <h2 className="text-lg text-gray-700 mb-4">Add Phone Call</h2>
+        {message && (
+          <div
+            className={`p-4 mb-4 text-sm ${
+              message.includes('success') ? 'text-green-600 bg-green-100' : 'text-red-600 bg-red-100'
+            } rounded-md`}
+          >
+            {message}
+          </div>
+        )}
         <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Form fields */}
           <div>
-            <label htmlFor="name" className="text-sm text-gray-600">Name</label>
+            <label htmlFor="name" className="text-sm text-gray-600">
+              Name
+            </label>
             <input
               type="text"
               id="name"
@@ -66,7 +93,9 @@ const PhoneCallLog = () => {
           </div>
 
           <div>
-            <label htmlFor="phone" className="text-sm text-gray-600">Phone *</label>
+            <label htmlFor="phone" className="text-sm text-gray-600">
+              Phone *
+            </label>
             <input
               type="text"
               id="phone"
@@ -80,7 +109,9 @@ const PhoneCallLog = () => {
           </div>
 
           <div>
-            <label htmlFor="date" className="text-sm text-gray-600">Date</label>
+            <label htmlFor="date" className="text-sm text-gray-600">
+              Date
+            </label>
             <input
               type="date"
               id="date"
@@ -93,7 +124,9 @@ const PhoneCallLog = () => {
           </div>
 
           <div>
-            <label htmlFor="followUpDate" className="text-sm text-gray-600">Follow Up Date</label>
+            <label htmlFor="followUpDate" className="text-sm text-gray-600">
+              Follow Up Date
+            </label>
             <input
               type="date"
               id="followUpDate"
@@ -105,7 +138,9 @@ const PhoneCallLog = () => {
           </div>
 
           <div>
-            <label htmlFor="callDuration" className="text-sm text-gray-600">Call Duration</label>
+            <label htmlFor="callDuration" className="text-sm text-gray-600">
+              Call Duration
+            </label>
             <input
               type="text"
               id="callDuration"
@@ -118,7 +153,9 @@ const PhoneCallLog = () => {
           </div>
 
           <div>
-            <label htmlFor="description" className="text-sm text-gray-600">Description</label>
+            <label htmlFor="description" className="text-sm text-gray-600">
+              Description
+            </label>
             <textarea
               id="description"
               name="description"
@@ -170,7 +207,7 @@ const PhoneCallLog = () => {
       </div>
 
       {/* Table Section */}
-      <div className="w-3/4 bg-white p-6 rounded-md shadow-none"> {/* No shadow */}
+      <div className="w-3/4 bg-white p-6 rounded-md shadow-none">
         <h2 className="text-lg text-gray-700 mb-4">Phone Call List</h2>
         <table className="min-w-full table-auto">
           <thead>
@@ -185,8 +222,10 @@ const PhoneCallLog = () => {
           </thead>
           <tbody>
             {phoneCallList.length === 0 ? (
-              <tr className="h-8"> {/* Smaller height */}
-                <td colSpan="6" className="text-center text-gray-500">No Data Available In Table</td>
+              <tr className="h-8">
+                <td colSpan="6" className="text-center text-gray-500">
+                  No Data Available In Table
+                </td>
               </tr>
             ) : (
               phoneCallList.map((call, index) => (

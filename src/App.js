@@ -150,6 +150,7 @@ import ParentSubjectDetails from './Parents/ParentSubjectDetails';
 import ParentTeachersList from './Parents/ParentTeachersList';
 import ParentStudentBookListPage from './Parents/ParentStudentBookListPage';
 import ParentTransportPage from './Parents/ParentTransportPage';
+import Login from './Student/Login';
 
 function App() {
   return (
@@ -289,6 +290,8 @@ function App() {
             <Route path="/student-booklist" element={<StudentBookListPage/>} />
             <Route path="/student-dormitory" element={<DormitoryPage/>} />
             <Route path="/sidebar" element={<Sidebar/>} />
+            <Route path="/" element={<Login/>} />
+
 
 
            {/* Parents Sections */}  

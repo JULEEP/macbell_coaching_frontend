@@ -2,15 +2,43 @@ import React, { useState } from "react";
 import StudentSidebar from "../Sidebar"; // Import the StudentSidebar component
 
 const ExamRoutinePage = () => {
-  const [selectedExam, setSelectedExam] = useState("");
+  const [selectedExam, setSelectedExam] = useState("");  // Selected exam type
+  const [examSchedule, setExamSchedule] = useState([]); // Store fetched exam schedule
+  const [loading, setLoading] = useState(false); // Loading state
+  const [error, setError] = useState(""); // Error state
 
+  const studentId = "676cf56dfd1eb1caa8426205"; // Static studentId (could be dynamic based on context)
+
+  // Handle change in exam selection
   const handleExamChange = (event) => {
     setSelectedExam(event.target.value);
   };
 
-  const handleSearch = () => {
-    console.log(`Searching for Exam Routine: ${selectedExam}`);
-    // Add search logic here
+  // Handle search logic
+  const handleSearch = async () => {
+    if (!selectedExam) {
+      setError("Please select an exam type");
+      return;
+    }
+    setLoading(true);
+    setError(""); // Reset error message
+    try {
+      // Fetch the exam schedule for the selected exam type
+      const response = await fetch(
+        `http://localhost:4000/api/students/exam-schedule/${studentId}`
+      );
+      const data = await response.json();
+
+      if (response.ok) {
+        setExamSchedule(data.examSchedule.filter(exam => exam.examType === selectedExam)); // Filter by selected exam type
+      } else {
+        setError(data.message || "Error fetching exam schedule");
+      }
+    } catch (err) {
+      setError("An error occurred while fetching the exam schedule");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -25,7 +53,7 @@ const ExamRoutinePage = () => {
 
         {/* Select Criteria Section */}
         <div className="bg-white shadow-md rounded-xl p-6">
-          <h2 className="text-xl font-medium text-gray-700 mb-4">Select Criteria</h2>
+          <h2 className="text-xl font-medium text-gray-700 mb-4">Select Exam Criteria</h2>
 
           {/* Exam Field and Button Row */}
           <div className="flex items-center gap-4">
@@ -37,7 +65,7 @@ const ExamRoutinePage = () => {
               onChange={handleExamChange}
             >
               <option value="">Select Exam</option>
-              <option value="Midterm">Midterm</option>
+              <option value="Mid-Term">Mid-Term</option>
               <option value="Final">Final</option>
               <option value="Class Test">Class Test</option>
             </select>
@@ -50,7 +78,44 @@ const ExamRoutinePage = () => {
               Search
             </button>
           </div>
+
+          {/* Error Message */}
+          {error && <p className="text-red-500 mt-4">{error}</p>}
         </div>
+
+        {/* Exam Schedule Table */}
+        {examSchedule.length > 0 && (
+          <div className="bg-white shadow-md rounded-xl p-6 mt-8">
+            <h2 className="text-xl font-medium text-gray-700 mb-4">Exam Schedule</h2>
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse bg-gray-50 rounded-lg">
+                <thead>
+                  <tr className="text-left text-gray-600 border-b">
+                    <th className="py-3 px-4">Subject</th>
+                    <th className="py-3 px-4">Exam Date</th>
+                    <th className="py-3 px-4">Exam Time</th>
+                    <th className="py-3 px-4">Exam Type</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {examSchedule.map((exam) => (
+                    <tr key={exam._id}>
+                      <td className="py-3 px-4 text-gray-700">{exam.subject}</td>
+                      <td className="py-3 px-4 text-gray-700">
+                        {new Date(exam.examDate).toLocaleDateString()}
+                      </td>
+                      <td className="py-3 px-4 text-gray-700">{exam.examTime}</td>
+                      <td className="py-3 px-4 text-gray-700">{exam.examType}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {/* Loading Message */}
+        {loading && <p className="text-gray-500">Loading exam schedule...</p>}
       </div>
     </div>
   );

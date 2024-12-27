@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Sidebar from './Sidebar';
+import axios from 'axios'
 
 const ComplaintBook = () => {
   const [formData, setFormData] = useState({
@@ -15,6 +16,8 @@ const ComplaintBook = () => {
   });
 
   const [complaintList, setComplaintList] = useState([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -24,20 +27,45 @@ const ComplaintBook = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setComplaintList([...complaintList, formData]);
-    setFormData({
-      complaintBy: '',
-      complaintType: '',
-      complaintSource: '',
-      phone: '',
-      date: '',
-      actionsTaken: '',
-      assigned: '',
-      description: '',
-      file: null,
+    setIsSubmitting(true);
+
+    const formPayload = new FormData();
+    Object.keys(formData).forEach((key) => {
+      formPayload.append(key, formData[key]);
     });
+
+    try {
+      const response = await axios.post('http://localhost:4000/api/admin/complaints', formPayload, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      alert(response.data.message);
+
+      // Update the complaint list with the new entry
+      setComplaintList([...complaintList, response.data.complaint]);
+
+      // Reset the form
+      setFormData({
+        complaintBy: '',
+        complaintType: '',
+        complaintSource: '',
+        phone: '',
+        date: '',
+        actionsTaken: '',
+        assigned: '',
+        description: '',
+        file: null,
+      });
+    } catch (error) {
+      console.error('Error adding complaint:', error);
+      alert('Failed to add complaint.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -180,33 +208,36 @@ const ComplaintBook = () => {
         </form>
       </div>
 
-      {/* Table Section */}
-      <div className="w-3/4 bg-white p-6 rounded-md shadow-md">
-        <h2 className="text-lg text-gray-700 mb-4">Complaint List</h2>
-        <table className="min-w-full table-auto">
-          <thead>
-            <tr className="bg-gray-100">
-              <th className="px-4 py-2 text-gray-600">SL</th>
-              <th className="px-4 py-2 text-gray-600">Complaint By</th>
-              <th className="px-4 py-2 text-gray-600">Complaint Type</th>
-              <th className="px-4 py-2 text-gray-600">Source</th>
-              <th className="px-4 py-2 text-gray-600">Phone</th>
-            </tr>
-          </thead>
-          <tbody>
-            {complaintList.map((complaint, index) => (
-              <tr key={index} className="border-t border-gray-300">
-                <td className="px-4 py-2 text-gray-600">{index + 1}</td>
-                <td className="px-4 py-2 text-gray-600">{complaint.complaintBy}</td>
-                <td className="px-4 py-2 text-gray-600">{complaint.complaintType}</td>
-                <td className="px-4 py-2 text-gray-600">{complaint.complaintSource}</td>
-                <td className="px-4 py-2 text-gray-600">{complaint.phone}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
+     {/* Table Section */}
+<div className="w-3/4 bg-white p-6 rounded-md shadow-md">
+<h2 className="text-lg text-gray-700 mb-4">Complaint List</h2>
+<div className="overflow-x-auto">
+  <table className="min-w-full table-auto ml-4"> {/* Added ml-4 for left margin */}
+    <thead>
+      <tr className="bg-gray-100">
+        <th className="px-4 py-2 text-gray-600 text-left">SL</th> {/* Added text-left */}
+        <th className="px-4 py-2 text-gray-600 text-left">Complaint By</th>
+        <th className="px-4 py-2 text-gray-600 text-left">Complaint Type</th>
+        <th className="px-4 py-2 text-gray-600 text-left">Source</th>
+        <th className="px-4 py-2 text-gray-600 text-left">Phone</th>
+      </tr>
+    </thead>
+    <tbody>
+      {complaintList.map((complaint, index) => (
+        <tr key={index} className="border-t border-gray-300">
+          <td className="px-4 py-2 text-gray-600">{index + 1}</td>
+          <td className="px-4 py-2 text-gray-600">{complaint.complaintBy}</td>
+          <td className="px-4 py-2 text-gray-600">{complaint.complaintType}</td>
+          <td className="px-4 py-2 text-gray-600">{complaint.complaintSource}</td>
+          <td className="px-4 py-2 text-gray-600">{complaint.phone}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+</div>
+</div>
+
   );
 };
 

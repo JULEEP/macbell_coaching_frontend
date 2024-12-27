@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Sidebar from './Sidebar';
+import axios from 'axios';
 
 const VisitorBook = () => {
   const [formData, setFormData] = useState({
@@ -24,29 +25,62 @@ const VisitorBook = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setVisitorList([...visitorList, formData]);
-    setFormData({
-      purpose: '',
-      name: '',
-      phone: '',
-      id: '',
-      noOfPersons: '',
-      date: '',
-      inTime: '',
-      outTime: '',
-      file: null,
-    });
+
+    // Prepare FormData to send the data to the backend
+    const visitorData = new FormData();
+    visitorData.append('purpose', formData.purpose);
+    visitorData.append('name', formData.name);
+    visitorData.append('phone', formData.phone);
+    visitorData.append('id', formData.id);
+    visitorData.append('no_of_persons', formData.noOfPersons);
+    visitorData.append('date', formData.date);
+    visitorData.append('in_time', formData.inTime);
+    visitorData.append('out_time', formData.outTime);
+    if (formData.file) {
+      visitorData.append('file', formData.file);
+    }
+
+    try {
+      // Send POST request to the backend API
+      const response = await axios.post('http://localhost:4000/api/admin/add-visitor', visitorData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      // Update visitor list with the newly added visitor
+      setVisitorList([...visitorList, response.data.visitor]);
+
+      // Reset form after successful submission
+      setFormData({
+        purpose: '',
+        name: '',
+        phone: '',
+        id: '',
+        noOfPersons: '',
+        date: '',
+        inTime: '',
+        outTime: '',
+        file: null,
+      });
+
+      // Optionally show a success message or handle errors
+      alert('Visitor added successfully!');
+    } catch (error) {
+      console.error('Error adding visitor:', error);
+      alert('Error adding visitor. Please try again.');
+    }
   };
 
   return (
     <div className="flex h-screen">
-    {/* Sidebar */}
-    <Sidebar /> {/* Sidebar added here */}
+      {/* Sidebar */}
+      <Sidebar /> {/* Sidebar added here */}
 
-    {/* Main Content */}
-    <div className="flex-1 p-6 ml-64"> {/* Add ml-64 to shift the content right */}
+      {/* Main Content */}
+      <div className="flex-1 p-6 ml-64"> {/* Add ml-64 to shift the content right */}
         <h2 className="text-lg text-gray-700 mb-4">Add Visitor</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
