@@ -13,7 +13,7 @@ const ResultPage = () => {
     const fetchMarks = async () => {
       try {
         const response = await fetch(
-          `http://localhost:4000/api/students/marks/${studentId}`
+          `https://school-backend-1-2xki.onrender.com/api/students/marks/${studentId}`
         );
         const data = await response.json();
 

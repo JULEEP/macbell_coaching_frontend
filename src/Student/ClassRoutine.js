@@ -24,7 +24,7 @@ const ClassRoutinePage = () => {
 
       try {
         const response = await fetch(
-          `http://localhost:4000/api/students/get-routine/${studentId}`
+          `https://school-backend-1-2xki.onrender.com/api/students/get-routine/${studentId}`
         );
         const data = await response.json();
 

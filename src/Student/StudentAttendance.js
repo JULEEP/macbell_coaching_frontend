@@ -15,7 +15,7 @@ const StudentAttendanceList = () => {
     const fetchAttendance = async () => {
       try {
         const response = await fetch(
-          `http://localhost:4000/api/students/get-attendance/${studentId}`
+          `https://school-backend-1-2xki.onrender.com/api/students/get-attendance/${studentId}`
         );
         const data = await response.json();
 

@@ -20,7 +20,7 @@ const StudentCategory = () => {
 
     try {
       // Sending a POST request to the backend API with 'type' as the field
-      const response = await fetch("http://localhost:4000/api/admin/add-category", {
+      const response = await fetch("https://school-backend-1-2xki.onrender.com/api/admin/add-category", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

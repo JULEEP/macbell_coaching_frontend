@@ -37,7 +37,7 @@ const ComplaintBook = () => {
     });
 
     try {
-      const response = await axios.post('http://localhost:4000/api/admin/complaints', formPayload, {
+      const response = await axios.post('https://school-backend-1-2xki.onrender.com/api/admin/complaints', formPayload, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

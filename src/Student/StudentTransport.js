@@ -13,7 +13,7 @@ const TransportPage = () => {
       setLoading(true);
       setError(""); // Reset error
       try {
-        const response = await fetch(`http://localhost:4000/api/students/get-transport/${studentId}`);
+        const response = await fetch(`https://school-backend-1-2xki.onrender.com/api/students/get-transport/${studentId}`);
         const data = await response.json();
 
         if (response.ok) {

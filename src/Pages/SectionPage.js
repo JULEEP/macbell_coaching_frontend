@@ -13,7 +13,7 @@ const SectionPage = () => {
   useEffect(() => {
     const fetchSections = async () => {
       try {
-        const response = await axios.get('http://localhost:4000/api/admin/get-sections');
+        const response = await axios.get('https://school-backend-1-2xki.onrender.com/api/admin/get-sections');
         setSections(response.data.sections); // Update sections state
       } catch (error) {
         console.error('Error fetching sections:', error);

@@ -14,7 +14,7 @@ const StudentDetailsPage = () => {
   useEffect(() => {
     const fetchStudentData = async () => {
       try {
-        const response = await axios.get(`http://localhost:4000/api/admin/single-student/${studentId}`);
+        const response = await axios.get(`https://school-backend-1-2xki.onrender.com/api/admin/single-student/${studentId}`);
         setStudentData(response.data.student);  // Store student data
         setLoading(false);  // Set loading to false once data is fetched
       } catch (error) {

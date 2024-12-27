@@ -5,7 +5,7 @@ const StudentExport = () => {
   // Function to handle export to CSV
   const handleExportCSV = async () => {
     try {
-      const response = await fetch('http://localhost:4000/api/admin/export-students?format=excel', { method: 'GET' });
+      const response = await fetch('https://school-backend-1-2xki.onrender.com/api/admin/export-students?format=excel', { method: 'GET' });
       if (!response.ok) {
         throw new Error('Failed to export to CSV');
       }
@@ -25,7 +25,7 @@ const StudentExport = () => {
   // Function to handle export to PDF
   const handleExportPDF = async () => {
     try {
-      const response = await fetch('http://localhost:4000/api/admin/export-students?format=pdf', { method: 'GET' });
+      const response = await fetch('https://school-backend-1-2xki.onrender.com/api/admin/export-students?format=pdf', { method: 'GET' });
       if (!response.ok) {
         throw new Error('Failed to export to PDF');
       }

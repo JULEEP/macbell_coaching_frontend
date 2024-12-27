@@ -61,7 +61,7 @@ const StudentAdmission = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:4000/api/admin/add-student", {
+      const response = await fetch("https://school-backend-1-2xki.onrender.com/api/admin/add-student", {
         method: "POST",
         body: formDataToSend,
       });

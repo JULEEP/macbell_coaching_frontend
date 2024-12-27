@@ -14,7 +14,7 @@ const NoticeBoard = () => {
       setError(""); // Reset error
       try {
         // Fetch notices from API
-        const response = await fetch(`http://localhost:4000/api/students/notices/${studentId}`);
+        const response = await fetch(`https://school-backend-1-2xki.onrender.com/api/students/notices/${studentId}`);
         const data = await response.json();
 
         if (response.ok) {

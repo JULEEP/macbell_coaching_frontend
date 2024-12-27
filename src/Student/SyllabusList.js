@@ -13,7 +13,7 @@ const StudentSyllabusList = () => {
     const fetchSyllabus = async () => {
       try {
         const response = await fetch(
-          `http://localhost:4000/api/students/get-syllabus/${studentId}`
+          `https://school-backend-1-2xki.onrender.com/api/students/get-syllabus/${studentId}`
         );
         const data = await response.json();
 

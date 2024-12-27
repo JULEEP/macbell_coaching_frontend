@@ -13,7 +13,7 @@ const StudentHomeworkList = () => {
     const fetchHomework = async () => {
       try {
         const response = await fetch(
-          `http://localhost:4000/api/students/get-homework/${studentId}`
+          `https://school-backend-1-2xki.onrender.com/api/students/get-homework/${studentId}`
         );
         const data = await response.json();
 

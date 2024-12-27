@@ -32,7 +32,7 @@ const ClassPage = () => {
     if (formData.name && formData.sections.length > 0) {
       try {
         // Make the POST request to the backend API
-        const response = await axios.post('http://localhost:4000/api/admin/add-class', {
+        const response = await axios.post('https://school-backend-1-2xki.onrender.com/api/admin/add-class', {
           className: formData.name,
           sections: formData.sections,
         });

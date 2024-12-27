@@ -13,7 +13,7 @@ const AddAssignVehicle = () => {
     if (selectedRoute && selectedVehicle) {
       try {
         const response = await axios.post(
-          "http://localhost:4000/api/admin/assign-vehicle",
+          "https://school-backend-1-2xki.onrender.com/api/admin/assign-vehicle",
           {
             route: selectedRoute,
             vehicle: selectedVehicle,

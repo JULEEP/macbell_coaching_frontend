@@ -13,7 +13,7 @@ const SubjectWiseAttendance = () => {
   const handleSearch = async () => {
     try {
       // Make an API request with selected filters
-      const response = await axios.get("http://localhost:4000/api/admin/subject-wise-attend", {
+      const response = await axios.get("https://school-backend-1-2xki.onrender.com/api/admin/subject-wise-attend", {
         params: {
           class: classSelected,
           section: sectionSelected,

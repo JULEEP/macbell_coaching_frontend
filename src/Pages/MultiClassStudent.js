@@ -15,7 +15,7 @@ const MultiClassStudent = () => {
     const fetchStudents = async () => {
       setLoading(true);
       try {
-        const response = await axios.get("http://localhost:4000/api/admin/get-student");
+        const response = await axios.get("https://school-backend-1-2xki.onrender.com/api/admin/get-student");
         if (response.status === 200) {
           setStudents(response.data.students);
         }

@@ -23,7 +23,7 @@ const GenerateSeatPlan = () => {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:4000/api/admin/get-seat", {
+      const response = await fetch("https://school-backend-1-2xki.onrender.com/api/admin/get-seat", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -54,7 +54,7 @@ const GenerateSeatPlan = () => {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:4000/api/admin/create-seat", {
+      const response = await fetch("https://school-backend-1-2xki.onrender.com/api/admin/create-seat", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

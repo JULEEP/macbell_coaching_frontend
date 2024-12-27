@@ -29,7 +29,7 @@ const AssignClassTeacherPage = () => {
     if (formData.className && formData.sectionName && formData.teacherName) {
       setIsLoading(true);
       try {
-        const response = await fetch('http://localhost:4000/api/admin/assign-teacher', {
+        const response = await fetch('https://school-backend-1-2xki.onrender.com/api/admin/assign-teacher', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({

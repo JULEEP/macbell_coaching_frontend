@@ -13,7 +13,7 @@ const LessonPlanPage = () => {
     const fetchLessons = async () => {
       try {
         const response = await fetch(
-          `http://localhost:4000/api/students/get-lesson/${studentId}`
+          `https://school-backend-1-2xki.onrender.com/api/students/get-lesson/${studentId}`
         );
         const data = await response.json();
 

@@ -13,7 +13,7 @@ const TransportRoutePage = () => {
     if (routeTitle && fare) {
       try {
         const response = await axios.post(
-          "http://localhost:4000/api/admin/add-transport-route",
+          "https://school-backend-1-2xki.onrender.com/api/admin/add-transport-route",
           {
             routeTitle,
             fare,

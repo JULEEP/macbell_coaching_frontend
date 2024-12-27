@@ -47,7 +47,7 @@ const ApplyLeave = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:4000/api/students/apply-leave/${studentId}`,
+        `https://school-backend-1-2xki.onrender.com/api/students/apply-leave/${studentId}`,
         {
           method: "POST",
           headers: {

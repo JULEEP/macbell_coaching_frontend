@@ -22,7 +22,7 @@ const AddTopic = () => {
     }
 
     try {
-      const response = await fetch('http://localhost:4000/api/admin/add-topic', {
+      const response = await fetch('https://school-backend-1-2xki.onrender.com/api/admin/add-topic', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

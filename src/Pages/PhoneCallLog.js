@@ -36,7 +36,7 @@ const PhoneCallLog = () => {
 
     try {
       // Call the API to add a phone call
-      const response = await axios.post('http://localhost:4000/api/admin/add-phones', formData);
+      const response = await axios.post('https://school-backend-1-2xki.onrender.com/api/admin/add-phones', formData);
 
       // Update the phone call list with the newly added entry
       setPhoneCallList([...phoneCallList, response.data.phoneCall]);

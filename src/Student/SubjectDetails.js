@@ -14,7 +14,7 @@ const SubjectDetails = () => {
       setError(""); // Reset error
       try {
         // Fetch subject details from API
-        const response = await fetch(`http://localhost:4000/api/students/subjects/${studentId}`);
+        const response = await fetch(`https://school-backend-1-2xki.onrender.com/api/students/subjects/${studentId}`);
         const data = await response.json();
 
         if (response.ok) {

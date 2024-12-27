@@ -44,7 +44,7 @@ const VisitorBook = () => {
 
     try {
       // Send POST request to the backend API
-      const response = await axios.post('http://localhost:4000/api/admin/add-visitor', visitorData, {
+      const response = await axios.post('https://school-backend-1-2xki.onrender.com/api/admin/add-visitor', visitorData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

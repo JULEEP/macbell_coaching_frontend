@@ -41,7 +41,7 @@ const AddHomework = () => {
 
     try {
       // Make the API request to add homework
-      const response = await axios.post("http://localhost:4000/api/admin/add-homework", formDataToSend, {
+      const response = await axios.post("https://school-backend-1-2xki.onrender.com/api/admin/add-homework", formDataToSend, {
         headers: {
           "Content-Type": "multipart/form-data",  // Ensure that it's multipart form data
         },

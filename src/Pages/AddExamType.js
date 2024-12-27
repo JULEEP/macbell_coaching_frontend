@@ -11,7 +11,7 @@ const AddExamType = () => {
   const handleSaveExamType = async () => {
     if (examName) {
       try {
-        const response = await axios.post("http://localhost:4000/api/admin/examtype", {
+        const response = await axios.post("https://school-backend-1-2xki.onrender.com/api/admin/examtype", {
           examName: examName,
         });
 

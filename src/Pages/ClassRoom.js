@@ -22,7 +22,7 @@ const ClassRoomPage = () => {
   const handleSaveClassRoom = async () => {
     if (formData.roomNo && formData.capacity) {
       try {
-        const response = await fetch('http://localhost:4000/api/admin/add-classroom', {
+        const response = await fetch('https://school-backend-1-2xki.onrender.com/api/admin/add-classroom', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

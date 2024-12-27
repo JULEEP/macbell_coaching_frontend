@@ -10,7 +10,7 @@ const HomeworkList = () => {
   useEffect(() => {
     const fetchHomeworks = async () => {
       try {
-        const response = await axios.get("http://localhost:4000/api/admin/homeworks");
+        const response = await axios.get("https://school-backend-1-2xki.onrender.com/api/admin/homeworks");
         setHomeworks(response.data); // Set homeworks data to state
       } catch (error) {
         console.error("Error fetching homework data:", error);

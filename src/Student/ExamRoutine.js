@@ -25,7 +25,7 @@ const ExamRoutinePage = () => {
     try {
       // Fetch the exam schedule for the selected exam type
       const response = await fetch(
-        `http://localhost:4000/api/students/exam-schedule/${studentId}`
+        `https://school-backend-1-2xki.onrender.com/api/students/exam-schedule/${studentId}`
       );
       const data = await response.json();
 
