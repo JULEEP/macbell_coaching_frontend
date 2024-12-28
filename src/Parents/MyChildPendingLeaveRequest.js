@@ -1,28 +1,34 @@
 import React, { useState, useEffect } from "react";
 import StudentSidebar from "../Sidebar";
+import axios from "axios";
 
 const MyChildPendingLeaveRequest = () => {
   const [pendingRequests, setPendingRequests] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    // Simulate fetching data from the database
-    const fetchData = async () => {
-      // Replace with your API call
-      const data = [
-        // Sample data
-        {
-          id: 1,
-          name: "Anissa Harris",
-          type: "Sick Leave",
-          from: "12/15/2024",
-          to: "12/18/2024",
-          applyDate: "12/10/2024",
-          status: "Pending",
-        },
-      ];
-      setPendingRequests(data);
+    // Fetch leave data from the API
+    const fetchLeaveRequests = async () => {
+      const parentId = "676f98625b442721a56ee770"; // Replace with actual parent ID
+      const studentId = "676bb21bd06928a8432c676a"; // Replace with actual student ID
+
+      try {
+        const response = await axios.get(
+          `https://school-backend-1-2xki.onrender.com/api/parent/my-child-leaves/${parentId}/${studentId}`
+        );
+        const leaves = response.data.leaves || [];
+        // Filter pending requests based on the status
+        const pending = leaves.filter((leave) => leave.status === "Pending");
+        setPendingRequests(pending);
+        setLoading(false);
+      } catch (err) {
+        setError(err.response?.data?.message || "Failed to fetch leave requests");
+        setLoading(false);
+      }
     };
-    fetchData();
+
+    fetchLeaveRequests();
   }, []);
 
   return (
@@ -57,13 +63,22 @@ const MyChildPendingLeaveRequest = () => {
                 </tr>
               </thead>
               <tbody>
-                {pendingRequests.length === 0 ? (
+                {loading ? (
                   <tr>
-                    <td
-                      className="py-2 px-4 text-center text-gray-500 font-medium"
-                      colSpan="6"
-                    >
-                      No Data Available In Table
+                    <td colSpan="6" className="py-2 px-4 text-center text-gray-500">
+                      Loading...
+                    </td>
+                  </tr>
+                ) : error ? (
+                  <tr>
+                    <td colSpan="6" className="py-2 px-4 text-center text-red-500">
+                      {error}
+                    </td>
+                  </tr>
+                ) : pendingRequests.length === 0 ? (
+                  <tr>
+                    <td colSpan="6" className="py-2 px-4 text-center text-gray-500">
+                      No Pending Requests Available
                     </td>
                   </tr>
                 ) : (

@@ -151,6 +151,7 @@ import ParentTeachersList from './Parents/ParentTeachersList';
 import ParentStudentBookListPage from './Parents/ParentStudentBookListPage';
 import ParentTransportPage from './Parents/ParentTransportPage';
 import Login from './Student/Login';
+import MyChildMarksPage from './Parents/MyChildrenMarks';
 
 function App() {
   return (
@@ -312,6 +313,8 @@ function App() {
            <Route path="/parent-teachers" element={<ParentTeachersList/>} />
            <Route path="/parent-booklist" element={<ParentStudentBookListPage/>} />
            <Route path="/parent-transport" element={<ParentTransportPage/>} />
+           <Route path="/mychild-exam-schedules" element={<MyChildMarksPage/>} />
+
 
 
 

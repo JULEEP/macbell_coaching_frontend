@@ -1,45 +1,53 @@
 import React, { useState } from 'react';
 import ParentSidebar from './ParentSidebar';
+import axios from 'axios';
 
 const MyChildExamSchedule = () => {
   const [exam, setExam] = useState('');
   const [classType, setClassType] = useState('');
   const [section, setSection] = useState('');
-  const [scheduleData, setScheduleData] = useState([
-    {
-      id: 1,
-      examTitle: 'Final Exam',
-      class: 'Class 1',
-      section: 'A',
-      subject: 'Math',
-      examDate: '12/20/2024',
-      startTime: '10:00 AM',
-      endTime: '12:00 PM',
-    },
-    {
-      id: 2,
-      examTitle: 'Mid-Term Exam',
-      class: 'Class 2',
-      section: 'B',
-      subject: 'Science',
-      examDate: '12/22/2024',
-      startTime: '11:00 AM',
-      endTime: '1:00 PM',
-    },
-  ]);
+  const [scheduleData, setScheduleData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleSearch = () => {
-    // Handle the search logic here (e.g., filter the table data)
-    console.log({ exam, classType, section });
+  // Parent and student IDs (replace with dynamic values or props as needed)
+  const parentId = '676f98625b442721a56ee770';
+  const studentId = '676bb21bd06928a8432c676a';
+
+  const handleSearch = async () => {
+    setLoading(true);
+    setError('');
+    setScheduleData([]);
+
+    try {
+      const response = await axios.get(
+        `https://school-backend-1-2xki.onrender.com/api/parent/my-child-examshedule/${parentId}/${studentId}`
+      );
+
+      const fetchedSchedule = response.data.examSchedule || [];
+      if (fetchedSchedule.length === 0) {
+        setError('No exam schedule found for the selected criteria.');
+      } else {
+        setScheduleData(fetchedSchedule);
+      }
+    } catch (err) {
+      if (err.response && err.response.data.message) {
+        setError(err.response.data.message);
+      } else {
+        setError('Failed to fetch exam schedule. Please try again.');
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="flex h-screen">
       {/* Sidebar */}
-      <ParentSidebar /> {/* Sidebar added here */}
+      <ParentSidebar />
 
       {/* Main Content */}
-      <div className="flex-1 ml-4 mt-4"> {/* Add ml-64 to shift the content right */}
+      <div className="flex-1 ml-4 mt-4">
         {/* Title */}
         <h1 className="text-xl text-blue-500 font-medium mb-4">Exam Schedule</h1>
 
@@ -106,8 +114,9 @@ const MyChildExamSchedule = () => {
             <button
               onClick={handleSearch}
               className="bg-purple-500 text-white p-2 rounded text-xs hover:bg-purple-600"
+              disabled={loading}
             >
-              Search
+              {loading ? 'Loading...' : 'Search'}
             </button>
           </div>
         </div>
@@ -116,41 +125,44 @@ const MyChildExamSchedule = () => {
         <div className="bg-white p-6 rounded-lg shadow-lg">
           <h2 className="text-xs text-gray-700 font-medium mb-4">Exam Schedule List</h2>
 
-          <div className="overflow-x-auto">
-            <table className="min-w-full table-auto">
-              <thead className="bg-gray-100">
-                <tr>
-                  <th className="px-4 py-2 text-left text-xs">SL</th>
-                  <th className="px-4 py-2 text-left text-xs">Exam Title</th>
-                  <th className="px-4 py-2 text-left text-xs">Class</th>
-                  <th className="px-4 py-2 text-left text-xs">Section</th>
-                  <th className="px-4 py-2 text-left text-xs">Subject</th>
-                  <th className="px-4 py-2 text-left text-xs">Exam Date</th>
-                  <th className="px-4 py-2 text-left text-xs">Start Time</th>
-                  <th className="px-4 py-2 text-left text-xs">End Time</th>
-                </tr>
-              </thead>
-              <tbody>
-                {scheduleData.map((schedule, index) => (
-                  <tr key={schedule.id}>
-                    <td className="px-4 py-2 text-xs">{index + 1}</td>
-                    <td className="px-4 py-2 text-xs">{schedule.examTitle}</td>
-                    <td className="px-4 py-2 text-xs">{schedule.class}</td>
-                    <td className="px-4 py-2 text-xs">{schedule.section}</td>
-                    <td className="px-4 py-2 text-xs">{schedule.subject}</td>
-                    <td className="px-4 py-2 text-xs">{schedule.examDate}</td>
-                    <td className="px-4 py-2 text-xs">{schedule.startTime}</td>
-                    <td className="px-4 py-2 text-xs">{schedule.endTime}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          {error && <div className="text-red-500 text-xs mb-4">{error}</div>}
 
-          {/* Pagination or Entry Count */}
-          <div className="mt-4 text-gray-500 text-xs">
-            Showing {scheduleData.length} entries
-          </div>
+          {scheduleData.length > 0 ? (
+            <div className="overflow-x-auto">
+              <table className="min-w-full table-auto">
+                <thead className="bg-gray-100">
+                  <tr>
+                    <th className="px-4 py-2 text-left text-xs">SL</th>
+                    <th className="px-4 py-2 text-left text-xs">Exam Title</th>
+                    <th className="px-4 py-2 text-left text-xs">Class</th>
+                    <th className="px-4 py-2 text-left text-xs">Section</th>
+                    <th className="px-4 py-2 text-left text-xs">Subject</th>
+                    <th className="px-4 py-2 text-left text-xs">Exam Date</th>
+                    <th className="px-4 py-2 text-left text-xs">Start Time</th>
+                    <th className="px-4 py-2 text-left text-xs">End Time</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {scheduleData.map((schedule, index) => (
+                    <tr key={schedule.id}>
+                      <td className="px-4 py-2 text-xs">{index + 1}</td>
+                      <td className="px-4 py-2 text-xs">{schedule.examTitle}</td>
+                      <td className="px-4 py-2 text-xs">{schedule.class}</td>
+                      <td className="px-4 py-2 text-xs">{schedule.section}</td>
+                      <td className="px-4 py-2 text-xs">{schedule.subject}</td>
+                      <td className="px-4 py-2 text-xs">{schedule.examDate}</td>
+                      <td className="px-4 py-2 text-xs">{schedule.startTime}</td>
+                      <td className="px-4 py-2 text-xs">{schedule.endTime}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            !loading && !error && (
+              <div className="text-gray-500 text-xs">No exam schedule available.</div>
+            )
+          )}
         </div>
       </div>
     </div>

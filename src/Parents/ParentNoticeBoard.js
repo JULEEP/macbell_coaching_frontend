@@ -1,19 +1,31 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ParentSidebar from "./ParentSidebar";
+import axios from "axios";
 
 const ParentNoticeBoard = () => {
-  const notices = [
-    {
-      title: "Mr.",
-      description:
-        "Hic quia explicabo vero qui vel. Incidunt voluptatem natus dolor ea quo sequi ut. Et ut illo ad commodi.",
-      publishDate: "16th Jun, 1983",
-    },
-    { title: "Miss", description: "Sample Notice Description", publishDate: "10th Mar, 1995" },
-    { title: "Dr.", description: "Another Notice Description", publishDate: "22nd Aug, 2005" },
-    { title: "Prof.", description: "Detailed Notice Information", publishDate: "5th Jan, 2010" },
-    { title: "Miss", description: "Short Notice Text Here", publishDate: "30th Sep, 2020" },
-  ];
+  const [notices, setNotices] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const fetchNotices = async () => {
+      const parentId = "676f98625b442721a56ee770";
+      const studentId = "676bb21bd06928a8432c676a";
+
+      try {
+        const response = await axios.get(
+          `https://school-backend-1-2xki.onrender.com/api/parent/my-child-notice/${parentId}/${studentId}`
+        );
+        setNotices(response.data.notices);
+        setLoading(false);
+      } catch (err) {
+        setError(err.response?.data?.message || "Failed to fetch notices");
+        setLoading(false);
+      }
+    };
+
+    fetchNotices();
+  }, []);
 
   return (
     <div className="min-h-screen flex bg-gray-100">
@@ -33,21 +45,29 @@ const ParentNoticeBoard = () => {
 
           {/* Notice Cards */}
           <div className="space-y-3">
-            {notices.map((notice, index) => (
-              <div
-                key={index}
-                className="border border-gray-300 rounded-lg p-3 bg-gray-50 hover:shadow-md flex justify-between items-start h-20"
-              >
-                <div className="flex-1">
-                  <h3 className="text-sm font-semibold text-gray-800">{notice.title}</h3>
-                  <p className="text-xs text-gray-700 mt-1">{notice.description}</p>
+            {loading ? (
+              <p className="text-center text-gray-500">Loading notices...</p>
+            ) : error ? (
+              <p className="text-center text-red-500">{error}</p>
+            ) : notices.length > 0 ? (
+              notices.map((notice, index) => (
+                <div
+                  key={index}
+                  className="border border-gray-300 rounded-lg p-3 bg-gray-50 hover:shadow-md flex justify-between items-start"
+                >
+                  <div className="flex-1">
+                    <h3 className="text-sm font-semibold text-gray-800">{notice.title}</h3>
+                    <p className="text-xs text-gray-700 mt-1">{notice.description}</p>
+                  </div>
+                  <div className="text-xs text-gray-500 ml-4 flex flex-col items-end">
+                    <span className="font-medium">Publish Date:</span>
+                    <span>{notice.publishDate}</span>
+                  </div>
                 </div>
-                <div className="text-xs text-gray-500 ml-4 flex flex-col items-end">
-                  <span className="font-medium">Publish Date:</span>
-                  <span>{notice.publishDate}</span>
-                </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <p className="text-center text-gray-500">No notices available</p>
+            )}
           </div>
         </div>
       </div>

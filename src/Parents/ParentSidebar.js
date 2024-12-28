@@ -105,15 +105,6 @@ const ParentSidebar = () => {
                   <span className="text-xs whitespace-nowrap">Lesson Plan</span>
                 </NavLink>
               </li>
-              <li>
-                <NavLink
-                  to="/mychild-lesson-plan-overview"
-                  className="flex items-center text-lg text-gray-400 hover:text-gray-300"
-                  activeClassName="text-blue-500"
-                >
-                  <span className="text-xs whitespace-nowrap">Lesson Overview</span>
-                </NavLink>
-              </li>
             </ul>
           )}
         </li>
@@ -169,7 +160,7 @@ const ParentSidebar = () => {
             <ul className="pl-8 space-y-4 mt-2">
               <li>
                 <NavLink
-                  to="/mychild-exam-schedule"
+                  to="/mychild-exam-schedules"
                   className="flex items-center text-lg text-gray-400 hover:text-gray-300"
                   activeClassName="text-blue-500"
                 >
@@ -209,15 +200,6 @@ const ParentSidebar = () => {
                   activeClassName="text-blue-500"
                 >
                   <span className="text-xs whitespace-nowrap">Apply Leave</span>
-                </NavLink>
-              </li>
-              <li>
-                <NavLink
-                  to="/mychild-pendingleave"
-                  className="flex items-center text-lg text-gray-400 hover:text-gray-300"
-                  activeClassName="text-blue-500"
-                >
-                  <span className="text-xs whitespace-nowrap">Pending Leave</span>
                 </NavLink>
               </li>
             </ul>
