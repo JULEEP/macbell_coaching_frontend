@@ -152,6 +152,16 @@ import ParentStudentBookListPage from './Parents/ParentStudentBookListPage';
 import ParentTransportPage from './Parents/ParentTransportPage';
 import Login from './Student/Login';
 import MyChildMarksPage from './Parents/MyChildrenMarks';
+import TeacherSidebar from './Teacher/TeacherSidebar';
+import TeacherDashboard from './Teacher/TeacherDashboard';
+import TeacherAttendance from './Teacher/TeacherAttendance';
+import AddHomeworkByTeacher from './Teacher/AssignHomework';
+import TeacherHomework from './Teacher/HomeworkList';
+import TeacherExamSchedulePage from './Teacher/TeacherExamSchedule';
+import TeacherClassRoutinePage from './Teacher/classRoutine';
+import NoticeBoardForTeacher from './Teacher/NoticeBoard';
+import TeacherLeavePage from './Teacher/TeacherLeave';
+import TeacherStudentsPage from './Teacher/StudentList';
 
 function App() {
   return (
@@ -314,6 +324,30 @@ function App() {
            <Route path="/parent-booklist" element={<ParentStudentBookListPage/>} />
            <Route path="/parent-transport" element={<ParentTransportPage/>} />
            <Route path="/mychild-exam-schedules" element={<MyChildMarksPage/>} />
+
+
+          {/* Parents Sections */} 
+          <Route path="/teacher-sidebar" element={<TeacherSidebar/>} />
+          <Route path="/teacher-dashboard" element={<TeacherDashboard/>} />
+          <Route path="/teacher-attendance" element={<TeacherAttendance/>} />
+          <Route path="/teacher-homework" element={<AddHomeworkByTeacher/>} />
+          <Route path="/teacher-homeworklist" element={<TeacherHomework/>} />
+          <Route path="/teacher-exam-schedule" element={<TeacherExamSchedulePage/>} />
+          <Route path="/teacher-classroutine" element={<TeacherClassRoutinePage/>} />
+          <Route path="/teacher-noticeboard" element={<NoticeBoardForTeacher/>} />
+          <Route path="/teacher-leave" element={<TeacherLeavePage/>} />
+          <Route path="/teacher-students" element={<TeacherStudentsPage/>} />
+
+
+
+
+
+
+
+
+
+ 
+
 
 
 
