@@ -10,8 +10,8 @@ const ParentDashboard = () => {
       </div>
 
       {/* Dashboard Content */}
-      <div className="w-2/1 mr-6 mt-4">
-        <h1 className="text-xl font-semibold text-blue-500 mb-6">Parent Dashboard</h1>
+      <div className="w-1/1 mr-40 mt-4">
+        <h1 className="text-xl font-semibold text-blue-500 mb-6 mr-30">Parent Dashboard</h1>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {/* Subject Card (Dark Blue) */}

@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Sidebar from './Sidebar';
+import axios from 'axios';
 
 const UploadContent = () => {
   const [contentTitle, setContentTitle] = useState('');
@@ -10,230 +11,189 @@ const UploadContent = () => {
   const [date, setDate] = useState('2024-12-15');
   const [description, setDescription] = useState('');
   const [sourceUrl, setSourceUrl] = useState('');
-  const [file, setFile] = useState(null);
+  const [message, setMessage] = useState('');
+  const [contentList, setContentList] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
 
-  const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
-  };
+  useEffect(() => {
+    const fetchContent = async () => {
+      try {
+        const response = await axios.get('https://school-backend-1-2xki.onrender.com/api/admin/get-content');
+        if (response.data.message === 'Content retrieved successfully.') {
+          setContentList(response.data.data);
+        }
+      } catch (error) {
+        console.error('Error fetching content:', error);
+      }
+    };
 
-  const handleSave = () => {
-    // Implement save logic here
-    console.log({
+    fetchContent();
+  }, []);
+
+  const handleSave = async () => {
+    const formData = {
       contentTitle,
       contentType,
       availableFor,
-      selectedClass,
-      selectedSection,
+      class: selectedClass,
+      section: selectedSection,
       date,
       description,
-      sourceUrl,
-      file,
-    });
+      sourceURL: sourceUrl,
+    };
+
+    try {
+      const response = await axios.post('https://school-backend-1-2xki.onrender.com/api/admin/upload-content', formData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.data.message === 'Content uploaded successfully.') {
+        setContentTitle('');
+        setContentType('');
+        setAvailableFor('All');
+        setSelectedClass('');
+        setSelectedSection('');
+        setDate('2024-12-15');
+        setDescription('');
+        setSourceUrl('');
+        setMessage(response.data.message);
+
+        const contentResponse = await axios.get('https://school-backend-1-2xki.onrender.com/api/admin/get-content');
+        if (contentResponse.data.message === 'Content retrieved successfully.') {
+          setContentList(contentResponse.data.data);
+        }
+      }
+    } catch (error) {
+      console.error('Error uploading content:', error);
+      setMessage('Error uploading content');
+    }
+  };
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = contentList.slice(indexOfFirstItem, indexOfLastItem);
+
+  const totalPages = Math.ceil(contentList.length / itemsPerPage);
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage((prev) => prev + 1);
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage((prev) => prev - 1);
+    }
   };
 
   return (
-    <div className="flex h-screen">
-    {/* Sidebar */}
-    <Sidebar /> {/* Sidebar added here */}
-
-    {/* Main Content */}
-    <div className="flex-1 p-6 ml-64">
-    <div className="flex gap-6">
-    <div className="w-1/3 bg-white p-6 rounded-md shadow-md">
-        <h2 className="text-xl font-semibold text-gray-700 mb-4">Upload Content</h2>
-
-        <div className="space-y-4">
-          {/* Content Title */}
-          <div>
-            <label htmlFor="contentTitle" className="block text-sm text-gray-600">Content Title *</label>
+    <div className="flex flex-col h-screen">
+      <Sidebar />
+      <div className="flex-1 p-6 ml-64">
+        <div className="bg-white p-6 rounded-md shadow-md mb-6">
+          <h2 className="text-xl font-semibold text-gray-700 mb-4">Upload Content</h2>
+          <div className="grid grid-cols-4 gap-4">
             <input
               type="text"
-              id="contentTitle"
+              placeholder="Content Title"
               value={contentTitle}
               onChange={(e) => setContentTitle(e.target.value)}
-              className="border border-gray-300 rounded-md p-3 w-full focus:outline-none focus:ring-2 focus:ring-purple-500"
-              required
+              className="border border-gray-300 rounded-md p-3"
             />
-          </div>
-
-          {/* Content Type */}
-          <div>
-            <label htmlFor="contentType" className="block text-sm text-gray-600">Content Type *</label>
             <select
-              id="contentType"
               value={contentType}
               onChange={(e) => setContentType(e.target.value)}
-              className="border border-gray-300 rounded-md p-3 w-full focus:outline-none focus:ring-2 focus:ring-purple-500"
-              required
+              className="border border-gray-300 rounded-md p-3"
             >
               <option value="">Select Content Type</option>
               <option value="Document">Document</option>
               <option value="Video">Video</option>
               <option value="Audio">Audio</option>
             </select>
-          </div>
-
-          {/* Available For */}
-          <div>
-            <label className="block text-sm text-gray-600">Available For *</label>
-            <div className="flex items-center gap-4">
-              <label className="flex items-center gap-2">
-                <input
-                  type="radio"
-                  name="availableFor"
-                  value="All"
-                  checked={availableFor === 'All'}
-                  onChange={(e) => setAvailableFor(e.target.value)}
-                />
-                All
-              </label>
-              <label className="flex items-center gap-2">
-                <input
-                  type="radio"
-                  name="availableFor"
-                  value="Admin"
-                  checked={availableFor === 'Admin'}
-                  onChange={(e) => setAvailableFor(e.target.value)}
-                />
-                Admin
-              </label>
-              <label className="flex items-center gap-2">
-                <input
-                  type="radio"
-                  name="availableFor"
-                  value="Student"
-                  checked={availableFor === 'Student'}
-                  onChange={(e) => setAvailableFor(e.target.value)}
-                />
-                Student
-              </label>
-            </div>
-          </div>
-
-          {/* Class Dropdown */}
-          <div>
-            <label htmlFor="class" className="block text-sm text-gray-600">Class</label>
             <select
-              id="class"
-              value={selectedClass}
-              onChange={(e) => setSelectedClass(e.target.value)}
-              className="border border-gray-300 rounded-md p-3 w-full focus:outline-none focus:ring-2 focus:ring-purple-500"
+              value={availableFor}
+              onChange={(e) => setAvailableFor(e.target.value)}
+              className="border border-gray-300 rounded-md p-3"
             >
-              <option value="">Select Class</option>
-              <option value="Class A">Class A</option>
-              <option value="Class B">Class B</option>
-              <option value="Class C">Class C</option>
+              <option value="All">All</option>
+              <option value="Admin">Admin</option>
+              <option value="Student">Student</option>
             </select>
-          </div>
-
-          {/* Section Dropdown */}
-          <div>
-            <label htmlFor="section" className="block text-sm text-gray-600">Section</label>
-            <select
-              id="section"
-              value={selectedSection}
-              onChange={(e) => setSelectedSection(e.target.value)}
-              className="border border-gray-300 rounded-md p-3 w-full focus:outline-none focus:ring-2 focus:ring-purple-500"
-            >
-              <option value="">Select Section</option>
-              <option value="A">Section A</option>
-              <option value="B">Section B</option>
-              <option value="C">Section C</option>
-            </select>
-          </div>
-
-          {/* Date Picker */}
-          <div>
-            <label htmlFor="date" className="block text-sm text-gray-600">Date</label>
             <input
               type="date"
-              id="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              className="border border-gray-300 rounded-md p-3 w-full focus:outline-none focus:ring-2 focus:ring-purple-500"
+              className="border border-gray-300 rounded-md p-3"
             />
           </div>
-
-          {/* Description */}
-          <div>
-            <label htmlFor="description" className="block text-sm text-gray-600">Description</label>
-            <textarea
-              id="description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              className="border border-gray-300 rounded-md p-3 w-full focus:outline-none focus:ring-2 focus:ring-purple-500"
-              rows="3"
-            ></textarea>
-          </div>
-
-          {/* Source URL */}
-          <div>
-            <label htmlFor="sourceUrl" className="block text-sm text-gray-600">Source URL</label>
-            <input
-              type="text"
-              id="sourceUrl"
-              value={sourceUrl}
-              onChange={(e) => setSourceUrl(e.target.value)}
-              className="border border-gray-300 rounded-md p-3 w-full focus:outline-none focus:ring-2 focus:ring-purple-500"
-            />
-          </div>
-
-          {/* File Upload */}
-          <div>
-            <label htmlFor="file" className="block text-sm text-gray-600">File</label>
-            <input
-              type="file"
-              id="file"
-              accept=".jpg,.png,.jpeg,.pdf,.doc,.docx,.mp4,.mp3,.txt"
-              onChange={handleFileChange}
-              className="block w-full text-sm text-gray-600 border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-purple-500"
-            />
-          </div>
-
-          {/* Save Button */}
-          <div className="mt-6">
+          <textarea
+            placeholder="Description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            className="border border-gray-300 rounded-md p-3 w-full mt-4"
+          ></textarea>
+          <input
+            type="text"
+            placeholder="Source URL"
+            value={sourceUrl}
+            onChange={(e) => setSourceUrl(e.target.value)}
+            className="border border-gray-300 rounded-md p-3 w-full mt-4"
+          />
+          <button
+            type="button"
+            onClick={handleSave}
+            className="mt-6 px-6 py-2 bg-purple-600 text-white rounded-md"
+          >
+            Save
+          </button>
+          {message && <p className="mt-4 text-green-500">{message}</p>}
+        </div>
+        <div className="bg-white p-8 rounded-lg shadow-lg">
+          <h2 className="text-xl font-semibold text-gray-700 mb-4">Upload Content List</h2>
+          <table className="w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-200">
+                <th className="px-4 py-2 text-left">SL</th>
+                <th className="px-4 py-2 text-left">Content Title</th>
+                <th className="px-4 py-2 text-left">Type</th>
+                <th className="px-4 py-2 text-left">Date</th>
+                <th className="px-4 py-2 text-left">Available For</th>
+              </tr>
+            </thead>
+            <tbody>
+              {currentItems.map((content, index) => (
+                <tr key={content._id}>
+                  <td className="px-4 py-2">{indexOfFirstItem + index + 1}</td>
+                  <td className="px-4 py-2">{content.contentTitle}</td>
+                  <td className="px-4 py-2">{content.contentType}</td>
+                  <td className="px-4 py-2">{new Date(content.date).toLocaleDateString()}</td>
+                  <td className="px-4 py-2">{content.availableFor}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <div className="flex justify-end mt-4">
             <button
-              type="button"
-              onClick={handleSave}
-              className="px-6 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700"
+              onClick={handlePrevPage}
+              disabled={currentPage === 1}
+              className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md mr-2 disabled:opacity-50"
             >
-              Save
+              Previous
+            </button>
+            <button
+              onClick={handleNextPage}
+              disabled={currentPage === totalPages}
+              className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md disabled:opacity-50"
+            >
+              Next
             </button>
           </div>
         </div>
       </div>
-
-     {/* Right Side: List */}
-     <div className="w-2/3 bg-white p-8 rounded-lg shadow-lg" style={{ height: '400px', overflowY: 'auto' }}>
-     <h2 className="text-xl font-semibold text-gray-700 mb-4">Upload Content List</h2>
-<div className="overflow-y-auto" style={{ maxHeight: '300px' }}>
-  <table className="w-full border-collapse">
-    <thead>
-      <tr className="bg-gray-200">
-        <th className="px-4 py-2 text-left">SL</th>
-        <th className="px-4 py-2 text-left">Content Title</th>
-        <th className="px-4 py-2 text-left">Type</th>
-        <th className="px-4 py-2 text-left">Date</th>
-        <th className="px-4 py-2 text-left">Available For</th>
-      </tr>
-    </thead>
-    <tbody>
-      {/* Add rows here */}
-      <tr>
-        <td className="px-4 py-2">1</td>
-        <td className="px-4 py-2">Sample Content</td>
-        <td className="px-4 py-2">Document</td>
-        <td className="px-4 py-2">2024-12-15</td>
-        <td className="px-4 py-2">All</td>
-      </tr>
-      {/* Repeat similar rows */}
-    </tbody>
-  </table>
-</div>
-</div>
-
-    </div>
-    </div>
     </div>
   );
 };

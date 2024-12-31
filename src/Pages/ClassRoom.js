@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Sidebar from './Sidebar';
 
 const ClassRoomPage = () => {
@@ -10,6 +10,29 @@ const ClassRoomPage = () => {
   const [classRooms, setClassRooms] = useState([]);
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(5);
+
+  // Fetch classrooms from the API
+  const fetchClassrooms = async () => {
+    try {
+      const response = await fetch('https://school-backend-1-2xki.onrender.com/api/admin/get-classroom');
+      const result = await response.json();
+
+      if (response.ok) {
+        // Assuming result.data is the array of classrooms
+        setClassRooms(result.data);
+      } else {
+        setError(result.message || 'Failed to fetch classrooms.');
+      }
+    } catch (error) {
+      setError('An error occurred while fetching classrooms.');
+    }
+  };
+
+  useEffect(() => {
+    fetchClassrooms();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -36,7 +59,7 @@ const ClassRoomPage = () => {
         const result = await response.json();
 
         if (response.ok) {
-          setClassRooms([...classRooms, { id: result.data._id, ...formData }]);
+          setClassRooms([...classRooms, { id: result.data._id, roomNumber: formData.roomNo, capacity: formData.capacity }]);
           setFormData({ roomNo: '', capacity: '' });
           setError('');
           setSuccessMessage('Classroom added successfully!');
@@ -58,10 +81,17 @@ const ClassRoomPage = () => {
     setClassRooms(classRooms.filter((room) => room.id !== id));
   };
 
+  // Pagination logic
+  const indexOfLastClassRoom = currentPage * itemsPerPage;
+  const indexOfFirstClassRoom = indexOfLastClassRoom - itemsPerPage;
+  const currentClassRooms = classRooms.slice(indexOfFirstClassRoom, indexOfLastClassRoom);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
   return (
     <div className="flex h-screen">
       {/* Sidebar */}
-      <Sidebar /> {/* Sidebar added here */}
+      <Sidebar />
 
       {/* Main Content */}
       <div className="flex-1 p-6 ml-64">
@@ -130,21 +160,21 @@ const ClassRoomPage = () => {
                 </tr>
               </thead>
               <tbody>
-                {classRooms.length === 0 ? (
+                {currentClassRooms.length === 0 ? (
                   <tr>
                     <td colSpan="3" className="text-center text-gray-500">
                       No Data Available In Table
                     </td>
                   </tr>
                 ) : (
-                  classRooms.map((room) => (
-                    <tr key={room.id} className="border-t border-gray-300">
-                      <td className="px-4 py-2 text-gray-600">{room.roomNo}</td>
-                      <td className="px-4 py-2 text-gray-600">{room.capacity}</td>
-                      <td className="px-4 py-2 text-gray-600">
+                  currentClassRooms.map((room) => (
+                    <tr key={room._id} className="border-t border-gray-300">
+                      <td className="px-4 py-2 text-gray-600 text-center">{room.roomNumber}</td>
+                      <td className="px-4 py-2 text-gray-600 text-center">{room.capacity}</td>
+                      <td className="px-4 py-2 text-gray-600 text-center">
                         <button
-                          onClick={() => handleRemoveClassRoom(room.id)}
-                          className="text-red-600 hover:text-red-800"
+                          onClick={() => handleRemoveClassRoom(room._id)}
+                          className="text-red-600 hover:text-red-800 text-center"
                         >
                           Remove
                         </button>
@@ -154,6 +184,24 @@ const ClassRoomPage = () => {
                 )}
               </tbody>
             </table>
+
+            {/* Pagination */}
+            <div className="flex justify-center mt-4">
+              <button
+                onClick={() => paginate(currentPage - 1)}
+                disabled={currentPage === 1}
+                className="px-4 py-2 bg-purple-600 text-white rounded-md mr-2"
+              >
+                Previous
+              </button>
+              <button
+                onClick={() => paginate(currentPage + 1)}
+                disabled={indexOfLastClassRoom >= classRooms.length}
+                className="px-4 py-2 bg-purple-600 text-white rounded-md"
+              >
+                Next
+              </button>
+            </div>
           </div>
         </div>
       </div>

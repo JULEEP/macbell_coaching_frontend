@@ -1,20 +1,61 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Sidebar from './Sidebar';
+import axios from 'axios'; // Ensure you have axios imported
 
 const AssignClassTeacherPage = () => {
   const [formData, setFormData] = useState({
     className: '',
     sectionName: '',
-    teacherName: '',
+    teacher: '', // Changed to "teacher" instead of "teacherName"
   });
 
   const [classTeacherAssignments, setClassTeacherAssignments] = useState([]);
-  const [isLoading, setIsLoading] = useState(false); // To handle API loading state
-  const [error, setError] = useState(''); // To handle API errors
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const classOptions = ['Class A', 'Class B', 'Class C']; // Example class options
-  const sectionOptions = ['Section A', 'Section B', 'Section C']; // Example section options
-  const teacherOptions = ['Teacher 1', 'Teacher 2', 'Teacher 3']; // Example teacher options
+  // Dropdown options states
+  const [classes, setClasses] = useState([]);
+  const [sections, setSections] = useState([]);
+  const [teachers, setTeachers] = useState([]);
+
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [assignmentsPerPage] = useState(5);
+
+  // Fetch data for classes, sections, and teachers on component mount
+  useEffect(() => {
+    const fetchDropdownData = async () => {
+      try {
+        // Fetch classes
+        const classResponse = await fetch('https://school-backend-1-2xki.onrender.com/api/admin/get-classes');
+        const classData = await classResponse.json();
+        if (classResponse.ok) {
+          setClasses(classData.classes || []);
+        } else {
+          throw new Error('Failed to fetch classes');
+        }
+
+        // Fetch sections using axios
+        const response = await axios.get('https://school-backend-1-2xki.onrender.com/api/admin/get-section');
+        setSections(response.data.sections || []); // Set sections
+
+        // Fetch teachers
+        const teacherResponse = await fetch('https://school-backend-1-2xki.onrender.com/api/admin/get-teacher');
+        const teacherData = await teacherResponse.json();
+        if (teacherResponse.ok) {
+          // Extract only the teacher names
+          const teacherNames = teacherData.data.map((teacher) => teacher.teacher); // Extracting only the teacher name
+          setTeachers(teacherNames || []);
+        } else {
+          throw new Error('Failed to fetch teachers');
+        }
+      } catch (error) {
+        setError(error.message);
+      }
+    };
+
+    fetchDropdownData();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -25,8 +66,8 @@ const AssignClassTeacherPage = () => {
   };
 
   const handleSaveAssignment = async () => {
-    setError(''); // Clear any previous errors
-    if (formData.className && formData.sectionName && formData.teacherName) {
+    setError('');
+    if (formData.className && formData.sectionName && formData.teacher) {
       setIsLoading(true);
       try {
         const response = await fetch('https://school-backend-1-2xki.onrender.com/api/admin/assign-teacher', {
@@ -35,7 +76,7 @@ const AssignClassTeacherPage = () => {
           body: JSON.stringify({
             class: formData.className,
             section: formData.sectionName,
-            teacher: formData.teacherName,
+            teacher: formData.teacher,
           }),
         });
 
@@ -44,17 +85,16 @@ const AssignClassTeacherPage = () => {
         }
 
         const data = await response.json();
-        // Update the local state with the new assignment
         setClassTeacherAssignments([
           ...classTeacherAssignments,
           {
-            id: classTeacherAssignments.length + 1, // Temporary ID for the local state
+            id: classTeacherAssignments.length + 1, 
             className: formData.className,
             sectionName: formData.sectionName,
-            teacherName: formData.teacherName,
+            teacherName: formData.teacher,
           },
         ]);
-        setFormData({ className: '', sectionName: '', teacherName: '' }); // Reset the form
+        setFormData({ className: '', sectionName: '', teacher: '' }); // Clear the form
       } catch (error) {
         setError(error.message || 'An unexpected error occurred.');
       } finally {
@@ -69,15 +109,19 @@ const AssignClassTeacherPage = () => {
     setClassTeacherAssignments(classTeacherAssignments.filter((assignment) => assignment.id !== id));
   };
 
+  // Pagination logic
+  const indexOfLastAssignment = currentPage * assignmentsPerPage;
+  const indexOfFirstAssignment = indexOfLastAssignment - assignmentsPerPage;
+  const currentAssignments = classTeacherAssignments.slice(indexOfFirstAssignment, indexOfLastAssignment);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
   return (
     <div className="flex h-screen">
-      {/* Sidebar */}
       <Sidebar />
 
-      {/* Main Content */}
       <div className="flex-1 p-6 ml-64">
         <div className="flex gap-6">
-          {/* Form Section */}
           <div className="w-1/3 bg-white p-6 rounded-md shadow-md">
             <h2 className="text-lg text-gray-700 mb-4">Assign Class Teacher</h2>
             {error && <p className="text-red-500 mb-4">{error}</p>}
@@ -94,9 +138,13 @@ const AssignClassTeacherPage = () => {
                   required
                 >
                   <option value="">Select Class</option>
-                  {classOptions.map((classOption, index) => (
-                    <option key={index} value={classOption}>{classOption}</option>
-                  ))}
+                  {classes.length > 0 ? (
+                    classes.map((classOption, index) => (
+                      <option key={index} value={classOption.className}>{classOption.className}</option>
+                    ))
+                  ) : (
+                    <option value="">Loading Classes...</option>
+                  )}
                 </select>
               </div>
 
@@ -112,27 +160,35 @@ const AssignClassTeacherPage = () => {
                   required
                 >
                   <option value="">Select Section</option>
-                  {sectionOptions.map((sectionOption, index) => (
-                    <option key={index} value={sectionOption}>{sectionOption}</option>
-                  ))}
+                  {sections.length > 0 ? (
+                    sections.map((sectionOption, index) => (
+                      <option key={index} value={sectionOption.name}>{sectionOption.name}</option>
+                    ))
+                  ) : (
+                    <option value="">Loading Sections...</option>
+                  )}
                 </select>
               </div>
 
               {/* Teacher Dropdown */}
               <div>
-                <label htmlFor="teacherName" className="text-sm text-gray-600">Teacher *</label>
+                <label htmlFor="teacher" className="text-sm text-gray-600">Teacher *</label>
                 <select
-                  id="teacherName"
-                  name="teacherName"
-                  value={formData.teacherName}
+                  id="teacher"
+                  name="teacher"
+                  value={formData.teacher}
                   onChange={handleChange}
                   className="border border-gray-300 rounded-md p-3 w-full focus:outline-none focus:ring-2 focus:ring-purple-500"
                   required
                 >
                   <option value="">Select Teacher</option>
-                  {teacherOptions.map((teacherOption, index) => (
-                    <option key={index} value={teacherOption}>{teacherOption}</option>
-                  ))}
+                  {teachers.length > 0 ? (
+                    teachers.map((teacher, index) => (
+                      <option key={index} value={teacher}>{teacher}</option>
+                    ))
+                  ) : (
+                    <option value="">Loading Teachers...</option>
+                  )}
                 </select>
               </div>
 
@@ -150,7 +206,6 @@ const AssignClassTeacherPage = () => {
             </form>
           </div>
 
-          {/* Class Teacher List Section */}
           <div className="w-2/3 bg-white p-6 rounded-md shadow-lg">
             <h2 className="text-lg text-gray-700 mb-4">Class Teacher List</h2>
             <table className="min-w-full table-auto">
@@ -163,14 +218,14 @@ const AssignClassTeacherPage = () => {
                 </tr>
               </thead>
               <tbody>
-                {classTeacherAssignments.length === 0 ? (
+                {currentAssignments.length === 0 ? (
                   <tr>
                     <td colSpan="4" className="text-center text-gray-500">
                       No Data Available In Table
                     </td>
                   </tr>
                 ) : (
-                  classTeacherAssignments.map((assignment, index) => (
+                  currentAssignments.map((assignment) => (
                     <tr key={assignment.id} className="border-t border-gray-300">
                       <td className="px-4 py-2 text-gray-600">{assignment.className}</td>
                       <td className="px-4 py-2 text-gray-600">{assignment.sectionName}</td>
@@ -188,6 +243,24 @@ const AssignClassTeacherPage = () => {
                 )}
               </tbody>
             </table>
+
+            {/* Pagination Controls */}
+            <div className="mt-4 flex justify-center">
+              <button
+                onClick={() => paginate(currentPage - 1)}
+                disabled={currentPage === 1}
+                className="px-4 py-2 bg-purple-600 text-white rounded-md mr-2"
+              >
+                Prev
+              </button>
+              <button
+                onClick={() => paginate(currentPage + 1)}
+                disabled={currentPage * assignmentsPerPage >= classTeacherAssignments.length}
+                className="px-4 py-2 bg-purple-600 text-white rounded-md"
+              >
+                Next
+              </button>
+            </div>
           </div>
         </div>
       </div>

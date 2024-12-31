@@ -16,7 +16,7 @@ const ApplyLeave = () => {
     const fetchLeaves = async () => {
       try {
         const response = await fetch(
-          `http://localhost:4000/api/students/leave/${studentId}`
+          `https://school-backend-1-2xki.onrender.com/api/students/leave/${studentId}`
         );
         const data = await response.json();
 

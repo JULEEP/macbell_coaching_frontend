@@ -162,14 +162,14 @@ import TeacherClassRoutinePage from './Teacher/classRoutine';
 import NoticeBoardForTeacher from './Teacher/NoticeBoard';
 import TeacherLeavePage from './Teacher/TeacherLeave';
 import TeacherStudentsPage from './Teacher/StudentList';
-
+import Teacher from './Pages/Teacher';
 function App() {
   return (
     <Router> {/* Wrap everything in Router to enable routing */}        
         <div>
           <Routes>
             {/* Define the route for the dashboard */}
-            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/Admin-dashboard" element={<Dashboard />} />
             <Route path="/student-sidebar" element={<StudnetSidebar />} />
             <Route path="/query" element={<AdmissionQuery/>} />
             <Route path="/visitor" element={<VisitorBook/>} />
@@ -300,6 +300,7 @@ function App() {
             <Route path="/student-transport" element={<TransportPage/>} />
             <Route path="/student-booklist" element={<StudentBookListPage/>} />
             <Route path="/student-dormitory" element={<DormitoryPage/>} />
+            <Route path="/teacher" element={<Teacher/>} />
             <Route path="/sidebar" element={<Sidebar/>} />
             <Route path="/" element={<Login/>} />
 

@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import Sidebar from './Sidebar';
 
 const AddTopic = () => {
@@ -10,6 +11,38 @@ const AddTopic = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [topics, setTopics] = useState([]);
+  const [classes, setClasses] = useState([]);
+  const [sections, setSections] = useState([]);
+  const [subjects, setSubjects] = useState([]);
+  const [lessons, setLessons] = useState([]);
+
+  // Fetch data for dropdowns and topics list
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const classResponse = await axios.get('https://school-backend-1-2xki.onrender.com/api/admin/get-classes');
+        setClasses(classResponse.data.classes || []);
+
+        const sectionResponse = await axios.get('https://school-backend-1-2xki.onrender.com/api/admin/get-section');
+        setSections(sectionResponse.data.sections || []);
+
+        const subjectResponse = await axios.get('https://school-backend-1-2xki.onrender.com/api/admin/get-subjects-names');
+        const uniqueSubjects = [...new Set(subjectResponse.data.subjectNames.filter((name) => name))];
+        setSubjects(uniqueSubjects || []);
+
+        const lessonResponse = await axios.get('https://school-backend-1-2xki.onrender.com/api/admin/get-lesson');
+        setLessons(lessonResponse.data.lessons || []);
+
+        // Fetch topics
+        const topicResponse = await axios.get('https://school-backend-1-2xki.onrender.com/api/admin/get-topic');
+        setTopics(topicResponse.data.data || []);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleSaveTopic = async () => {
     setErrorMessage('');
@@ -71,9 +104,10 @@ const AddTopic = () => {
       {/* Main Content */}
       <div className="flex-1 p-6 ml-64">
         <div className="flex gap-6">
-          <div className="w-1/3 bg-white p-6 rounded-md shadow-md">
+          <div className="w-full bg-white p-6 rounded-md shadow-md">
             <h2 className="text-xl font-semibold text-gray-700 mb-4">Add Topic</h2>
-            <div className="space-y-4">
+
+            <div className="grid grid-cols-4 gap-6">
               {/* Class Dropdown */}
               <div>
                 <label htmlFor="class" className="block text-sm text-gray-600">
@@ -86,9 +120,11 @@ const AddTopic = () => {
                   className="border border-gray-300 rounded-md p-3 w-full focus:outline-none focus:ring-2 focus:ring-purple-500"
                 >
                   <option value="">Select Class</option>
-                  <option value="Class A">Class A</option>
-                  <option value="Class B">Class B</option>
-                  <option value="Class C">Class C</option>
+                  {classes.map((cls, index) => (
+                    <option key={index} value={cls.className}>
+                      {cls.className}
+                    </option>
+                  ))}
                 </select>
               </div>
 
@@ -104,9 +140,11 @@ const AddTopic = () => {
                   className="border border-gray-300 rounded-md p-3 w-full focus:outline-none focus:ring-2 focus:ring-purple-500"
                 >
                   <option value="">Select Section</option>
-                  <option value="A">Section A</option>
-                  <option value="B">Section B</option>
-                  <option value="C">Section C</option>
+                  {sections.map((section, index) => (
+                    <option key={index} value={section.name}>
+                      {section.name}
+                    </option>
+                  ))}
                 </select>
               </div>
 
@@ -122,9 +160,11 @@ const AddTopic = () => {
                   className="border border-gray-300 rounded-md p-3 w-full focus:outline-none focus:ring-2 focus:ring-purple-500"
                 >
                   <option value="">Select Subject</option>
-                  <option value="Mathematics">Mathematics</option>
-                  <option value="Science">Science</option>
-                  <option value="History">History</option>
+                  {subjects.map((subject, index) => (
+                    <option key={index} value={subject}>
+                      {subject}
+                    </option>
+                  ))}
                 </select>
               </div>
 
@@ -140,14 +180,16 @@ const AddTopic = () => {
                   className="border border-gray-300 rounded-md p-3 w-full focus:outline-none focus:ring-2 focus:ring-purple-500"
                 >
                   <option value="">Select Lesson</option>
-                  <option value="Algebra">Algebra</option>
-                  <option value="Geometry">Geometry</option>
-                  <option value="Trigonometry">Trigonometry</option>
+                  {lessons.map((lesson, index) => (
+                    <option key={index} value={lesson.lessonName}>
+                      {lesson.lessonName}
+                    </option>
+                  ))}
                 </select>
               </div>
 
               {/* Topic Title */}
-              <div>
+              <div className="col-span-4">
                 <label htmlFor="topicTitle" className="block text-sm text-gray-600">
                   Add Topic <span className="text-red-500">*</span>
                 </label>
@@ -162,7 +204,7 @@ const AddTopic = () => {
               </div>
 
               {/* Save Button */}
-              <div className="mt-6">
+              <div className="col-span-4 mt-6">
                 <button
                   type="button"
                   onClick={handleSaveTopic}
@@ -174,62 +216,52 @@ const AddTopic = () => {
 
               {/* Feedback Messages */}
               {errorMessage && (
-                <div className="mt-4 text-red-600 text-sm">{errorMessage}</div>
+                <div className="col-span-4 mt-4 text-red-600 text-sm">{errorMessage}</div>
               )}
               {successMessage && (
-                <div className="mt-4 text-green-600 text-sm">{successMessage}</div>
+                <div className="col-span-4 mt-4 text-green-600 text-sm">{successMessage}</div>
               )}
             </div>
-          </div>
 
-          {/* Right Side: Topic List */}
-          <div className="w-2/3 bg-white p-6 rounded-lg shadow-lg">
-            <h2 className="text-xl font-semibold text-gray-700 mb-4">Topic List</h2>
-            <div className="mb-4">
-              <input
-                type="text"
-                placeholder="Quick Search"
-                className="border border-gray-300 rounded-md p-3 w-full focus:outline-none focus:ring-2 focus:ring-purple-500"
-              />
-            </div>
-            <table className="w-full border-collapse">
-              <thead className="bg-gray-200">
-                <tr>
-                  <th className="text-left px-4 py-2">SL</th>
-                  <th className="text-left px-4 py-2">Class</th>
-                  <th className="text-left px-4 py-2">Section</th>
-                  <th className="text-left px-4 py-2">Subject</th>
-                  <th className="text-left px-4 py-2">Lesson</th>
-                  <th className="text-left px-4 py-2">Topic</th>
-                  <th className="text-left px-4 py-2">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {topics.length > 0 ? (
-                  topics.map((topic, index) => (
-                    <tr key={index}>
-                      <td className="px-4 py-2">{index + 1}</td>
-                      <td className="px-4 py-2">{topic.className}</td>
-                      <td className="px-4 py-2">{topic.section}</td>
-                      <td className="px-4 py-2">{topic.subject}</td>
-                      <td className="px-4 py-2">{topic.lesson}</td>
-                      <td className="px-4 py-2">{topic.topic}</td>
-                      <td className="px-4 py-2">
-                        <button className="text-red-600 hover:underline">Delete</button>
+            {/* Topic List */}
+            <div className="mt-8">
+              <h3 className="text-xl font-semibold text-gray-700 mb-4">Topic List</h3>
+              <table className="w-full border-collapse">
+                <thead className="bg-gray-200">
+                  <tr>
+                    <th className="text-left px-4 py-2">SL</th>
+                    <th className="text-left px-4 py-2">Class</th>
+                    <th className="text-left px-4 py-2">Section</th>
+                    <th className="text-left px-4 py-2">Subject</th>
+                    <th className="text-left px-4 py-2">Lesson</th>
+                    <th className="text-left px-4 py-2">Topic</th>
+                    <th className="text-left px-4 py-2">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {topics.length > 0 ? (
+                    topics.map((topic, index) => (
+                      <tr key={index}>
+                        <td className="px-4 py-2">{index + 1}</td>
+                        <td className="px-4 py-2">{topic.className}</td>
+                        <td className="px-4 py-2">{topic.section}</td>
+                        <td className="px-4 py-2">{topic.subject}</td>
+                        <td className="px-4 py-2">{topic.lesson}</td>
+                        <td className="px-4 py-2">{topic.topic}</td>
+                        <td className="px-4 py-2">
+                          <button className="text-red-600 hover:underline">Delete</button>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="7" className="text-center px-4 py-2">
+                        No Data Available In Table
                       </td>
                     </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan="7" className="text-center px-4 py-2">
-                      No Data Available In Table
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-            <div className="mt-4 text-gray-600">
-              Showing {topics.length} to {topics.length} of {topics.length} entries
+                  )}
+                </tbody>
+              </table>
             </div>
           </div>
         </div>

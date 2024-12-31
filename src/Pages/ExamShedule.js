@@ -1,42 +1,52 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Sidebar from './Sidebar';
+import axios from 'axios';
 
 const ExamSchedule = () => {
-  const [exam, setExam] = useState('');
-  const [classType, setClassType] = useState('');
-  const [section, setSection] = useState('');
-  const [scheduleData, setScheduleData] = useState([
-    {
-      id: 1,
-      examTitle: 'Final Exam',
-      class: 'Class 1',
-      section: 'A',
-      subject: 'Math',
-      examDate: '12/20/2024',
-      startTime: '10:00 AM',
-      endTime: '12:00 PM',
-    },
-    {
-      id: 2,
-      examTitle: 'Mid-Term Exam',
-      class: 'Class 2',
-      section: 'B',
-      subject: 'Science',
-      examDate: '12/22/2024',
-      startTime: '11:00 AM',
-      endTime: '1:00 PM',
-    },
-  ]);
+  const [scheduleData, setScheduleData] = useState([]);
+  const [classes, setClasses] = useState([]);
+  const [sections, setSections] = useState([]);
+  const [subjects, setSubjects] = useState([]);
 
-  // State for the Add Exam form
   const [examTitle, setExamTitle] = useState('');
+  const [examCenter, setExamCenter] = useState('');
   const [examClass, setExamClass] = useState('');
   const [examSection, setExamSection] = useState('');
   const [subject, setSubject] = useState('');
   const [examDate, setExamDate] = useState('');
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
+  const [examType, setExamType] = useState('');
 
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const [perPage] = useState(10); // Display 10 items per page
+
+  // Fetch data for dropdowns and exam schedules
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const scheduleResponse = await axios.get('https://school-backend-1-2xki.onrender.com/api/admin/get-exam-schedule');
+        setScheduleData(scheduleResponse.data.examSchedules || []);
+
+        const classResponse = await axios.get('https://school-backend-1-2xki.onrender.com/api/admin/get-classes');
+        setClasses(classResponse.data.classes || []);
+
+        const sectionResponse = await axios.get('https://school-backend-1-2xki.onrender.com/api/admin/get-section');
+        setSections(sectionResponse.data.sections || []);
+
+        const subjectResponse = await axios.get('https://school-backend-1-2xki.onrender.com/api/admin/get-subjects-names');
+        const uniqueSubjects = [...new Set(subjectResponse.data.subjectNames.filter((name) => name))];
+        setSubjects(uniqueSubjects || []);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // Handle adding new exam
   const handleAddExam = async (e) => {
     e.preventDefault();
 
@@ -48,22 +58,16 @@ const ExamSchedule = () => {
       examDate,
       startTime,
       endTime,
+      examType,
+      examCenter
     };
 
     try {
-      const response = await fetch('https://school-backend-1-2xki.onrender.com/api/admin/add-exam-schedule', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newExam),
-      });
+      const response = await axios.post('https://school-backend-1-2xki.onrender.com/api/admin/add-exam-schedule', newExam);
 
-      if (response.ok) {
-        const data = await response.json();
-        setScheduleData([...scheduleData, data.examSchedule]);
+      if (response.status === 200) {
+        setScheduleData([...scheduleData, response.data.examSchedule]);
         alert('Exam schedule added successfully!');
-        // Reset form fields
         setExamTitle('');
         setExamClass('');
         setExamSection('');
@@ -71,9 +75,9 @@ const ExamSchedule = () => {
         setExamDate('');
         setStartTime('');
         setEndTime('');
+        setExamType('');
       } else {
-        const errorData = await response.json();
-        alert(`Error: ${errorData.message}`);
+        alert(`Error: ${response.data.message}`);
       }
     } catch (error) {
       console.error('Error adding exam schedule:', error);
@@ -81,16 +85,37 @@ const ExamSchedule = () => {
     }
   };
 
-  const handleSearch = () => {
-    console.log({ exam, classType, section });
+  // Handle generate admit card
+  const handleGenerateAdmitCard = async (scheduleId) => {
+    try {
+      const response = await axios.post(`https://school-backend-1-2xki.onrender.com/api/admin/generate-admit-cards/${scheduleId}`);
+
+      if (response.status === 200) {
+        setScheduleData(scheduleData.map(schedule =>
+          schedule._id === scheduleId ? { ...schedule, isAdmitCardGenerated: true } : schedule
+        ));
+        alert('Admit card generated successfully!');
+      } else {
+        alert(`Error: ${response.data.message}`);
+      }
+    } catch (error) {
+      console.error('Error generating admit card:', error);
+      alert('An error occurred while generating the admit card.');
+    }
   };
+
+  // Get current items for the page
+  const indexOfLastSchedule = currentPage * perPage;
+  const indexOfFirstSchedule = indexOfLastSchedule - perPage;
+  const currentSchedules = scheduleData.slice(indexOfFirstSchedule, indexOfLastSchedule);
+
+  // Handle page change
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <div className="flex h-screen">
-      {/* Sidebar */}
       <Sidebar />
 
-      {/* Main Content */}
       <div className="flex-1 p-6 ml-64">
         <h1 className="text-xl text-gray-700 font-semibold mb-4">Exam Schedule</h1>
 
@@ -108,29 +133,52 @@ const ExamSchedule = () => {
                 required
               />
               <input
-                type="text"
-                placeholder="Class"
+              type="text"
+              placeholder="Exam Center"
+              value={examCenter}
+              onChange={(e) => setExamCenter(e.target.value)}
+              className="border border-gray-300 p-2 rounded"
+              required
+            />
+              <select
                 value={examClass}
                 onChange={(e) => setExamClass(e.target.value)}
                 className="border border-gray-300 p-2 rounded"
                 required
-              />
-              <input
-                type="text"
-                placeholder="Section"
+              >
+                <option value="">Select Class</option>
+                {classes.map((cls) => (
+                  <option key={cls._id} value={cls.className}>
+                    {cls.className}
+                  </option>
+                ))}
+              </select>
+              <select
                 value={examSection}
                 onChange={(e) => setExamSection(e.target.value)}
                 className="border border-gray-300 p-2 rounded"
                 required
-              />
-              <input
-                type="text"
-                placeholder="Subject"
+              >
+                <option value="">Select Section</option>
+                {sections.map((sec) => (
+                  <option key={sec._id} value={sec.name}>
+                    {sec.name}
+                  </option>
+                ))}
+              </select>
+              <select
                 value={subject}
                 onChange={(e) => setSubject(e.target.value)}
                 className="border border-gray-300 p-2 rounded"
                 required
-              />
+              >
+                <option value="">Select Subject</option>
+                {subjects.map((sub, index) => (
+                  <option key={index} value={sub}>
+                    {sub}
+                  </option>
+                ))}
+              </select>
               <input
                 type="date"
                 value={examDate}
@@ -152,6 +200,17 @@ const ExamSchedule = () => {
                 className="border border-gray-300 p-2 rounded"
                 required
               />
+              <select
+                value={examType}
+                onChange={(e) => setExamType(e.target.value)}
+                className="border border-gray-300 p-2 rounded"
+                required
+              >
+                <option value="">Select Exam Type</option>
+                <option value="Mid-Term">Mid-Term</option>
+                <option value="Final">Final</option>
+                <option value="Semester">Semester</option>
+              </select>
             </div>
             <button
               type="submit"
@@ -160,66 +219,6 @@ const ExamSchedule = () => {
               Add Exam Schedule
             </button>
           </form>
-        </div>
-
-        {/* Select Criteria Section */}
-        <div className="bg-white p-6 rounded-lg shadow-lg mb-6">
-          <div className="flex gap-8 mb-4">
-            <div className="w-1/3">
-              <label htmlFor="exam" className="block text-sm text-gray-600 mb-1">
-                Exam *
-              </label>
-              <select
-                id="exam"
-                value={exam}
-                onChange={(e) => setExam(e.target.value)}
-                className="w-full border border-gray-300 p-2 rounded"
-              >
-                <option value="">Select Exam</option>
-                <option value="mid-term">Mid-Term</option>
-                <option value="final">Final</option>
-                <option value="semester">Semester</option>
-              </select>
-            </div>
-            <div className="w-1/3">
-              <label htmlFor="class" className="block text-sm text-gray-600 mb-1">
-                Class *
-              </label>
-              <select
-                id="class"
-                value={classType}
-                onChange={(e) => setClassType(e.target.value)}
-                className="w-full border border-gray-300 p-2 rounded"
-              >
-                <option value="">Select Class</option>
-                <option value="class-1">Class 1</option>
-                <option value="class-2">Class 2</option>
-                <option value="class-3">Class 3</option>
-              </select>
-            </div>
-            <div className="w-1/3">
-              <label htmlFor="section" className="block text-sm text-gray-600 mb-1">
-                Section *
-              </label>
-              <select
-                id="section"
-                value={section}
-                onChange={(e) => setSection(e.target.value)}
-                className="w-full border border-gray-300 p-2 rounded"
-              >
-                <option value="">Select Section</option>
-                <option value="A">A</option>
-                <option value="B">B</option>
-                <option value="C">C</option>
-              </select>
-            </div>
-          </div>
-          <button
-            onClick={handleSearch}
-            className="bg-purple-500 text-white p-2 rounded hover:bg-purple-600"
-          >
-            Search
-          </button>
         </div>
 
         {/* Exam Schedule Table Section */}
@@ -237,23 +236,56 @@ const ExamSchedule = () => {
                   <th className="px-4 py-2 text-left">Exam Date</th>
                   <th className="px-4 py-2 text-left">Start Time</th>
                   <th className="px-4 py-2 text-left">End Time</th>
+                  <th className="px-4 py-2 text-left">Exam Type</th>
+                  <th className="px-4 py-2 text-left">Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {scheduleData.map((schedule, index) => (
-                  <tr key={schedule.id}>
+                {currentSchedules.map((schedule, index) => (
+                  <tr key={schedule._id}>
                     <td className="px-4 py-2">{index + 1}</td>
-                    <td className="px-4 py-2">{schedule.examTitle}</td>
-                    <td className="px-4 py-2">{schedule.class}</td>
-                    <td className="px-4 py-2">{schedule.section}</td>
-                    <td className="px-4 py-2">{schedule.subject}</td>
-                    <td className="px-4 py-2">{schedule.examDate}</td>
-                    <td className="px-4 py-2">{schedule.startTime}</td>
-                    <td className="px-4 py-2">{schedule.endTime}</td>
+                    <td className="px-4 py-2">{schedule.examTitle || 'N/A'}</td>
+                    <td className="px-4 py-2">{schedule.class || 'N/A'}</td>
+                    <td className="px-4 py-2">{schedule.section || 'N/A'}</td>
+                    <td className="px-4 py-2">{schedule.subject || 'N/A'}</td>
+                    <td className="px-4 py-2">{schedule.examDate || 'N/A'}</td>
+                    <td className="px-4 py-2">{schedule.startTime || 'N/A'}</td>
+                    <td className="px-4 py-2">{schedule.endTime || 'N/A'}</td>
+                    <td className="px-4 py-2">{schedule.examType || 'N/A'}</td>
+                    <td className="px-4 py-2">
+                      <button
+                        onClick={() => handleGenerateAdmitCard(schedule._id)}
+                        className={`${
+                          schedule.isAdmitCardGenerated
+                            ? 'bg-green-500 text-white'
+                            : 'bg-purple-500 text-white'
+                        } px-2 py-2 rounded hover:bg-blue-600`}
+                      >
+                        {schedule.isAdmitCardGenerated ? 'Generated' : 'Generate Admit Card'}
+                      </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>
             </table>
+          </div>
+
+          {/* Pagination Controls */}
+          <div className="flex justify-center mt-4">
+            <button
+              onClick={() => paginate(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="px-4 py-2 bg-gray-200 rounded-l hover:bg-gray-300"
+            >
+              Prev
+            </button>
+            <button
+              onClick={() => paginate(currentPage + 1)}
+              disabled={indexOfLastSchedule >= scheduleData.length}
+              className="px-4 py-2 bg-gray-200 rounded-r hover:bg-gray-300"
+            >
+              Next
+            </button>
           </div>
         </div>
       </div>

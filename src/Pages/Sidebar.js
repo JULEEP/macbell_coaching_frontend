@@ -152,9 +152,9 @@ const toggleWalletDropdown = () => {
     <div className="h-full w-64 bg-black text-white overflow-y-auto fixed">
       <div className="p-4">
         {/* Dashboard Section */}
-        <h2 className="text-lg font-bold border-gray-700 pb-2">Dashboard</h2>
+        <h2 className="text-lg font-bold border-gray-700 pb-2">Admin Dashboard</h2>
         <ul className="mt-4">
-        <Link to="/dashboard" className="hover:text-gray-400">
+        <Link to="/Admin-dashboard" className="hover:text-gray-400">
           <li className="py-2 flex items-center"><FaHome className="w-5 h-5 mr-2" /><a href="#" className="hover:text-gray-400">Dashboard</a></li>
           </Link>
           <li className="text-lg mt-2 pb-2">Sidebar Manager</li>
@@ -180,6 +180,9 @@ const toggleWalletDropdown = () => {
           </li>
           <Link to="/visitor" className="hover:text-gray-400">
            <li className="py-2"><a href="#" className="hover:text-gray-400">Visitor Book</a></li>
+           </Link>
+           <Link to="/teacher" className="hover:text-gray-400">
+           <li className="py-2"><a href="#" className="hover:text-gray-400">Teacher List</a></li>
            </Link>
            <Link to="/complaint" className="hover:text-gray-400">
               <li className="py-2"><a href="#" className="hover:text-gray-400">Complaint</a></li>
