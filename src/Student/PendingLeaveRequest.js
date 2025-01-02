@@ -1,14 +1,47 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { FiMenu } from "react-icons/fi"; // Import menu icon for mobile
 import StudentSidebar from "../Sidebar"; // Import the StudentSidebar component
 
 const PendingLeaveRequest = () => {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  // Toggle Sidebar for Mobile View
+  const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
+
   return (
     <div className="min-h-screen flex bg-gray-100">
+      {/* Sidebar and Menu Icon */}
+      <div className="lg:hidden absolute top-4 right-4 z-50">
+        <button
+          onClick={toggleSidebar}
+          className="p-2 text-purple-500 bg-white rounded-md shadow-md focus:outline-none"
+        >
+          <FiMenu size={24} />
+        </button>
+      </div>
+
+      {/* Sidebar Overlay */}
+      <div
+        className={`fixed inset-0 bg-gray-800 bg-opacity-50 transition-opacity lg:hidden ${isSidebarOpen ? "block" : "hidden"}`}
+        onClick={toggleSidebar}
+      ></div>
+
       {/* Sidebar */}
-      <StudentSidebar />
+      <div
+        className={`fixed inset-y-0 left-0 bg-white shadow-lg transform lg:transform-none lg:relative w-64 transition-transform duration-300 ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        <StudentSidebar />
+      </div>
 
       {/* Main Content */}
-      <div className="flex-grow p-6">
+      <div
+        className={`flex-grow p-6 overflow-y-auto transition-all duration-300 ${isSidebarOpen ? "ml-64" : "ml-0"}`}
+      >
+        {/* Divider */}
+        <hr className="border-t-2 border-gray-300 my-4 mt-10" />
+
         {/* Title */}
         <h1 className="text-3xl font-semibold text-gray-800 mb-4">Pending Leave Request</h1>
 

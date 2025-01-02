@@ -163,6 +163,7 @@ import NoticeBoardForTeacher from './Teacher/NoticeBoard';
 import TeacherLeavePage from './Teacher/TeacherLeave';
 import TeacherStudentsPage from './Teacher/StudentList';
 import Teacher from './Pages/Teacher';
+import TeacherMarks from './Teacher/StudentMarks';
 function App() {
   return (
     <Router> {/* Wrap everything in Router to enable routing */}        
@@ -338,6 +339,8 @@ function App() {
           <Route path="/teacher-noticeboard" element={<NoticeBoardForTeacher/>} />
           <Route path="/teacher-leave" element={<TeacherLeavePage/>} />
           <Route path="/teacher-students" element={<TeacherStudentsPage/>} />
+          <Route path="/teacher-marks" element={<TeacherMarks/>} />
+
 
 
 

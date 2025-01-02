@@ -1,17 +1,22 @@
 import React, { useState, useEffect } from "react";
 import StudentSidebar from "../Sidebar"; // Import the StudentSidebar component
 import axios from "axios";
+import { FiMenu } from "react-icons/fi"; // For menu icon
 
 const StudentDetailsPage = () => {
   const [activeButton, setActiveButton] = useState("");
   const [studentDetails, setStudentDetails] = useState(null);
   const [error, setError] = useState("");
+  const [isSidebarVisible, setIsSidebarVisible] = useState(false); // Sidebar visibility toggle
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Mobile sidebar state
+  
 
   const studentId = "676bb21bd06928a8432c676a"; // Example Student ID
 
   const handleButtonClick = (buttonName) => {
     setActiveButton(buttonName);
   };
+
 
   const buttonStyle = (buttonName) =>
     activeButton === buttonName
@@ -37,25 +42,58 @@ const StudentDetailsPage = () => {
   if (error) return <div className="text-red-500">{error}</div>;
   if (!studentDetails) return <div>Loading...</div>;
 
+  const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
+
   return (
     <div className="min-h-screen flex bg-gray-100">
+      {/* Sidebar and Menu Icon */}
+      <div className="lg:hidden absolute top-4 right-4 z-50">
+        <button
+          onClick={toggleSidebar}
+          className="p-2 text-purple-500 bg-white rounded-md shadow-md focus:outline-none"
+        >
+          <FiMenu size={24} />
+        </button>
+      </div>
+
+      {/* Sidebar Overlay */}
+      <div
+        className={`fixed inset-0 bg-gray-800 bg-opacity-50 transition-opacity lg:hidden ${isSidebarOpen ? "block" : "hidden"}`}
+        onClick={toggleSidebar}
+      ></div>
+
       {/* Sidebar */}
-      <StudentSidebar />
+      <div
+        className={`fixed inset-y-0 left-0 bg-white shadow-lg transform lg:transform-none lg:relative w-64 transition-transform duration-300 ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        <StudentSidebar />
+      </div>
+
+      {/* Divider Below Menu Icon (only visible when sidebar is open) */}
+      <div
+        className={`lg:hidden h-px bg-gray-300 transition-all duration-300 ${
+          isSidebarOpen ? "block" : "hidden"
+        }`}
+      ></div>
 
       {/* Main Content */}
-      <div className="flex-grow p-6">
+      <div
+        className={`flex-grow p-6 overflow-y-auto transition-all duration-300 ${isSidebarOpen ? "ml-64" : "ml-0"}`}
+      >
         {/* Page Title */}
         <h1 className="text-sm font-semibold text-blue-500 mb-6">Student Details</h1>
 
-        <div className="flex space-x-6">
+        <div className="flex flex-col lg:flex-row space-y-6 lg:space-y-0 lg:space-x-6">
           {/* Left Side - Student Profile */}
-          <div className="bg-white shadow-md rounded-lg p-4 w-1/4">
+          <div className="bg-white shadow-md rounded-lg p-4 lg:w-1/4">
             <div className="flex justify-center mb-4">
-            <img
-            src="https://cdn.pixabay.com/photo/2023/06/01/14/11/ai-generated-8033671_960_720.png"
-            alt="Profile"
-            className="w-16 h-16 rounded-full border-4 border-purple-500"
-          />          
+              <img
+                src="https://cdn.pixabay.com/photo/2023/06/01/14/11/ai-generated-8033671_960_720.png"
+                alt="Profile"
+                className="w-16 h-16 rounded-full border-4 border-purple-500"
+              />
             </div>
 
             {/* Student Details */}
@@ -99,7 +137,7 @@ const StudentDetailsPage = () => {
           </div>
 
           {/* Right Side - Profile Options */}
-          <div className="bg-white shadow-md rounded-lg p-6 w-3/4">
+          <div className="bg-white shadow-md rounded-lg p-6 lg:w-3/4">
             {/* Profile Options (Horizontal Row) */}
             <div className="flex space-x-4">
               <button onClick={() => handleButtonClick("Profile")} className={buttonStyle("Profile")}>Profile</button>

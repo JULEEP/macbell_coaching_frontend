@@ -1,20 +1,32 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios"; // Import axios for making API calls
 import TeacherSidebar from "./TeacherSidebar";
+
 const TeacherClassRoutinePage = () => {
   const [selectedClass, setSelectedClass] = useState(""); // Selected class
   const [selectedSection, setSelectedSection] = useState(""); // Selected section
   const [classRoutine, setClassRoutine] = useState([]); // Store class routine
   const [error, setError] = useState(""); // Error state
 
-  // Dummy data for class routines (for teacher)
-  const allRoutines = [
-    { day: "Monday", time: "09:00 AM - 09:45 AM", subject: "Bangla (ENG-123)", class: "5", section: "A" },
-    { day: "Tuesday", time: "09:00 AM - 09:45 AM", subject: "Bangla (ENG-123)", class: "5", section: "A" },
-    { day: "Wednesday", time: "10:00 AM - 10:45 AM", subject: "Math (MTH-101)", class: "5", section: "A" },
-    { day: "Monday", time: "10:00 AM - 10:45 AM", subject: "Science (SCI-102)", class: "6", section: "B" },
-    { day: "Tuesday", time: "11:00 AM - 11:45 AM", subject: "History (HIS-105)", class: "5", section: "B" },
-    { day: "Wednesday", time: "09:00 AM - 09:45 AM", subject: "Geography (GEO-107)", class: "5", section: "B" },
-  ];
+  // Fetch class routine data from API
+  const fetchRoutine = async () => {
+    try {
+      const response = await axios.get("http://localhost:4000/api/teacher/classroutine");
+      const data = response.data;
+      // You can now filter based on the class and section
+      const filteredRoutine = data.find(
+        (item) => item.class === selectedClass && item.section === selectedSection
+      );
+      if (filteredRoutine) {
+        setClassRoutine(filteredRoutine.routine);
+      } else {
+        setClassRoutine([]); // No routine found
+      }
+    } catch (err) {
+      setError("Error fetching routine data");
+      console.error(err);
+    }
+  };
 
   // Handle class change
   const handleClassChange = (event) => {
@@ -33,11 +45,7 @@ const TeacherClassRoutinePage = () => {
       return;
     }
     setError(""); // Reset error message
-    // Filter class routine based on selected class and section
-    const filteredRoutine = allRoutines.filter(
-      (routine) => routine.class === selectedClass && routine.section === selectedSection
-    );
-    setClassRoutine(filteredRoutine); // Update the routine list
+    fetchRoutine(); // Fetch the routine for the selected class and section
   };
 
   return (

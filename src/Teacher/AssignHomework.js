@@ -1,60 +1,79 @@
-import React, { useState } from "react";
-import axios from "axios";  // Import axios for making API requests
+import React, { useState, useEffect } from "react";
+import axios from "axios"; // Import axios for making API requests
 import TeacherSidebar from "./TeacherSidebar";
-
 
 const AddHomeworkByTeacher = () => {
   const [formData, setFormData] = useState({
-    class: "",
-    subject: "",
-    section: "",
-    select: "",
-    homeworkDate: "2024-12-17",
-    submissionDate: "2024-12-17",
-    marks: "",
-    file: null,
-    description: "",
+    class: "5",  // Default class set to 5
+    subject: "Math", // Default subject set to Math
+    section: "A", // Default section set to A
+    homeworkDate: "",
+    submissionDate: "",
+    marks: 50, // Default marks
+    description: "This is a sample homework description.",
+    homeworkTitle: "Math Homework - Chapter 1", // Default homework title
   });
 
+  const [classes, setClasses] = useState([]);
+  const [sections, setSections] = useState([]);
+  const [subjects, setSubjects] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Fetch data for classes, sections, and subjects
+        const classResponse = await axios.get('https://school-backend-1-2xki.onrender.com/api/admin/get-classes');
+        setClasses(classResponse.data.classes || []);
+
+        const sectionResponse = await axios.get('https://school-backend-1-2xki.onrender.com/api/admin/get-section');
+        setSections(sectionResponse.data.sections || []);
+
+        const subjectResponse = await axios.get('https://school-backend-1-2xki.onrender.com/api/admin/get-subjects-names');
+        const uniqueSubjects = [...new Set(subjectResponse.data.subjectNames.filter((name) => name))];
+        setSubjects(uniqueSubjects || []);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const handleInputChange = (e) => {
-    const { name, value, files } = e.target;
-    if (name === "file") {
-      setFormData({ ...formData, [name]: files[0] });
-    } else {
-      setFormData({ ...formData, [name]: value });
-    }
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Create a FormData object to send the form data along with the file
-    const formDataToSend = new FormData();
-    formDataToSend.append("class", formData.class);
-    formDataToSend.append("subject", formData.subject);
-    formDataToSend.append("section", formData.section);
-    formDataToSend.append("select", formData.select);
-    formDataToSend.append("homeworkDate", formData.homeworkDate);
-    formDataToSend.append("submissionDate", formData.submissionDate);
-    formDataToSend.append("marks", formData.marks);
-    formDataToSend.append("file", formData.file);
-    formDataToSend.append("description", formData.description);
+    // Check if all required fields are filled
+    if (!formData.homeworkDate || !formData.submissionDate || !formData.homeworkTitle) {
+      alert("Please fill all required fields.");
+      return;
+    }
+
+    // Prepare the data for API submission in the correct format
+    const homeworkData = {
+      class: formData.class,
+      subject: formData.subject,
+      section: formData.section,
+      homeworkDate: formData.homeworkDate,
+      submissionDate: formData.submissionDate,
+      marks: formData.marks,
+      marksObtained: 0,  // Default marks obtained is set to 0
+      description: formData.description,
+      homeworkTitle: formData.homeworkTitle,
+    };
 
     try {
       // Make the API request to add homework
-      const response = await axios.post("https://school-backend-1-2xki.onrender.com/api/admin/add-homework", formDataToSend, {
-        headers: {
-          "Content-Type": "multipart/form-data",  // Ensure that it's multipart form data
-        },
-      });
-
-      // Handle successful response
-      console.log("Homework added successfully:", response.data);
+      const response = await axios.post("http://localhost:4000/api/teacher/add-homework", homeworkData);
       alert("Homework added successfully!");
+      console.log("Homework added successfully:", response.data);
     } catch (error) {
-      // Handle error
-      console.error("Error adding homework:", error);
       alert("Error adding homework!");
+      console.error("Error adding homework:", error);
     }
   };
 
@@ -64,7 +83,7 @@ const AddHomeworkByTeacher = () => {
       <TeacherSidebar /> {/* Sidebar added here */}
 
       {/* Main Content */}
-      <div className="flex-1 p-6 ml-64"> {/* Add ml-64 to shift the content right */}
+      <div className="flex-1 p-6 ml-64">
         {/* Title */}
         <h1 className="text-xl text-purple-700">Add Homework</h1>
 
@@ -81,9 +100,11 @@ const AddHomeworkByTeacher = () => {
                 onChange={handleInputChange}
                 className="w-full p-2 border border-gray-300 rounded"
               >
-                <option value="">Select Class</option>
-                <option value="Class 1">Class 1</option>
-                <option value="Class 2">Class 2</option>
+                {classes.map((cls) => (
+                  <option key={cls._id} value={cls.className}>
+                    {cls.className}
+                  </option>
+                ))}
               </select>
             </div>
 
@@ -96,9 +117,11 @@ const AddHomeworkByTeacher = () => {
                 onChange={handleInputChange}
                 className="w-full p-2 border border-gray-300 rounded"
               >
-                <option value="">Select Subject</option>
-                <option value="Math">Math</option>
-                <option value="Science">Science</option>
+                {subjects.map((subject, index) => (
+                  <option key={index} value={subject}>
+                    {subject}
+                  </option>
+                ))}
               </select>
             </div>
 
@@ -111,53 +134,38 @@ const AddHomeworkByTeacher = () => {
                 onChange={handleInputChange}
                 className="w-full p-2 border border-gray-300 rounded"
               >
-                <option value="">Select Section</option>
-                <option value="A">A</option>
-                <option value="B">B</option>
+                {sections.map((section) => (
+                  <option key={section._id} value={section.name}>
+                    {section.name}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
 
-          {/* Second Row */}
+          {/* Date and Marks */}
           <div className="flex gap-6">
-            {/* Select */}
-            <div className="w-1/4">
-              <label className="block text-sm text-gray-600 mb-1">Select</label>
-              <input
-                type="text"
-                name="select"
-                placeholder="Select"
-                value={formData.select}
-                onChange={handleInputChange}
-                className="w-full p-2 border border-gray-300 rounded"
-              />
-            </div>
-
             {/* Homework Date */}
             <div className="w-1/4">
-              <label className="block text-sm text-gray-600 mb-1">
-                Homework Date *
-              </label>
+              <label className="block text-sm text-gray-600 mb-1">Homework Date *</label>
               <input
                 type="date"
                 name="homeworkDate"
                 value={formData.homeworkDate}
                 onChange={handleInputChange}
-                className="w-full p-2 border border-gray-300 rounded"
+                className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
               />
             </div>
 
             {/* Submission Date */}
             <div className="w-1/4">
-              <label className="block text-sm text-gray-600 mb-1">
-                Submission Date *
-              </label>
+              <label className="block text-sm text-gray-600 mb-1">Submission Date *</label>
               <input
                 type="date"
                 name="submissionDate"
                 value={formData.submissionDate}
                 onChange={handleInputChange}
-                className="w-full p-2 border border-gray-300 rounded"
+                className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
               />
             </div>
 
@@ -167,39 +175,37 @@ const AddHomeworkByTeacher = () => {
               <input
                 type="number"
                 name="marks"
-                placeholder="Enter Marks"
                 value={formData.marks}
                 onChange={handleInputChange}
-                className="w-full p-2 border border-gray-300 rounded"
+                className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
               />
             </div>
           </div>
 
-          {/* Third Row */}
-          <div className="space-y-4">
-            {/* Attach File */}
-            <div>
-              <label className="block text-sm text-gray-600 mb-1">Attach File</label>
-              <input
-                type="file"
-                name="file"
-                onChange={handleInputChange}
-                className="w-full p-2 border border-gray-300 rounded"
-              />
-            </div>
+          {/* Homework Title */}
+          <div>
+            <label className="block text-sm text-gray-600 mb-1">Homework Title *</label>
+            <input
+              type="text"
+              name="homeworkTitle"
+              value={formData.homeworkTitle}
+              onChange={handleInputChange}
+              placeholder="Enter homework title"
+              className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
+            />
+          </div>
 
-            {/* Description */}
+          {/* Description */}
+          <div className="space-y-4">
             <div>
-              <label className="block text-sm text-gray-600 mb-1">
-                Description *
-              </label>
+              <label className="block text-sm text-gray-600 mb-1">Description *</label>
               <textarea
                 name="description"
                 placeholder="Enter description here"
                 value={formData.description}
                 onChange={handleInputChange}
                 rows="4"
-                className="w-full p-2 border border-gray-300 rounded"
+                className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
               ></textarea>
             </div>
           </div>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import TeacherSidebar from "./TeacherSidebar";
 
 const TeacherLeavePage = () => {
@@ -8,6 +8,7 @@ const TeacherLeavePage = () => {
   const [reason, setReason] = useState(""); // Reason for leave
   const [leaveList, setLeaveList] = useState([]); // List of leave applications
   const [error, setError] = useState(""); // Error state
+  const [loading, setLoading] = useState(false); // Loading state for async operations
 
   // Handle leave type change
   const handleLeaveTypeChange = (event) => {
@@ -30,7 +31,7 @@ const TeacherLeavePage = () => {
   };
 
   // Handle leave submission
-  const handleLeaveSubmit = (event) => {
+  const handleLeaveSubmit = async (event) => {
     event.preventDefault();
 
     // Validate input fields
@@ -41,24 +42,65 @@ const TeacherLeavePage = () => {
 
     setError(""); // Reset error message
 
-    // Create a leave object
     const newLeave = {
       leaveType,
       startDate,
       endDate,
       reason,
-      status: "Pending", // Default status
     };
 
-    // Add new leave to the list
-    setLeaveList([...leaveList, newLeave]);
+    try {
+      setLoading(true); // Start loading
 
-    // Reset form fields
+      // Sending POST request to the API
+      const response = await fetch("http://localhost:4000/api/teacher/apply-leave", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newLeave),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // If successful, add the leave to the list
+        setLeaveList([...leaveList, data.leave]);
+      } else {
+        setError(data.message || "Something went wrong");
+      }
+    } catch (error) {
+      setError("Failed to apply for leave");
+    } finally {
+      setLoading(false); // Stop loading
+    }
+
+    // Reset form fields after submission
     setLeaveType("");
     setStartDate("");
     setEndDate("");
     setReason("");
   };
+
+  // Fetch all leaves when the component mounts
+  useEffect(() => {
+    const fetchLeaves = async () => {
+      try {
+        const response = await fetch("http://localhost:4000/api/teacher/leaves");
+        const data = await response.json();
+
+        if (response.ok) {
+          setLeaveList(data.leaves);
+        } else {
+          setError(data.message || "Failed to fetch leaves");
+        }
+      } catch (error) {
+        setError("Failed to fetch leaves");
+      }
+    };
+
+    fetchLeaves();
+  }, []); // Empty dependency array to run only once on component mount
 
   return (
     <div className="min-h-screen flex bg-gray-100">
@@ -135,8 +177,9 @@ const TeacherLeavePage = () => {
               <button
                 type="submit"
                 className="px-6 py-2 bg-purple-500 text-white rounded-md hover:bg-blue-600"
+                disabled={loading} // Disable the button when loading
               >
-                Apply for Leave
+                {loading ? "Applying..." : "Apply for Leave"}
               </button>
             </div>
 

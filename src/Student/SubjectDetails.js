@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
+import { FiMenu } from "react-icons/fi"; // Import menu icon for mobile
 import StudentSidebar from "../Sidebar"; // Import the Sidebar component
 
 const SubjectDetails = () => {
   const [subjects, setSubjects] = useState([]); // State to store the subjects
   const [loading, setLoading] = useState(false); // Loading state
   const [error, setError] = useState(""); // Error state
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Mobile sidebar state
   const studentId = "676cf56dfd1eb1caa8426205"; // Static studentId (could be dynamic based on context)
 
   // Fetch subject details from API
@@ -32,17 +34,52 @@ const SubjectDetails = () => {
     fetchSubjects(); // Call the function to fetch subjects
   }, [studentId]); // This effect runs once when the component mounts
 
+  // Toggle Sidebar for Mobile View
+  const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
+
   return (
     <div className="min-h-screen flex bg-gray-100">
+      {/* Sidebar and Menu Icon on Right Side */}
+      <div className="lg:hidden absolute top-4 right-4 z-50">
+        <button
+          onClick={toggleSidebar}
+          className="p-2 text-purple-500 bg-white rounded-md shadow-md focus:outline-none"
+        >
+          <FiMenu size={24} />
+        </button>
+      </div>
+
+      {/* Sidebar Overlay */}
+      <div
+        className={`fixed inset-0 bg-gray-800 bg-opacity-50 transition-opacity lg:hidden ${isSidebarOpen ? "block" : "hidden"}`}
+        onClick={toggleSidebar}
+      ></div>
+
       {/* Sidebar */}
-      <div className="w-64 sticky top-0 h-screen">
+      <div
+        className={`fixed inset-y-0 left-0 bg-white shadow-lg transform lg:transform-none lg:relative w-64 transition-transform duration-300 ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
         <StudentSidebar />
       </div>
 
       {/* Main Content */}
-      <div className="flex-grow p-6">
-        {/* Subject Title */}
-        <h1 className="text-3xl font-semibold text-gray-800 mb-4">Subject Details</h1>
+      <div
+        className={`flex-grow p-6 overflow-y-auto transition-all duration-300 ${isSidebarOpen ? "ml-64" : "ml-0"}`}
+      >
+        {/* Mobile View: Menu Icon, Divider, and Content */}
+        <div className="lg:hidden">
+          <button
+            onClick={toggleSidebar}
+            className="p-2 text-purple-500 focus:outline-none mb-4"
+          >
+          </button>
+          <div className="border-t-2 border-gray-200 mb-4"></div> {/* Divider for mobile view */}
+        </div>
+
+        {/* Heading (Now below the divider on mobile) */}
+        <h1 className="text-3xl font-semibold text-gray-800 mb-8 lg:mb-8">Subject Details</h1>
 
         {/* Class and Section */}
         <h2 className="text-xl font-medium text-gray-700 mb-6">Class: 5 (A)</h2>
@@ -58,10 +95,10 @@ const SubjectDetails = () => {
           {loading && <p className="text-gray-500">Loading subjects...</p>}
 
           {/* Subject Details Row */}
-          <div className="flex justify-between space-x-8">
+          <div className="flex flex-col lg:flex-row justify-between space-x-8">
             {subjects.length > 0 ? (
               subjects.map((subject) => (
-                <div key={subject._id} className="flex-1 flex justify-between items-center">
+                <div key={subject._id} className="flex-1 flex justify-between items-center mb-4 lg:mb-0">
                   {/* Subject Column */}
                   <div className="flex flex-col items-center">
                     <span className="font-medium text-gray-700">Subject</span>

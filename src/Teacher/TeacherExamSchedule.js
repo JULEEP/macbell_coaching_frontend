@@ -1,19 +1,29 @@
-import React, { useState } from "react";
-import TeacherSidebar from './TeacherSidebar'
+import React, { useState, useEffect } from "react";
+import TeacherSidebar from './TeacherSidebar';
+
 const TeacherExamSchedulePage = () => {
   const [selectedExam, setSelectedExam] = useState(""); // Selected exam type
   const [examSchedule, setExamSchedule] = useState([]); // Store exam schedule
   const [error, setError] = useState(""); // Error state
 
-  // Dummy data for exams (for teacher)
-  const allExams = [
-    { subject: "Math", examDate: "2024-12-30", examTime: "10:00 AM", examType: "Mid-Term" },
-    { subject: "Science", examDate: "2024-12-31", examTime: "2:00 PM", examType: "Mid-Term" },
-    { subject: "English", examDate: "2024-12-29", examTime: "11:00 AM", examType: "Final" },
-    { subject: "History", examDate: "2024-12-28", examTime: "1:00 PM", examType: "Class Test" },
-    { subject: "Geography", examDate: "2024-12-25", examTime: "9:00 AM", examType: "Final" },
-    { subject: "Physics", examDate: "2024-12-26", examTime: "3:00 PM", examType: "Class Test" },
-  ];
+  // Fetch exam schedule from API
+  useEffect(() => {
+    const fetchExamSchedule = async () => {
+      try {
+        const response = await fetch("http://localhost:4000/api/admin/get-exam-schedule");
+        const data = await response.json();
+        if (data.message === "Exam schedules fetched successfully") {
+          setExamSchedule(data.examSchedules); // Set fetched exam schedules
+        } else {
+          setError("Failed to fetch exam schedules");
+        }
+      } catch (error) {
+        setError("Error fetching exam schedules");
+      }
+    };
+
+    fetchExamSchedule();
+  }, []);
 
   // Handle change in exam selection
   const handleExamChange = (event) => {
@@ -28,7 +38,7 @@ const TeacherExamSchedulePage = () => {
     }
     setError(""); // Reset error message
     // Filter exams based on the selected exam type
-    const filteredExams = allExams.filter(exam => exam.examType === selectedExam);
+    const filteredExams = examSchedule.filter(exam => exam.examType === selectedExam);
     setExamSchedule(filteredExams); // Update the schedule list
   };
 
@@ -84,18 +94,20 @@ const TeacherExamSchedulePage = () => {
                   <tr className="text-left text-gray-600 border-b">
                     <th className="py-3 px-4">Subject</th>
                     <th className="py-3 px-4">Exam Date</th>
-                    <th className="py-3 px-4">Exam Time</th>
+                    <th className="py-3 px-4">Start Time</th>
+                    <th className="py-3 px-4">End Time</th>
                     <th className="py-3 px-4">Exam Type</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {examSchedule.map((exam, index) => (
-                    <tr key={index}>
+                  {examSchedule.map((exam) => (
+                    <tr key={exam._id}>
                       <td className="py-3 px-4 text-gray-700">{exam.subject}</td>
                       <td className="py-3 px-4 text-gray-700">
                         {new Date(exam.examDate).toLocaleDateString()}
                       </td>
-                      <td className="py-3 px-4 text-gray-700">{exam.examTime}</td>
+                      <td className="py-3 px-4 text-gray-700">{exam.startTime}</td>
+                      <td className="py-3 px-4 text-gray-700">{exam.endTime}</td>
                       <td className="py-3 px-4 text-gray-700">{exam.examType}</td>
                     </tr>
                   ))}

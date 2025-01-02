@@ -1,12 +1,19 @@
 import React, { useState, useEffect } from "react";
+import { FiMenu } from "react-icons/fi"; // Import menu icon
 import StudentSidebar from "../Sidebar"; // Import the StudentSidebar component
 
 const StudentAssignmentList = () => {
   const [assignments, setAssignments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
   const studentId = "676cf56dfd1eb1caa8426205"; // Static studentId
+
+  // Toggle sidebar visibility
+  const toggleSidebar = () => {
+    setIsSidebarOpen((prev) => !prev);
+  };
 
   // Fetch assignment data from API
   useEffect(() => {
@@ -45,11 +52,43 @@ const StudentAssignmentList = () => {
 
   return (
     <div className="min-h-screen flex bg-gray-100">
+      {/* Sidebar and Menu Icon */}
+      <div className="lg:hidden absolute top-4 right-4 z-50">
+        <button
+          onClick={toggleSidebar}
+          className="p-2 text-purple-500 bg-white rounded-md shadow-md focus:outline-none"
+        >
+          <FiMenu size={24} />
+        </button>
+      </div>
+
+      {/* Sidebar Overlay */}
+      <div
+        className={`fixed inset-0 bg-gray-800 bg-opacity-50 transition-opacity lg:hidden ${isSidebarOpen ? "block" : "hidden"}`}
+        onClick={toggleSidebar}
+      ></div>
+
       {/* Sidebar */}
-      <StudentSidebar />
+      <div
+        className={`fixed inset-y-0 left-0 bg-white shadow-lg transform lg:transform-none lg:relative w-64 transition-transform duration-300 ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        <StudentSidebar />
+      </div>
 
       {/* Main Content */}
-      <div className="flex-grow p-6">
+      <div className="flex-grow p-6 overflow-y-auto">
+        {/* Mobile View: Menu Icon, Divider, and Content */}
+        <div className="lg:hidden">
+          <button
+            onClick={toggleSidebar}
+            className="p-2 text-purple-500 focus:outline-none mb-4"
+          >
+          </button>
+          <div className="border-t-2 border-gray-200 mb-4"></div> {/* Divider for mobile view */}
+        </div>
+
         {/* Title Section */}
         <h1 className="text-3xl font-semibold text-gray-800 mb-8">Assignment List</h1>
 

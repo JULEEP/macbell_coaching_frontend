@@ -122,7 +122,7 @@ const TeacherSidebar = () => {
               </li>
               <li>
                 <NavLink
-                  to="/teacher-exam-schedule"
+                  to="/teacher-marks"
                   className="block text-gray-400 p-2 text-sm hover:bg-gray-700 rounded-md"
                   activeClassName="bg-gray-700"
                 >

@@ -1,54 +1,98 @@
 import React, { useState, useEffect } from "react";
 import TeacherSidebar from "./TeacherSidebar";
+import axios from "axios";
 
 const TeacherStudentsPage = () => {
-  const [students, setStudents] = useState([]); // Store the list of students
-  const [filteredStudents, setFilteredStudents] = useState([]); // Filtered students based on class or section
+  const [students, setStudents] = useState([]); // Store all students
+  const [filteredStudents, setFilteredStudents] = useState([]); // Filtered students based on filters
   const [loading, setLoading] = useState(true); // Loading state
-  const [error, setError] = useState(""); // Error message state
+  const [error, setError] = useState(""); // Error message
   const [classFilter, setClassFilter] = useState(""); // Class filter
   const [sectionFilter, setSectionFilter] = useState(""); // Section filter
+  const [selectedStudent, setSelectedStudent] = useState(null); // Student for complaint
+  const [complaintTitle, setComplaintTitle] = useState(""); // Complaint title
+  const [complaintDescription, setComplaintDescription] = useState(""); // Complaint description
+  const [filedComplaints, setFiledComplaints] = useState([]); // Track filed complaints
 
-  // Example: Static student data (you can replace it with a fetch API call)
-  const sampleStudents = [
-    { id: 1, name: "John Doe", roll: "A123", class: "5", section: "A" },
-    { id: 2, name: "Jane Smith", roll: "A124", class: "5", section: "A" },
-    { id: 3, name: "Alice Brown", roll: "B123", class: "6", section: "B" },
-    { id: 4, name: "Bob White", roll: "B124", class: "6", section: "B" },
-  ];
-
-  // Function to fetch students data (simulate with static data for now)
+  // Fetch students data from API
   useEffect(() => {
-    setLoading(true);
-    setError("");
-    setTimeout(() => {
-      setStudents(sampleStudents); // Simulating data fetch
-      setFilteredStudents(sampleStudents); // Initially showing all students
-      setLoading(false);
-    }, 1000);
+    const fetchStudents = async () => {
+      setLoading(true);
+      setError("");
+
+      try {
+        const response = await axios.get("http://localhost:4000/api/teacher/students");
+        const fetchedStudents = response.data.students.map((student) => ({
+          id: student._id,
+          name: `${student.firstName} ${student.lastName}`,
+          roll: student.roll,
+          class: student.studentClass,
+          section: student.section,
+        }));
+        setStudents(fetchedStudents);
+        setFilteredStudents(fetchedStudents);
+      } catch (err) {
+        setError("Failed to fetch students. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStudents();
   }, []);
 
   // Handle filter changes
   const handleClassFilterChange = (event) => {
-    setClassFilter(event.target.value);
-    filterStudents(event.target.value, sectionFilter);
+    const classValue = event.target.value;
+    setClassFilter(classValue);
+    filterStudents(classValue, sectionFilter);
   };
 
   const handleSectionFilterChange = (event) => {
-    setSectionFilter(event.target.value);
-    filterStudents(classFilter, event.target.value);
+    const sectionValue = event.target.value;
+    setSectionFilter(sectionValue);
+    filterStudents(classFilter, sectionValue);
   };
 
   // Filter students based on class and section
   const filterStudents = (classValue, sectionValue) => {
     let filtered = students;
     if (classValue) {
-      filtered = filtered.filter(student => student.class === classValue);
+      filtered = filtered.filter((student) => student.class === classValue);
     }
     if (sectionValue) {
-      filtered = filtered.filter(student => student.section === sectionValue);
+      filtered = filtered.filter((student) => student.section === sectionValue);
     }
     setFilteredStudents(filtered);
+  };
+
+  // Open complaint modal
+  const openComplaintModal = (student) => {
+    setSelectedStudent(student);
+    setComplaintTitle("");
+    setComplaintDescription("");
+  };
+
+  // Close complaint modal
+  const closeComplaintModal = () => {
+    setSelectedStudent(null);
+  };
+
+  // Submit complaint
+  const submitComplaint = async () => {
+    try {
+      const response = await axios.post(
+        `http://localhost:4000/api/teacher/add-complaint/${selectedStudent.id}`,
+        {
+          title: complaintTitle,
+          description: complaintDescription,
+        }
+      );
+      setFiledComplaints([...filedComplaints, selectedStudent.id]);
+      closeComplaintModal();
+    } catch (err) {
+      alert("Failed to file the complaint. Please try again.");
+    }
   };
 
   return (
@@ -77,7 +121,6 @@ const TeacherStudentsPage = () => {
                 <option value="">All Classes</option>
                 <option value="5">Class 5</option>
                 <option value="6">Class 6</option>
-                {/* Add more options here */}
               </select>
             </div>
 
@@ -93,7 +136,6 @@ const TeacherStudentsPage = () => {
                 <option value="">All Sections</option>
                 <option value="A">Section A</option>
                 <option value="B">Section B</option>
-                {/* Add more options here */}
               </select>
             </div>
           </div>
@@ -115,6 +157,7 @@ const TeacherStudentsPage = () => {
                     <th className="py-3 px-4">Roll Number</th>
                     <th className="py-3 px-4">Class</th>
                     <th className="py-3 px-4">Section</th>
+                    <th className="py-3 px-4">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -125,11 +168,23 @@ const TeacherStudentsPage = () => {
                         <td className="py-3 px-4 text-gray-700">{student.roll}</td>
                         <td className="py-3 px-4 text-gray-700">{student.class}</td>
                         <td className="py-3 px-4 text-gray-700">{student.section}</td>
+                        <td className="py-3 px-4 text-gray-700">
+                          <button
+                            className={`px-4 py-2 rounded-md text-white ${
+                              filedComplaints.includes(student.id)
+                                ? "bg-red-500"
+                                : "bg-purple-500"
+                            }`}
+                            onClick={() => openComplaintModal(student)}
+                          >
+                            {filedComplaints.includes(student.id) ? "Complaint Added" : "Add Complaint"}
+                          </button>
+                        </td>
                       </tr>
                     ))
                   ) : (
                     <tr>
-                      <td colSpan="4" className="py-3 px-4 text-center text-gray-700">
+                      <td colSpan="5" className="py-3 px-4 text-center text-gray-700">
                         No students found.
                       </td>
                     </tr>
@@ -140,6 +195,47 @@ const TeacherStudentsPage = () => {
           </div>
         )}
       </div>
+
+      {/* Complaint Modal */}
+      {selectedStudent && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white rounded-lg p-6 w-1/3">
+            <h2 className="text-xl font-bold mb-4">Add Complaint for {selectedStudent.name}</h2>
+            <div className="mb-4">
+              <label className="block text-gray-700 mb-2">Title</label>
+              <input
+                type="text"
+                className="w-full border border-gray-300 rounded-md px-4 py-2"
+                value={complaintTitle}
+                onChange={(e) => setComplaintTitle(e.target.value)}
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-gray-700 mb-2">Description</label>
+              <textarea
+                className="w-full border border-gray-300 rounded-md px-4 py-2"
+                rows="4"
+                value={complaintDescription}
+                onChange={(e) => setComplaintDescription(e.target.value)}
+              />
+            </div>
+            <div className="flex justify-end gap-4">
+              <button
+                className="px-4 py-2 bg-gray-300 rounded-md"
+                onClick={closeComplaintModal}
+              >
+                Cancel
+              </button>
+              <button
+                className="px-4 py-2 bg-purple-500 text-white rounded-md"
+                onClick={submitComplaint}
+              >
+                Submit
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
