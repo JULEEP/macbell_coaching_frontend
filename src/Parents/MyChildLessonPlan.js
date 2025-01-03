@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import ParentSidebar from "./ParentSidebar";
+import { FaBars, FaTimes } from 'react-icons/fa';
 
 const MyChildLessonPlan = () => {
   const [lessons, setLessons] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  // Replace with the actual parent and student IDs
   const parentId = "676f98625b442721a56ee770"; // Example parentId
   const studentId = "676bb21bd06928a8432c676a"; // Example studentId
 
@@ -35,19 +36,42 @@ const MyChildLessonPlan = () => {
     fetchLessons();
   }, [parentId, studentId]);
 
+  // Toggle Sidebar for mobile view
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
   return (
-    <div className="min-h-screen flex bg-gray-100">
+    <div className="min-h-screen flex flex-col lg:flex-row bg-gray-100">
       {/* Sidebar */}
-      <div className="w-64 sticky top-0 h-screen">
+      <div
+        className={`fixed top-0 left-0 h-full z-20 bg-white shadow-lg transition-transform transform ${
+          isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+        } lg:translate-x-0 lg:static lg:shadow-none w-64`}
+      >
         <ParentSidebar />
       </div>
 
+      {/* Overlay for mobile */}
+      {isSidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-10 lg:hidden"
+          onClick={toggleSidebar}
+        ></div>
+      )}
+
       {/* Main Content */}
-      <div className="flex-grow p-6 overflow-y-auto">
+      <div className="flex-grow overflow-y-auto lg:ml-64">
+        {/* Header for Mobile */}
+        <div className="flex items-center justify-between bg-purple-700 text-white p-4 shadow-lg lg:hidden">
+          <h1 className="text-lg font-bold">Lesson Plan</h1>
+          <button onClick={toggleSidebar} className="text-2xl focus:outline-none">
+            {isSidebarOpen ? <FaTimes /> : <FaBars />}
+          </button>
+        </div>
+
         {/* Title Section */}
-        <h1 className="text-xl font-semibold text-blue-500 mb-6">
-          My Child Lesson Plan
-        </h1>
+        <h1 className="text-xl font-semibold text-blue-500 mb-6">My Child Lesson Plan</h1>
         <div className="bg-white shadow-md rounded-lg p-6 space-y-4">
           <h2 className="text-xl font-semibold text-gray-800">Nine (A)</h2>
           <div className="my-4 border-t border-gray-300"></div>
@@ -74,27 +98,11 @@ const MyChildLessonPlan = () => {
               <table className="min-w-full table-auto">
                 <thead className="bg-gray-100">
                   <tr>
-                    <th className="px-4 py-2 text-left text-gray-400">
-                      Saturday 16-Dec-24
-                    </th>
-                    <th className="px-4 py-2 text-left text-gray-400">
-                      Sunday 17-Dec-24
-                    </th>
-                    <th className="px-4 py-2 text-left text-gray-400">
-                      Monday 18-Dec-24
-                    </th>
-                    <th className="px-4 py-2 text-left text-gray-400">
-                      Tuesday 19-Dec-24
-                    </th>
-                    <th className="px-4 py-2 text-left text-gray-400">
-                      Wednesday 20-Dec-24
-                    </th>
-                    <th className="px-4 py-2 text-left text-gray-400">
-                      Thursday 21-Dec-24
-                    </th>
-                    <th className="px-4 py-2 text-left text-gray-400">
-                      Friday 22-Dec-24
-                    </th>
+                    {["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"].map((day, idx) => (
+                      <th key={idx} className="px-4 py-2 text-left text-gray-400">
+                        {day} 16-Dec-24
+                      </th>
+                    ))}
                   </tr>
                 </thead>
                 <tbody>

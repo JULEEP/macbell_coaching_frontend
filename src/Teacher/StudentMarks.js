@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { FaBars, FaTimes } from "react-icons/fa";
 import TeacherSidebar from "./TeacherSidebar"; // Import TeacherSidebar component
 
 const TeacherMarks = () => {
@@ -6,6 +7,7 @@ const TeacherMarks = () => {
   const [selectedSubject, setSelectedSubject] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [marksPerPage] = useState(10); // Number of marks per page
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // Fetch marks data from API
   useEffect(() => {
@@ -44,19 +46,45 @@ const TeacherMarks = () => {
   // Handle page change
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
   return (
-    <div className="flex">
+    <div className="min-h-screen flex flex-col lg:flex-row bg-gray-100">
       {/* Sidebar */}
-      <TeacherSidebar />
+      <div
+        className={`fixed top-0 left-0 h-full z-20 bg-white shadow-lg transition-transform transform ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } lg:translate-x-0 lg:static lg:shadow-none w-64`}
+      >
+        <TeacherSidebar />
+      </div>
+
+      {/* Overlay for mobile */}
+      {isSidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-10 lg:hidden"
+          onClick={toggleSidebar}
+        ></div>
+      )}
 
       {/* Main Content */}
-      <div className="flex-1 p-4 sm:p-6 bg-gray-100 min-h-screen ml-64">
+      <div className="flex-grow overflow-y-auto lg:ml-64">
+        {/* Header for Mobile */}
+        <div className="flex items-center justify-between bg-purple-700 text-white p-4 shadow-lg lg:hidden">
+          <h1 className="text-lg font-bold">Student Marks</h1>
+          <button onClick={toggleSidebar} className="text-2xl focus:outline-none">
+            {isSidebarOpen ? <FaTimes /> : <FaBars />}
+          </button>
+        </div>
+
         <h1 className="text-xl text-purple-700 mb-6">Student Marks</h1>
 
-        {/* Filter (Subject) */}
-        <div className="flex mb-6 bg-white shadow-lg p-4 rounded-lg">
+        {/* Filters */}
+        <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-6 mb-6 bg-white shadow-lg p-4 rounded-lg">
           <div className="flex-1">
-            <label className="mr-4 text-lg">Select Subject:</label>
+            <label className="block mb-2">Select Subject:</label>
             <select
               className="p-2 rounded-lg border border-gray-300 w-full"
               value={selectedSubject}
@@ -92,9 +120,7 @@ const TeacherMarks = () => {
               <tbody>
                 {currentMarks.map((mark) => (
                   <tr key={mark._id}>
-                    <td className="px-4 py-2">
-                      {mark.studentId.firstName} {mark.studentId.lastName}
-                    </td>
+                    <td className="px-4 py-2">{`${mark.studentId.firstName} ${mark.studentId.lastName}`}</td>
                     <td className="px-4 py-2">{mark.studentId.class}</td>
                     <td className="px-4 py-2">{mark.studentId.section}</td>
                     <td className="px-4 py-2">{mark.studentId.roll}</td>

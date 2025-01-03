@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import ParentSidebar from './ParentSidebar';
 import axios from 'axios';
+import { FaBars, FaTimes } from 'react-icons/fa';
 
 const MyChildExamSchedule = () => {
   const [exam, setExam] = useState('');
@@ -9,6 +10,7 @@ const MyChildExamSchedule = () => {
   const [scheduleData, setScheduleData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // Parent and student IDs (replace with dynamic values or props as needed)
   const parentId = '676f98625b442721a56ee770';
@@ -41,13 +43,40 @@ const MyChildExamSchedule = () => {
     }
   };
 
+  // Toggle Sidebar for mobile view
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
   return (
     <div className="flex h-screen">
-      {/* Sidebar */}
-      <ParentSidebar />
+      {/* Sidebar (mobile-hidden by default, can be toggled) */}
+      <div
+        className={`fixed top-0 left-0 h-full z-20 bg-white shadow-lg transition-transform transform ${
+          isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+        } lg:translate-x-0 lg:static lg:shadow-none w-64`}
+      >
+        <ParentSidebar />
+      </div>
+
+      {/* Overlay for mobile */}
+      {isSidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-10 lg:hidden"
+          onClick={toggleSidebar}
+        ></div>
+      )}
 
       {/* Main Content */}
-      <div className="flex-1 ml-4 mt-4">
+      <div className="flex-grow overflow-y-auto lg:ml-64">
+        {/* Header for Mobile */}
+        <div className="flex items-center justify-between bg-purple-700 text-white p-4 shadow-lg lg:hidden">
+          <h1 className="text-lg font-bold">Exam Schedule</h1>
+          <button onClick={toggleSidebar} className="text-2xl focus:outline-none">
+            {isSidebarOpen ? <FaTimes /> : <FaBars />}
+          </button>
+        </div>
+
         {/* Title */}
         <h1 className="text-xl text-blue-500 font-medium mb-4">Exam Schedule</h1>
 

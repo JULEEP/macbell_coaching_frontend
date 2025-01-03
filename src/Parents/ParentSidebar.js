@@ -280,30 +280,6 @@ const ParentSidebar = () => {
           </NavLink>
         </li>
 
-        {/* Dormitory */}
-        <li className="flex items-center text-lg text-gray-300 hover:text-gray-400 p-3 rounded-md">
-          <FaList className="mr-3" />
-          <NavLink 
-            to="/parent-transport" 
-            className="flex items-center text-lg text-gray-400 hover:text-gray-300" 
-            activeClassName="text-blue-500"
-          >
-            <span>Dormitory</span>
-          </NavLink>
-        </li>
-
-        {/* Zoom */}
-        <li className="flex items-center text-lg text-gray-300 hover:text-gray-400 p-3 rounded-md">
-          <FaVideo className="mr-3" />
-          <NavLink 
-            to="/parent-transport" 
-            className="flex items-center text-lg text-gray-400 hover:text-gray-300" 
-            activeClassName="text-blue-500"
-          >
-            <span>Zoom</span>
-          </NavLink>
-        </li>
-
       </ul>
     </div>
   );

@@ -1,12 +1,18 @@
 import React, { useEffect, useState } from "react";
 import ParentSidebar from "./ParentSidebar";
 import axios from "axios";
+import { FaBars, FaTimes } from "react-icons/fa";
 
 const ParentTransportPage = () => {
   const [studentDetails, setStudentDetails] = useState({});
   const [transportDetails, setTransportDetails] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
 
   useEffect(() => {
     const fetchTransportDetails = async () => {
@@ -32,19 +38,40 @@ const ParentTransportPage = () => {
   }, []);
 
   return (
-    <div className="min-h-screen flex bg-gray-100">
+    <div className="min-h-screen flex flex-col lg:flex-row bg-gray-100">
       {/* Sidebar */}
-      <div className="w-64 sticky top-0 h-screen">
+      <div
+        className={`fixed top-0 left-0 h-full z-20 bg-white shadow-lg transition-transform transform ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } lg:translate-x-0 lg:static lg:shadow-none w-64`}
+      >
         <ParentSidebar />
       </div>
 
+      {/* Overlay for mobile */}
+      {isSidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-10 lg:hidden"
+          onClick={toggleSidebar}
+        ></div>
+      )}
+
       {/* Main Content */}
-      <div className="flex-grow p-6">
+      <div className="flex-grow p-6 lg:ml-64 overflow-y-auto">
+        {/* Header for Mobile */}
+        <div className="flex items-center justify-between bg-purple-700 text-white p-4 shadow-lg lg:hidden">
+          <h1 className="text-lg font-bold">Transport</h1>
+          <button onClick={toggleSidebar} className="text-2xl focus:outline-none">
+            {isSidebarOpen ? <FaTimes /> : <FaBars />}
+          </button>
+        </div>
+
+        {/* Transport Title */}
         <h1 className="text-xl font-semibold text-blue-500 mb-6">Transport</h1>
 
-        <div className="flex items-start justify-between">
+        <div className="flex flex-col lg:flex-row lg:space-x-6">
           {/* Student Details Card */}
-          <div className="bg-white shadow-xl rounded-3xl p-6 w-64">
+          <div className="bg-white shadow-xl rounded-3xl p-6 w-full lg:w-64 mb-6 lg:mb-0">
             <div className="border-2 border-gray-300 rounded-3xl p-6">
               {/* Profile Photo */}
               <div className="flex justify-center mb-4">
@@ -91,7 +118,7 @@ const ParentTransportPage = () => {
           </div>
 
           {/* Transport Details */}
-          <div className="ml-6 flex-1 bg-white shadow-md rounded-lg p-6">
+          <div className="bg-white shadow-md rounded-lg p-6 flex-1">
             <h3 className="text-xs font-semibold text-blue-500 mb-4">Transport Details</h3>
             <div className="overflow-x-auto">
               {loading ? (

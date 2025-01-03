@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import TeacherSidebar from "./TeacherSidebar"; // Import TeacherSidebar component
+import { FaBars, FaTimes } from "react-icons/fa";
 
 const TeacherHomework = () => {
   const [homeworkAssignments, setHomeworkAssignments] = useState([]);
@@ -8,6 +9,7 @@ const TeacherHomework = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [homeworkPerPage] = useState(10); // Number of homeworks per page
   const [statusData, setStatusData] = useState({});
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // Fetch homework data from API
   useEffect(() => {
@@ -28,18 +30,19 @@ const TeacherHomework = () => {
     fetchHomeworks();
   }, []);
 
-  // Handle class selection
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
   const handleClassChange = (e) => {
     setSelectedClass(e.target.value);
     setSelectedSection(""); // Reset section on class change
   };
 
-  // Handle section selection
   const handleSectionChange = (e) => {
     setSelectedSection(e.target.value);
   };
 
-  // Filter homework based on selected class and section
   const filteredHomework = homeworkAssignments.filter((homework) => {
     return (
       (selectedClass ? homework.class === selectedClass : true) &&
@@ -47,18 +50,14 @@ const TeacherHomework = () => {
     );
   });
 
-  // Pagination logic
   const indexOfLastHomework = currentPage * homeworkPerPage;
   const indexOfFirstHomework = indexOfLastHomework - homeworkPerPage;
   const currentHomework = filteredHomework.slice(indexOfFirstHomework, indexOfLastHomework);
 
-  // Handle page change
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  // Handle status change and update the status via API
   const handleStatusChange = async (homeworkId, newStatus) => {
     try {
-      // Send a PUT request to the backend to update the status
       const response = await fetch(`http://localhost:4000/api/teacher/update-status/${homeworkId}`, {
         method: "PUT",
         headers: {
@@ -70,12 +69,10 @@ const TeacherHomework = () => {
       const data = await response.json();
 
       if (data.message === "Status updated successfully!") {
-        // Update the status in the local state after successful API response
         setStatusData((prevStatus) => ({
           ...prevStatus,
           [homeworkId]: newStatus,
         }));
-        console.log("Homework status updated!");
       } else {
         console.error("Failed to update status");
       }
@@ -85,18 +82,40 @@ const TeacherHomework = () => {
   };
 
   return (
-    <div className="flex">
+    <div className="min-h-screen flex flex-col lg:flex-row bg-gray-100">
       {/* Sidebar */}
-      <TeacherSidebar />
+      <div
+        className={`fixed top-0 left-0 h-full z-20 bg-white shadow-lg transition-transform transform ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } lg:translate-x-0 lg:static lg:shadow-none w-64`}
+      >
+        <TeacherSidebar />
+      </div>
+
+      {/* Overlay for mobile */}
+      {isSidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-10 lg:hidden"
+          onClick={toggleSidebar}
+        ></div>
+      )}
 
       {/* Main Content */}
-      <div className="flex-1 p-4 sm:p-6 bg-gray-100 min-h-screen ml-64">
+      <div className="flex-grow overflow-y-auto lg:ml-64">
+        {/* Header for Mobile */}
+        <div className="flex items-center justify-between bg-purple-700 text-white p-4 shadow-lg lg:hidden">
+          <h1 className="text-lg font-bold">Assigned Homework</h1>
+          <button onClick={toggleSidebar} className="text-2xl focus:outline-none">
+            {isSidebarOpen ? <FaTimes /> : <FaBars />}
+          </button>
+        </div>
+
         <h1 className="text-xl text-purple-700 mb-6">Assigned Homework</h1>
 
-        {/* Filters (Class, Section displayed together) */}
-        <div className="flex space-x-6 mb-6 bg-white shadow-lg p-4 rounded-lg">
+        {/* Filters */}
+        <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-6 mb-6 bg-white shadow-lg p-4 rounded-lg">
           <div className="flex-1">
-            <label className="mr-4 text-lg">Select Class:</label>
+            <label className="block mb-2">Select Class:</label>
             <select
               className="p-2 rounded-lg border border-gray-300 w-full"
               value={selectedClass}
@@ -112,12 +131,12 @@ const TeacherHomework = () => {
           </div>
 
           <div className="flex-1">
-            <label className="mr-4 text-lg">Select Section:</label>
+            <label className="block mb-2">Select Section:</label>
             <select
               className="p-2 rounded-lg border border-gray-300 w-full"
               value={selectedSection}
               onChange={handleSectionChange}
-              disabled={!selectedClass} // Disable section dropdown if class is not selected
+              disabled={!selectedClass}
             >
               <option value="">Select Section</option>
               {[...new Set(homeworkAssignments.filter((hw) => hw.class === selectedClass).map((hw) => hw.section))].map((section) => (

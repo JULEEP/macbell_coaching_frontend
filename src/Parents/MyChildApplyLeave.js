@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ParentSidebar from "./ParentSidebar";
 import axios from "axios";
+import { FaBars, FaTimes } from "react-icons/fa";
 
 const MyChildApplyLeave = () => {
   const [leaveType, setLeaveType] = useState("");
@@ -8,6 +9,7 @@ const MyChildApplyLeave = () => {
   const [endDate, setEndDate] = useState("");
   const [reason, setReason] = useState("");
   const [leaveList, setLeaveList] = useState([]);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Sidebar toggle state
 
   const parentId = "676f98625b442721a56ee770"; // Example parentId
   const studentId = "676bb21bd06928a8432c676a"; // Example studentId
@@ -53,28 +55,54 @@ const MyChildApplyLeave = () => {
 
   // Convert date to readable format
   const formatDate = (date) => {
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    return new Date(date).toLocaleDateString('en-US', options);
+    const options = { year: "numeric", month: "long", day: "numeric" };
+    return new Date(date).toLocaleDateString("en-US", options);
+  };
+
+  // Toggle Sidebar for mobile view
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
   };
 
   return (
     <div className="flex h-screen">
-      {/* Sidebar - fixed position */}
-      <div className="w-1/4 fixed top-0 left-0 h-full bg-white-200 p-4">
+      {/* Sidebar */}
+      <div
+        className={`fixed top-0 left-0 h-full z-20 bg-white shadow-lg transition-transform transform ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } lg:translate-x-0 lg:static lg:shadow-none w-64`}
+      >
         <ParentSidebar />
       </div>
 
+      {/* Overlay for mobile */}
+      {isSidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-10 lg:hidden"
+          onClick={toggleSidebar}
+        ></div>
+      )}
+
       {/* Main Content */}
-      <div className="flex-1 mt-4 ml-80"> {/* Adjust left margin for the fixed sidebar */}
+      <div className="flex-grow overflow-y-auto lg:ml-64">
+        {/* Header for Mobile */}
+        <div className="flex items-center justify-between bg-purple-700 text-white p-4 shadow-lg lg:hidden">
+          <h1 className="text-lg font-bold">Apply Leave</h1>
+          <button onClick={toggleSidebar} className="text-2xl focus:outline-none">
+            {isSidebarOpen ? <FaTimes /> : <FaBars />}
+          </button>
+        </div>
+
         {/* Title */}
+        <h2 className="text-lg text-gray-700 font-semibold mb-4">Apply Leave</h2>
+
         {/* Form Section */}
         <div className="bg-white p-6 rounded-lg shadow-lg mb-8">
-          <h2 className="text-lg text-gray-700 font-semibold mb-4">Add Apply Leave</h2>
           <form onSubmit={handleSubmit}>
             {/* Row for leaveType, startDate, endDate, and reason */}
-            <div className="flex gap-4">
+            <div className="flex gap-4 flex-wrap">
               {/* Leave Type */}
-              <div className="mb-4 flex-1">
+              <div className="mb-4 flex-1 min-w-[200px]">
                 <label htmlFor="leaveType" className="block text-sm text-gray-600 mb-1">
                   Leave Type
                 </label>
@@ -92,7 +120,7 @@ const MyChildApplyLeave = () => {
               </div>
 
               {/* Start Date */}
-              <div className="mb-4 flex-1">
+              <div className="mb-4 flex-1 min-w-[200px]">
                 <label htmlFor="startDate" className="block text-sm text-gray-600 mb-1">
                   Start Date
                 </label>
@@ -107,7 +135,7 @@ const MyChildApplyLeave = () => {
               </div>
 
               {/* End Date */}
-              <div className="mb-4 flex-1">
+              <div className="mb-4 flex-1 min-w-[200px]">
                 <label htmlFor="endDate" className="block text-sm text-gray-600 mb-1">
                   End Date
                 </label>
