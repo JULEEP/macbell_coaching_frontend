@@ -17,7 +17,7 @@ const MyChildApplyLeave = () => {
   // Fetch leaves on component mount
   useEffect(() => {
     axios
-      .get(`http://localhost:4000/api/parent/my-child-leaves/${parentId}/${studentId}`)
+      .get(`https://school-backend-1-2xki.onrender.com/api/parent/my-child-leaves/${parentId}/${studentId}`)
       .then((response) => {
         setLeaveList(response.data.leaves || []); // Ensure we always set an array
       })
@@ -94,7 +94,6 @@ const MyChildApplyLeave = () => {
         </div>
 
         {/* Title */}
-        <h2 className="text-lg text-gray-700 font-semibold mb-4">Apply Leave</h2>
 
         {/* Form Section */}
         <div className="bg-white p-6 rounded-lg shadow-lg mb-8">

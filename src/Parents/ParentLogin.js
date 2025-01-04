@@ -14,7 +14,7 @@ const ParentLogin = () => {
     setSuccess(""); // Reset success message
 
     try {
-      const response = await fetch("http://localhost:4000/api/parent/parent-login", {
+      const response = await fetch("https://school-backend-1-2xki.onrender.com/api/parent/parent-login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

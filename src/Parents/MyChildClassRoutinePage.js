@@ -71,7 +71,6 @@ const MyChildClassRoutinePage = () => {
         </div>
 
         {/* Title Section */}
-        <h1 className="text-xl font-medium text-blue-500 mb-6">Class Routine</h1>
 
         <div className="bg-white shadow-md rounded-lg p-4 space-y-4">
           {/* Class Routine Header */}

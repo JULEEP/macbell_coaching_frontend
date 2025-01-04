@@ -67,7 +67,6 @@ const ParentTransportPage = () => {
         </div>
 
         {/* Transport Title */}
-        <h1 className="text-xl font-semibold text-blue-500 mb-6">Transport</h1>
 
         <div className="flex flex-col lg:flex-row lg:space-x-6">
           {/* Student Details Card */}

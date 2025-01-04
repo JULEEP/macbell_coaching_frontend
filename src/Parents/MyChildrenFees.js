@@ -71,7 +71,6 @@ const MyChildrenFees = () => {
         </div>
 
         {/* Title */}
-        <h1 className="text-xl font-semibold text-blue-500 mb-6">My Children Fees Invoice</h1>
 
         {/* Search Bar */}
         <div className="mt-4">

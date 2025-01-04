@@ -65,7 +65,6 @@ const ParentNoticeBoard = () => {
         </div>
 
         {/* Title Section */}
-        <h1 className="text-xl font-semibold text-blue-500 mb-6">Notice Board</h1>
 
         {/* Notices Section */}
         <div className="bg-white shadow-md rounded-lg p-4">

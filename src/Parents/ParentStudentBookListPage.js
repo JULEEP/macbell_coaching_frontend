@@ -40,7 +40,6 @@ const ParentStudentBookListPage = () => {
         </div>
 
         {/* Book List Title */}
-        <h1 className="text-xl font-semibold text-blue-500 mb-6">Book List</h1>
 
         <div className="bg-white shadow-md rounded-lg p-6">
           <h2 className="text-xs font-medium text-blue-500 mb-4">All Books</h2>

@@ -63,11 +63,6 @@ const MyChildStudentHomeworkList = () => {
           </button>
         </div>
 
-        {/* Title Section */}
-        <h1 className="text-xl font-medium text-blue-500 mb-6">
-          My Child Homework List
-        </h1>
-
         <div className="bg-white shadow-md rounded-lg p-4 space-y-4">
           <h2 className="text-lg font-medium text-gray-800">Nine (A)</h2>
           <div className="my-3 border-t border-gray-300"></div>

@@ -19,7 +19,7 @@ const MyChildAttendance = () => {
     const fetchStudentDetails = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:4000/api/parent/my-child-attendance/${parentId}/${studentId}`
+          `https://school-backend-1-2xki.onrender.com/api/parent/my-child-attendance/${parentId}/${studentId}`
         );
         setStudentDetails(response.data.studentDetails);
       } catch (err) {
@@ -85,7 +85,6 @@ const MyChildAttendance = () => {
         </div>
 
         {/* Title */}
-        <h1 className="text-xl font-medium text-blue-500 mb-6">Attendance</h1>
 
         {/* Student Info Section */}
         {studentDetails && (

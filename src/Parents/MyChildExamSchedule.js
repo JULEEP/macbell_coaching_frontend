@@ -78,7 +78,6 @@ const MyChildExamSchedule = () => {
         </div>
 
         {/* Title */}
-        <h1 className="text-xl text-blue-500 font-medium mb-4">Exam Schedule</h1>
 
         {/* Select Criteria Section */}
         <div className="bg-white p-6 rounded-lg shadow-lg mb-6">

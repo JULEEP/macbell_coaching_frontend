@@ -72,7 +72,6 @@ const MyChildMarksPage = () => {
         </div>
 
         {/* Title Section */}
-        <h1 className="text-xl font-semibold text-blue-500 mb-6">Result</h1>
         
         <div className="bg-white shadow-md rounded-lg p-6 space-y-4">
           <h2 className="text-xl font-semibold text-gray-800">Result List</h2>

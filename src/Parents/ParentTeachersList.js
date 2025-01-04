@@ -66,8 +66,7 @@ const ParentTeachersList = () => {
         </div>
 
         {/* Title Section */}
-        <h1 className="text-xl font-semibold text-blue-500 mb-6">Teachers List</h1>
-        <h2 className="text-xs font-medium text-gray-700 mb-6">Nine (A)</h2>
+        <h2 className="text-xl font-medium text-gray-700 mb-6 mt-6">Nine (A)</h2>
 
         {/* Teachers List Section */}
         <div className="bg-white shadow-md rounded-lg p-6">

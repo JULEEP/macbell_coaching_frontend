@@ -71,7 +71,6 @@ const MyChildLessonPlan = () => {
         </div>
 
         {/* Title Section */}
-        <h1 className="text-xl font-semibold text-blue-500 mb-6">My Child Lesson Plan</h1>
         <div className="bg-white shadow-md rounded-lg p-6 space-y-4">
           <h2 className="text-xl font-semibold text-gray-800">Nine (A)</h2>
           <div className="my-4 border-t border-gray-300"></div>

@@ -65,7 +65,6 @@ const ParentSubjectDetails = () => {
         </div>
 
         {/* Title Section */}
-        <h1 className="text-xl font-semibold text-blue-500 mb-6">Subject Details</h1>
 
         <h2 className="text-xs font-medium text-gray-700 mb-6">Nine (A)</h2>
 
