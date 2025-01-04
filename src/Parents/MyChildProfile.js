@@ -42,24 +42,40 @@ const MyChildProfile = () => {
   if (error) return <div className="text-red-500">{error}</div>;
   if (!studentDetails) return <div>Loading...</div>;
 
+   // Toggle Sidebar for mobile view
+   const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
   return (
-    <div className="min-h-screen flex bg-gray-100">
+    <div className="min-h-screen flex flex-col lg:flex-row bg-gray-100">
       {/* Sidebar */}
-      <div className={`md:block ${isSidebarOpen ? "block" : "hidden"} md:w-1/4 lg:w-1/5`}>
+      <div
+        className={`fixed top-0 left-0 h-full z-20 bg-white shadow-lg transition-transform transform ${
+          isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+        } lg:translate-x-0 lg:static lg:shadow-none w-64`}
+      >
         <ParentSidebar />
       </div>
 
+      {/* Overlay for mobile */}
+      {isSidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-10 lg:hidden"
+          onClick={toggleSidebar}
+        ></div>
+      )}
+
       {/* Main Content */}
-      <div className={`flex-grow p-6 ${isSidebarOpen ? "ml-0" : "ml-0"}`}>
-        {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          {/* Sidebar Toggle Button */}
-          <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="lg:hidden p-2 rounded-full bg-purple-500 text-white">
+      <div className="flex-grow overflow-y-auto lg:ml-64">
+        {/* Header for Mobile */}
+        <div className="flex items-center justify-between bg-purple-700 text-white p-4 shadow-lg lg:hidden">
+          <h1 className="text-lg font-bold">Student Details</h1>
+          <button onClick={toggleSidebar} className="text-2xl focus:outline-none">
             {isSidebarOpen ? <FaTimes /> : <FaBars />}
           </button>
-          
+
           {/* Page Title */}
-          <h1 className="text-sm font-semibold text-blue-500">Student Details</h1>
         </div>
 
         <div className="flex flex-col md:flex-row space-y-6 md:space-y-0 md:space-x-6">

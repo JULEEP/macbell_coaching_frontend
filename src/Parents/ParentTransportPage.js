@@ -57,7 +57,7 @@ const ParentTransportPage = () => {
       )}
 
       {/* Main Content */}
-      <div className="flex-grow p-6 lg:ml-64 overflow-y-auto">
+      <div className="flex-grow lg:ml-64 overflow-y-auto">
         {/* Header for Mobile */}
         <div className="flex items-center justify-between bg-purple-700 text-white p-4 shadow-lg lg:hidden">
           <h1 className="text-lg font-bold">Transport</h1>

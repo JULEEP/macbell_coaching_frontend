@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FiMenu } from "react-icons/fi"; // Import menu icon
+import { FaBars, FaTimes } from "react-icons/fa"; // Mobile sidebar toggle icons
 import StudentSidebar from "../Sidebar"; // Import the Sidebar component
 
 const StudentAttendanceList = () => {
@@ -76,16 +77,6 @@ const StudentAttendanceList = () => {
 
   return (
     <div className="min-h-screen flex bg-gray-100">
-      {/* Sidebar and Menu Icon */}
-      <div className="lg:hidden absolute top-4 right-4 z-50">
-        <button
-          onClick={toggleSidebar}
-          className="p-2 text-purple-500 bg-white rounded-md shadow-md focus:outline-none"
-        >
-          <FiMenu size={24} />
-        </button>
-      </div>
-
       {/* Sidebar Overlay */}
       <div
         className={`fixed inset-0 bg-gray-800 bg-opacity-50 transition-opacity lg:hidden ${isSidebarOpen ? "block" : "hidden"}`}
@@ -102,19 +93,16 @@ const StudentAttendanceList = () => {
       </div>
 
       {/* Main Content */}
-      <div className="flex-grow p-6 overflow-y-auto">
-        {/* Mobile View: Menu Icon, Divider, and Content */}
-        <div className="lg:hidden">
-          <button
-            onClick={toggleSidebar}
-            className="p-2 text-purple-500 focus:outline-none mb-4"
-          >
+      <div className="flex-grow overflow-y-auto lg:ml-64">
+        {/* Header for Mobile */}
+        <div className="flex items-center justify-between bg-purple-700 text-white p-4 shadow-lg lg:hidden">
+          <h1 className="text-lg font-bold">Attendance List</h1>
+          <button onClick={toggleSidebar} className="text-2xl focus:outline-none">
+            {isSidebarOpen ? <FaTimes /> : <FaBars />}
           </button>
-          <div className="border-t-2 border-gray-200 mb-4"></div> {/* Divider for mobile view */}
         </div>
 
         {/* Title Section */}
-        <h1 className="text-3xl font-semibold text-gray-800 mb-8">Attendance</h1>
 
         {/* Month and Year Dropdowns in Same Row */}
         <div className="bg-white shadow-md rounded-lg p-6 space-y-4">

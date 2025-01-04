@@ -1,121 +1,98 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // for navigation after login
+import axios from 'axios';
 
-const Login = () => {
-  const [formData, setFormData] = useState({
-    firstName: "",
-    class: "",       // Changed from className to class
-    section: "",
-    roll: "",
-    dateOfBirth: "",
-  });
-
-  const [error, setError] = useState("");
-  const navigate = useNavigate();
-
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
+const StudentLogin = () => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const navigate = useNavigate(); // To navigate to another page after login
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
-      const response = await fetch("https://school-backend-1-2xki.onrender.com/api/students/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
+      const response = await axios.post('https://school-backend-1-2xki.onrender.com/api/students/login', {
+        firstName: username,
+        randomPassword: password,
       });
 
-      const data = await response.json();
+      if (response.status === 200) {
+        const { token, refreshToken, _id } = response.data; // Destructure the student data
 
-      if (response.ok) {
-        localStorage.setItem("token", data.token); // Store token
-        localStorage.setItem("studentId", data.studentId); // Store studentId
-        navigate("/student-dashboard");
-      } else {
-        setError(data.message || "Login failed. Please try again.");
+        // Store tokens and student ID in localStorage
+        localStorage.setItem('accessToken', token); // Store access token
+        localStorage.setItem('refreshToken', refreshToken); // Store refresh token
+        localStorage.setItem('studentId', _id); // Store studentId
+
+        // Redirect to the student dashboard or another page after login
+        navigate('/student-dashboard'); // Change this to the correct route for your student dashboard
       }
-    } catch (err) {
-      setError("An error occurred. Please try again.");
+    } catch (error) {
+      // Handle error: show error message
+      setErrorMessage('Invalid username or password');
+      console.error('Login error:', error);
     }
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-        <h2 className="text-2xl font-bold text-center mb-6">Student Login</h2>
-        {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700">First Name</label>
-            <input
-              type="text"
-              name="firstName"
-              value={formData.firstName}
-              onChange={handleChange}
-              required
-              className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Class</label>
-            <input
-              type="text"
-              name="class"
-              value={formData.class}
-              onChange={handleChange}
-              required
-              className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Section</label>
-            <input
-              type="text"
-              name="section"
-              value={formData.section}
-              onChange={handleChange}
-              required
-              className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Roll Number</label>
-            <input
-              type="text"
-              name="roll"
-              value={formData.roll}
-              onChange={handleChange}
-              required
-              className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Date of Birth</label>
-            <input
-              type="date"
-              name="dateOfBirth"
-              value={formData.dateOfBirth}
-              onChange={handleChange}
-              required
-              className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-            />
-          </div>
-          <button
-            type="submit"
-            className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition"
-          >
-            Login
-          </button>
-        </form>
+    <div className="flex h-screen bg-gray-100 justify-center items-center">
+      <div className="flex flex-col lg:flex-row w-11/12 md:w-3/4 h-auto md:h-3/4 bg-white rounded-lg shadow-lg overflow-hidden">
+        {/* Left Side: Form */}
+        <div className="flex flex-col justify-center items-center w-full lg:w-1/2 p-8">
+          <h2 className="text-xl font-bold mb-6 text-gray-800">Student Login</h2>
+          <form onSubmit={handleSubmit} className="w-full sm:w-3/4">
+            {errorMessage && (
+              <div className="text-red-500 mb-4 text-center">{errorMessage}</div>
+            )}
+            <div className="mb-4">
+              <label htmlFor="username" className="block text-gray-700 font-medium mb-2">
+                Username
+              </label>
+              <input
+                type="text"
+                id="username"
+                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                placeholder="Enter your username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+              />
+            </div>
+            <div className="mb-6">
+              <label htmlFor="password" className="block text-gray-700 font-medium mb-2">
+                Password
+              </label>
+              <input
+                type="password"
+                id="password"
+                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
+            <button
+              type="submit"
+              className="w-full bg-purple-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-200"
+            >
+              Login
+            </button>
+          </form>
+        </div>
+
+        {/* Right Side: Image */}
+        <div className="w-full lg:w-1/2">
+          <img
+            src="https://abcschool.institute.org.in/435abcschool/websites/ofcsch/school-theme-4/assets/images/login-bg.jpg"
+            alt="Login Illustration"
+            className="object-cover w-full h-full"
+          />
+        </div>
       </div>
     </div>
   );
 };
 
-export default Login;
+export default StudentLogin;

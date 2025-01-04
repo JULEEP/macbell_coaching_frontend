@@ -150,7 +150,6 @@ import ParentSubjectDetails from './Parents/ParentSubjectDetails';
 import ParentTeachersList from './Parents/ParentTeachersList';
 import ParentStudentBookListPage from './Parents/ParentStudentBookListPage';
 import ParentTransportPage from './Parents/ParentTransportPage';
-import Login from './Student/Login';
 import MyChildMarksPage from './Parents/MyChildrenMarks';
 import TeacherSidebar from './Teacher/TeacherSidebar';
 import TeacherDashboard from './Teacher/TeacherDashboard';
@@ -164,6 +163,10 @@ import TeacherLeavePage from './Teacher/TeacherLeave';
 import TeacherStudentsPage from './Teacher/StudentList';
 import Teacher from './Pages/Teacher';
 import TeacherMarks from './Teacher/StudentMarks';
+import StudentLogin from './Student/Login';
+import TeacherLogin from './Teacher/TeacherLogin';
+import ParentLogin from './Parents/ParentLogin';
+import AdminLogin from './Pages/AdminLogin';
 function App() {
   return (
     <Router> {/* Wrap everything in Router to enable routing */}        
@@ -171,6 +174,7 @@ function App() {
           <Routes>
             {/* Define the route for the dashboard */}
             <Route path="/Admin-dashboard" element={<Dashboard />} />
+            <Route path="/admin-login" element={<AdminLogin />} />
             <Route path="/student-sidebar" element={<StudnetSidebar />} />
             <Route path="/query" element={<AdmissionQuery/>} />
             <Route path="/visitor" element={<VisitorBook/>} />
@@ -303,7 +307,8 @@ function App() {
             <Route path="/student-dormitory" element={<DormitoryPage/>} />
             <Route path="/teacher" element={<Teacher/>} />
             <Route path="/sidebar" element={<Sidebar/>} />
-            <Route path="/" element={<Login/>} />
+            <Route path="/student-login" element={<StudentLogin/>} />
+
 
 
 
@@ -326,6 +331,8 @@ function App() {
            <Route path="/parent-booklist" element={<ParentStudentBookListPage/>} />
            <Route path="/parent-transport" element={<ParentTransportPage/>} />
            <Route path="/mychild-exam-schedules" element={<MyChildMarksPage/>} />
+           <Route path="/parent-login" element={<ParentLogin/>} />
+
 
 
           {/* Parents Sections */} 
@@ -340,6 +347,8 @@ function App() {
           <Route path="/teacher-leave" element={<TeacherLeavePage/>} />
           <Route path="/teacher-students" element={<TeacherStudentsPage/>} />
           <Route path="/teacher-marks" element={<TeacherMarks/>} />
+          <Route path="/teacher-login" element={<TeacherLogin/>} />
+
 
 
 

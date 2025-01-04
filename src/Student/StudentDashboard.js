@@ -1,6 +1,53 @@
 import React, { useState } from "react";
+import { Container, Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
+import { FaBars, FaTimes } from "react-icons/fa"; // Import both icons for toggling the sidebar
 import StudentSidebar from "../Sidebar";
-import { FaBars } from "react-icons/fa";
+
+// Importing images (similar to BestCategoriesSlider)
+import exam from "../Images/exam.jpeg";
+import attendance from "../Images/attendance.jpeg";
+import student from "../Images/student.jpeg";
+import subject from "../Images/subject.jpeg";
+import teacher from "../Images/teacher.jpeg";
+import notice from "../Images/notice.jpeg";
+
+const book = 'https://static.vecteezy.com/system/resources/previews/003/812/674/large_2x/pink-book-closed-free-vector.jpg';
+const transport = 'https://static.vecteezy.com/system/resources/previews/002/373/903/large_2x/cartoon-school-bus-with-children-free-vector.jpg';
+
+const bestCategories = [
+  {
+    img: subject,
+    name: "Subjects",
+  },
+  {
+    img: student,
+    name: "Homeworks",
+  },
+  {
+    img: exam,
+    name: "Exams",
+  },
+  {
+    img: teacher,
+    name: "Teachers",
+  },
+  {
+    img: attendance,
+    name: "Attendance",
+  },
+  {
+    img: notice,
+    name: "Notice",
+  },
+  {
+    img: book,
+    name: "Books",
+  },
+  {
+    img: transport,
+    name: "Transport",
+  },
+];
 
 const StudentDashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -8,6 +55,25 @@ const StudentDashboard = () => {
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
+
+  // Sample data for tables
+  const subjectsData = [
+    { name: "Math", teacher: "Mr. Smith", time: "9:00 AM" },
+    { name: "Science", teacher: "Ms. Johnson", time: "10:00 AM" },
+    { name: "History", teacher: "Mr. Brown", time: "11:00 AM" },
+  ];
+
+  const teachersData = [
+    { name: "Mr. Smith", subject: "Math", contact: "9876543210" },
+    { name: "Ms. Johnson", subject: "Science", contact: "1234567890" },
+    { name: "Mr. Brown", subject: "History", contact: "4567891230" },
+  ];
+
+  const classesData = [
+    { className: "Math 101", teacher: "Mr. Smith", students: "30" },
+    { className: "Science 102", teacher: "Ms. Johnson", students: "25" },
+    { className: "History 103", teacher: "Mr. Brown", students: "28" },
+  ];
 
   return (
     <div className="min-h-screen bg-gray-100 flex">
@@ -30,103 +96,164 @@ const StudentDashboard = () => {
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
-        {/* Mobile Menu Icon */}
-        <div className="p-4 bg-white shadow-md flex items-center justify-between md:hidden">
-          <h1 className="text-lg font-bold text-gray-800">
-            Student Dashboard
-          </h1>
+        {/* Mobile Header */}
+        <div className="p-4 bg-purple-700 text-white shadow-md flex items-center justify-between md:hidden">
+          <h1 className="text-lg font-bold">Student Dashboard</h1>
           <button
             onClick={toggleSidebar}
-            className="text-purple-800 focus:outline-none"
+            className="text-2xl focus:outline-none"
           >
-            <FaBars size={24} />
+            {isSidebarOpen ? <FaTimes /> : <FaBars />}
           </button>
         </div>
 
         {/* Content Area */}
-        <div className="flex-1 p-4 sm:p-6 overflow-y-auto">
-          {/* Page Title */}
-          <h1 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4 sm:mb-6">
-            Welcome To Student Dashboard
-          </h1>
+        <Container
+          maxWidth="xl"
+          style={{
+            padding: "20px",
+            textAlign: "center",
+            backgroundColor: "#e0c8a0",
+            marginTop: "12px",
+          }}
+        >
+          <Box
+            display="grid"
+            gridTemplateColumns="repeat(7, 1fr)"
+            gap="5px"
+            justifyItems="center"
+            sx={{
+              "@media (max-width: 1200px)": { gridTemplateColumns: "repeat(4, 1fr)" },
+              "@media (max-width: 900px)": { gridTemplateColumns: "repeat(3, 1fr)" },
+              "@media (max-width: 600px)": { gridTemplateColumns: "repeat(2, 1fr)" },
+              width: "100%",
+              boxSizing: "border-box",
+            }}
+          >
+            {bestCategories.map((category) => (
+              <Box key={category.name} style={{ padding: "5px" }}>
+                {/* Add hover animation */}
+                <Box
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    padding: "10px",
+                    backgroundColor: "#f5f5f5",
+                    borderRadius: "8px",
+                    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+                    textAlign: "center",
+                    transition: "transform 0.3s ease, box-shadow 0.3s ease", // Transition properties
+                  }}
+                  className="category-box"
+                >
+                  <img
+                    src={category.img}
+                    alt={category.name}
+                    style={{
+                      width: "150px",
+                      height: "150px",
+                      objectFit: "cover",
+                      borderRadius: "8px",
+                      marginBottom: "10px",
+                    }}
+                  />
+                  <Box
+                    style={{
+                      backgroundColor: "white",
+                      padding: "10px",
+                      borderRadius: "4px",
+                      width: "100%",
+                      marginTop: "10px",
+                    }}
+                  >
+                    <p style={{ fontWeight: "bold", color: "black", margin: 0 }}>
+                      {category.name}
+                    </p>
+                  </Box>
+                </Box>
+              </Box>
+            ))}
+          </Box>
 
-          {/* Grid Layout */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-            {/* Subject Block */}
-            <div className="bg-white shadow-md rounded-lg p-4 sm:p-6 text-left">
-              <h2 className="text-lg sm:text-xl font-semibold text-blue-500 mb-2">
-                Subject
-              </h2>
-              <p className="text-sm text-gray-500">Total Subject</p>
-              <p className="text-lg sm:text-xl font-bold text-purple-500">0</p>
-            </div>
+          {/* New Section with Tables (Subjects, Teachers, Classes) */}
+          <Box mt={5} style={{ marginBottom: "20px" }}>
+            {/* Subjects Table */}
+            <Box mb={4} style={{ backgroundColor: "#f0f8ff", padding: "20px", borderRadius: "10px" }}>
+              <h3 style={{ marginBottom: "10px", fontWeight: "bold" }}>Subjects</h3>
+              <TableContainer component={Paper}>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Subject</TableCell>
+                      <TableCell>Teacher</TableCell>
+                      <TableCell>Time</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {subjectsData.map((row, index) => (
+                      <TableRow key={index}>
+                        <TableCell>{row.name}</TableCell>
+                        <TableCell>{row.teacher}</TableCell>
+                        <TableCell>{row.time}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Box>
 
-            {/* Notice Block */}
-            <div className="bg-white shadow-md rounded-lg p-4 sm:p-6 text-left">
-              <h2 className="text-lg sm:text-xl font-semibold text-blue-500 mb-2">
-                Notice
-              </h2>
-              <p className="text-sm text-gray-500">Total Notice</p>
-              <p className="text-lg sm:text-xl font-bold text-purple-500">0</p>
-            </div>
+            {/* Teachers Table */}
+            <Box mb={4} style={{ backgroundColor: "#e6ffe6", padding: "20px", borderRadius: "10px" }}>
+              <h3 style={{ marginBottom: "10px", fontWeight: "bold" }}>Teachers</h3>
+              <TableContainer component={Paper}>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Name</TableCell>
+                      <TableCell>Subject</TableCell>
+                      <TableCell>Contact</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {teachersData.map((row, index) => (
+                      <TableRow key={index}>
+                        <TableCell>{row.name}</TableCell>
+                        <TableCell>{row.subject}</TableCell>
+                        <TableCell>{row.contact}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Box>
 
-            {/* Exam Block */}
-            <div className="bg-white shadow-md rounded-lg p-4 sm:p-6 text-left">
-              <h2 className="text-lg sm:text-xl font-semibold text-blue-500 mb-2">
-                Exam
-              </h2>
-              <p className="text-sm text-gray-500">Total Exam</p>
-              <p className="text-lg sm:text-xl font-bold text-purple-500">0</p>
-            </div>
-
-            {/* Online Exam Block */}
-            <div className="bg-white shadow-md rounded-lg p-4 sm:p-6 text-left">
-              <h2 className="text-lg sm:text-xl font-semibold text-blue-500 mb-2">
-                Online Exam
-              </h2>
-              <p className="text-sm text-gray-500">Total Online Exam</p>
-              <p className="text-lg sm:text-xl font-bold text-purple-500">0</p>
-            </div>
-
-            {/* Teachers Block */}
-            <div className="bg-white shadow-md rounded-lg p-4 sm:p-6 text-left">
-              <h2 className="text-lg sm:text-xl font-semibold text-blue-500 mb-2">
-                Teachers
-              </h2>
-              <p className="text-sm text-gray-500">Total Teachers</p>
-              <p className="text-lg sm:text-xl font-bold text-purple-500">0</p>
-            </div>
-
-            {/* Issued Books Block */}
-            <div className="bg-white shadow-md rounded-lg p-4 sm:p-6 text-left">
-              <h2 className="text-lg sm:text-xl font-semibold text-blue-500 mb-2">
-                Issued Book
-              </h2>
-              <p className="text-sm text-gray-500">Total Issued Book</p>
-              <p className="text-lg sm:text-xl font-bold text-purple-500">0</p>
-            </div>
-
-            {/* Pending Homework Block */}
-            <div className="bg-white shadow-md rounded-lg p-4 sm:p-6 text-left">
-              <h2 className="text-lg sm:text-xl font-semibold text-blue-500 mb-2">
-                Pending Homework
-              </h2>
-              <p className="text-sm text-gray-500">Total Pending Homework</p>
-              <p className="text-lg sm:text-xl font-bold text-purple-500">0</p>
-            </div>
-
-            {/* Attendance Block */}
-            <div className="bg-white shadow-md rounded-lg p-4 sm:p-6 text-left">
-              <h2 className="text-lg sm:text-xl font-semibold text-blue-500 mb-2">
-                Attendance In Current Month
-              </h2>
-              <p className="text-sm text-gray-500">
-                Total Attendance In Current Month
-              </p>
-              <p className="text-lg sm:text-xl font-bold text-purple-500">0</p>
-            </div>
-          </div>
-        </div>
+            {/* Classes Table */}
+            <Box style={{ backgroundColor: "#fff3e6", padding: "20px", borderRadius: "10px" }}>
+              <h3 style={{ marginBottom: "10px", fontWeight: "bold" }}>Classes</h3>
+              <TableContainer component={Paper}>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Class Name</TableCell>
+                      <TableCell>Teacher</TableCell>
+                      <TableCell>Number of Students</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {classesData.map((row, index) => (
+                      <TableRow key={index}>
+                        <TableCell>{row.className}</TableCell>
+                        <TableCell>{row.teacher}</TableCell>
+                        <TableCell>{row.students}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Box>
+          </Box>
+        </Container>
       </div>
     </div>
   );

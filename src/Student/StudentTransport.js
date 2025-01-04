@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FiMenu } from "react-icons/fi"; // Import menu icon for mobile
+import { FaBars, FaTimes } from "react-icons/fa"; // Mobile sidebar toggle icons
 import StudentSidebar from "../Sidebar"; // Import the Sidebar component
 
 const TransportPage = () => {
@@ -50,16 +51,6 @@ const TransportPage = () => {
 
   return (
     <div className="min-h-screen flex bg-gray-100">
-      {/* Sidebar and Menu Icon on Right Side */}
-      <div className="lg:hidden absolute top-4 right-4 z-50">
-        <button
-          onClick={toggleSidebar}
-          className="p-2 text-purple-500 bg-white rounded-md shadow-md focus:outline-none"
-        >
-          <FiMenu size={24} />
-        </button>
-      </div>
-
       {/* Sidebar Overlay */}
       <div
         className={`fixed inset-0 bg-gray-800 bg-opacity-50 transition-opacity lg:hidden ${isSidebarOpen ? "block" : "hidden"}`}
@@ -68,29 +59,22 @@ const TransportPage = () => {
 
       {/* Sidebar */}
       <div
-        className={`fixed inset-y-0 left-0 bg-white shadow-lg transform lg:transform-none lg:relative w-64 transition-transform duration-300 ${
-          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+        className={`fixed inset-y-0 left-0 bg-white shadow-lg transform lg:transform-none lg:relative w-64 transition-transform duration-300 ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}`}
       >
         <StudentSidebar />
       </div>
 
       {/* Main Content */}
-      <div
-        className={`flex-grow p-6 overflow-y-auto transition-all duration-300 ${isSidebarOpen ? "ml-64" : "ml-0"}`}
-      >
-        {/* Mobile View: Menu Icon, Divider, and Content */}
-        <div className="lg:hidden">
-          <button
-            onClick={toggleSidebar}
-            className="p-2 text-purple-500 focus:outline-none mb-4"
-          >
+      <div className={`flex-grow overflow-y-auto transition-all duration-300 ${isSidebarOpen ? "ml-64" : "ml-0"}`}>
+        {/* Mobile Header */}
+        <div className="flex items-center justify-between bg-purple-700 text-white p-4 shadow-lg lg:hidden">
+          <h1 className="text-lg font-bold">Transport</h1>
+          <button onClick={toggleSidebar} className="text-2xl focus:outline-none">
+            {isSidebarOpen ? <FaTimes /> : <FaBars />}
           </button>
-          <div className="border-t-2 border-gray-200 mb-4"></div> {/* Divider for mobile view */}
         </div>
 
-        {/* Transport Title */}
-        <h1 className="text-3xl font-semibold text-gray-800 mb-6">Transport</h1>
+        {/* Title */}
 
         <div className="flex flex-col lg:flex-row items-start justify-between gap-6">
           {/* ID Card */}
@@ -130,7 +114,7 @@ const TransportPage = () => {
           </div>
 
           {/* Transport Details */}
-          <div className="flex-1 bg-white shadow-md rounded-lg p-6">
+          <div className="flex-1 bg-white shadow-md rounded-lg p-6 ml-6">
             <h3 className="text-xl font-semibold text-gray-700 mb-4">Transport Details</h3>
 
             {/* Route and Vehicle Table */}

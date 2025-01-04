@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FiMenu } from "react-icons/fi"; // Import menu icon
-import StudentSidebar from "../Sidebar";
+import { FaBars, FaTimes } from "react-icons/fa"; // Mobile sidebar toggle icons
+import StudentSidebar from "../Sidebar"; // Import the Sidebar component
 
 const ApplyLeave = () => {
   const [startDate, setStartDate] = useState("");
@@ -86,16 +87,6 @@ const ApplyLeave = () => {
 
   return (
     <div className="min-h-screen flex bg-gray-100">
-      {/* Sidebar and Menu Icon */}
-      <div className="lg:hidden absolute top-4 right-4 z-50">
-        <button
-          onClick={toggleSidebar}
-          className="p-2 text-purple-500 bg-white rounded-md shadow-md focus:outline-none"
-        >
-          <FiMenu size={24} />
-        </button>
-      </div>
-
       {/* Sidebar Overlay */}
       <div
         className={`fixed inset-0 bg-gray-800 bg-opacity-50 transition-opacity lg:hidden ${isSidebarOpen ? "block" : "hidden"}`}
@@ -104,29 +95,22 @@ const ApplyLeave = () => {
 
       {/* Sidebar */}
       <div
-        className={`fixed inset-y-0 left-0 bg-white shadow-lg transform lg:transform-none lg:relative w-64 transition-transform duration-300 ${
-          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+        className={`fixed inset-y-0 left-0 bg-white shadow-lg transform lg:transform-none lg:relative w-64 transition-transform duration-300 ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}`}
       >
         <StudentSidebar />
       </div>
 
       {/* Main Content */}
-      <div
-        className={`flex-grow p-6 overflow-y-auto transition-all duration-300 ${isSidebarOpen ? "ml-64" : "ml-0"}`}
-      >
-        {/* Mobile View: Menu Icon, Divider, and Content */}
-        <div className="lg:hidden">
-          <button
-            onClick={toggleSidebar}
-            className="p-2 text-purple-500 focus:outline-none mb-4"
-          >
+      <div className={`flex-grow overflow-y-auto transition-all duration-300 ${isSidebarOpen ? "ml-64" : "ml-0"}`}>
+        {/* Mobile View: Header and Sidebar Toggle Icon */}
+        <div className="flex items-center justify-between bg-purple-700 text-white p-4 shadow-lg lg:hidden">
+          <h1 className="text-lg font-bold">Apply Leave</h1>
+          <button onClick={toggleSidebar} className="text-2xl focus:outline-none">
+            {isSidebarOpen ? <FaTimes /> : <FaBars />}
           </button>
-          <div className="border-t-2 border-gray-200 mb-4"></div> {/* Divider for mobile view */}
         </div>
 
-        {/* Heading (Now below the divider on mobile) */}
-        <h1 className="text-3xl font-semibold text-gray-800 mb-8 lg:mb-8">Apply Leave</h1>
+        {/* Title Section */}
 
         {/* Leave Application Form */}
         <div className="bg-white shadow-md rounded-xl p-6 mb-8">

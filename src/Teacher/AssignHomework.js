@@ -60,8 +60,17 @@ const AddHomeworkByTeacher = () => {
       return;
     }
 
+    // Fetch teacher ID from localStorage or sessionStorage
+    const teacherId = localStorage.getItem("teacherId"); // Assuming teacherId is stored in localStorage
+
+    if (!teacherId) {
+      alert("Teacher ID is missing. Please login again.");
+      return;
+    }
+
     const homeworkData = {
       ...formData,
+      teacherId, // Add teacherId to the form data
       marksObtained: 0,
     };
 
@@ -86,9 +95,7 @@ const AddHomeworkByTeacher = () => {
     <div className="flex min-h-screen">
       {/* Sidebar */}
       <div
-        className={`fixed top-0 left-0 h-full z-20 bg-white shadow-lg transition-transform transform ${
-          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } lg:translate-x-0 lg:static lg:shadow-none w-64`}
+        className={`fixed top-0 left-0 h-full z-20 bg-white shadow-lg transition-transform transform ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0 lg:static lg:shadow-none w-64`}
       >
         <TeacherSidebar />
       </div>

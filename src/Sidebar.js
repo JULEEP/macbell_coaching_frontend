@@ -245,50 +245,6 @@ const StudnetSidebar = () => {
                )}
              </li>     
 
-         {/* Chat Section with Dropdown */}
-         <li className="flex flex-col items-start text-lg text-gray-300 hover:text-gray-400 p-3 rounded-md">
-         <div className="flex items-center w-full cursor-pointer" onClick={toggleChat}>
-           <FaList className="mr-3" />
-           <span>Chat</span>
-           {isChatOpen ? (
-             <FaChevronDown className="ml-2" />
-           ) : (
-             <FaChevronRight className="ml-2" />
-           )}
-         </div>
-         {isChatOpen && (
-           <ul className="pl-8 space-y-4 mt-2">
-             <li>
-               <NavLink
-                 to="/chat"
-                 className="flex items-center text-lg text-gray-400 hover:text-gray-300"
-                 activeClassName="text-blue-500"
-               >
-                 <span className="text-xs whitespace-nowrap">Chat Box</span>
-               </NavLink>
-             </li>
-             <li>
-               <NavLink
-                 to="/connection"
-                 className="flex items-center text-lg text-gray-400 hover:text-gray-300"
-                 activeClassName="text-blue-500"
-               >
-                 <span className="text-xs whitespace-nowrap">Invitation</span>
-               </NavLink>
-             </li>
-             <li>
-               <NavLink
-                 to="/blockeduser"
-                 className="flex items-center text-lg text-gray-400 hover:text-gray-300"
-                 activeClassName="text-blue-500"
-               >
-                 <span className="text-xs whitespace-nowrap">Blocked Users</span>
-               </NavLink>
-             </li>
-           </ul>
-         )}
-       </li>
-
   {/* Examinations Section with Dropdown */}
   <li className="flex flex-col items-start text-lg text-gray-300 hover:text-gray-400 p-3 rounded-md">
   <div className="flex items-center w-full cursor-pointer" onClick={toggleExaminations}>
@@ -347,18 +303,6 @@ const StudnetSidebar = () => {
           </NavLink>
         </li>
 
-        {/* Online Exam */}
-        <li className="flex items-center text-lg text-gray-300 hover:text-gray-400 p-3 rounded-md">
-          <FaList className="mr-3" />
-          <NavLink 
-            to="/student-dashboard" 
-            className="flex items-center text-lg text-gray-400 hover:text-gray-300" 
-            activeClassName="text-blue-500"
-          >
-            <span>Online Exam</span>
-          </NavLink>
-        </li>
-
         {/* Teacher */}
         <li className="flex items-center text-lg text-gray-300 hover:text-gray-400 p-3 rounded-md">
           <FaList className="mr-3" />
@@ -380,43 +324,6 @@ const StudnetSidebar = () => {
             activeClassName="text-blue-500"
           >
             <span>Transport</span>
-          </NavLink>
-        </li>
-
-       {/* Library Section with Dropdown */}
-       <li className="flex flex-col items-start text-lg text-gray-300 hover:text-gray-400 p-3 rounded-md">
-       <div className="flex items-center w-full cursor-pointer" onClick={toggleLibrary}>
-         <FaList className="mr-3" />
-         <span>Library</span>
-         {isLibraryOpen ? (
-           <FaChevronDown className="ml-2" />
-         ) : (
-           <FaChevronRight className="ml-2" />
-         )}
-       </div>
-       {isLibraryOpen && (
-         <ul className="pl-8 space-y-4 mt-2">
-           <li>
-             <NavLink
-               to="/student-booklist"
-               className="flex items-center text-lg text-gray-400 hover:text-gray-300"
-               activeClassName="text-blue-500"
-             >
-               <span className="text-xs whitespace-nowrap">Book List</span>
-             </NavLink>
-           </li>
-         </ul>
-       )}
-     </li>
-        {/* Dormitory */}
-        <li className="flex items-center text-lg text-gray-300 hover:text-gray-400 p-3 rounded-md">
-          <FaList className="mr-3" />
-          <NavLink 
-            to="/student-dormitory" 
-            className="flex items-center text-lg text-gray-400 hover:text-gray-300" 
-            activeClassName="text-blue-500"
-          >
-            <span>Dormitory</span>
           </NavLink>
         </li>
       </ul>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Sidebar from './Sidebar';
 import axios from 'axios';
+import { FaBars, FaTimes } from 'react-icons/fa'; // Mobile sidebar toggle icons
 
 const ComplaintBook = () => {
   const [formData, setFormData] = useState({
@@ -16,10 +17,9 @@ const ComplaintBook = () => {
 
   const [complaintList, setComplaintList] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // Fetch complaints on page load
   useEffect(() => {
@@ -55,10 +55,8 @@ const ComplaintBook = () => {
 
       alert(response.data.message);
 
-      // Update the complaint list with the new entry
       setComplaintList([...complaintList, response.data.complaint]);
 
-      // Reset the form
       setFormData({
         complaintBy: '',
         complaintType: '',
@@ -77,28 +75,47 @@ const ComplaintBook = () => {
     }
   };
 
-  // Get the complaints for the current page
   const currentComplaints = complaintList.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
-
-  // Handle page change
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
-
-  // Calculate total pages
   const totalPages = Math.ceil(complaintList.length / itemsPerPage);
 
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
   return (
-    <div className="flex h-screen">
+    <div className="flex min-h-screen bg-gray-100">
+      {/* Sidebar Overlay */}
+      <div
+        className={`fixed inset-0 bg-gray-800 bg-opacity-50 transition-opacity lg:hidden ${isSidebarOpen ? 'block' : 'hidden'}`}
+        onClick={toggleSidebar}
+      ></div>
+
       {/* Sidebar */}
-      <Sidebar /> {/* Sidebar added here */}
+      <div
+        className={`fixed inset-y-0 left-0 bg-white shadow-lg transform lg:transform-none lg:relative w-64 transition-transform duration-300 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}
+      >
+        <Sidebar />
+      </div>
 
       {/* Main Content */}
-      <div className="flex-1 p-6 ml-64"> {/* Add ml-64 to shift the content right */}
+      <div className={`flex-1 transition-all duration-300 ${isSidebarOpen ? 'ml-64' : 'ml-0'}`}>
+        {/* Mobile View: Header and Sidebar Toggle Icon */}
+        <div className="flex items-center justify-between bg-purple-700 text-white p-4 shadow-lg lg:hidden">
+          <h1 className="text-lg font-bold">Complaint Book</h1>
+          <button onClick={toggleSidebar} className="text-2xl focus:outline-none">
+            {isSidebarOpen ? <FaTimes /> : <FaBars />}
+          </button>
+        </div>
+
+        <h2 className="text-3xl font-semibold text-gray-800 mb-8">Complaint Book</h2>
+
         {/* Form Section */}
-        <h2 className="text-lg text-gray-700 mb-4">Add Complaint</h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="bg-white p-6 rounded-md shadow-md mb-8">
+          <h2 className="text-lg text-gray-700 mb-4">Add Complaint</h2>
+          <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-6">
             <div>
               <label htmlFor="complaintBy" className="text-sm text-gray-600">Complaint By *</label>
               <input
@@ -215,8 +232,8 @@ const ComplaintBook = () => {
                 Save
               </button>
             </div>
-          </div>
-        </form>
+          </form>
+        </div>
 
         {/* Complaint List Section */}
         <div className="mt-8">
@@ -245,25 +262,27 @@ const ComplaintBook = () => {
               </tbody>
             </table>
           </div>
-        </div>
 
-        {/* Pagination Section */}
-        <div className="mt-4 flex justify-center">
-          <button
-            onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-            className="px-4 py-2 bg-purple-600 text-white rounded-md mr-2"
-          >
-            Previous
-          </button>
-          <span className="px-4 py-2 text-gray-600">{currentPage}</span>
-          <button
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
-            className="px-4 py-2 bg-purple-600 text-white rounded-md ml-2"
-          >
-            Next
-          </button>
+          {/* Pagination */}
+          <div className="flex justify-between items-center mt-4">
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="text-sm bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 disabled:bg-gray-400"
+            >
+              Previous
+            </button>
+            <div className="text-sm text-gray-600">
+              Page {currentPage} of {totalPages}
+            </div>
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className="text-sm bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 disabled:bg-gray-400"
+            >
+              Next
+            </button>
+          </div>
         </div>
       </div>
     </div>
