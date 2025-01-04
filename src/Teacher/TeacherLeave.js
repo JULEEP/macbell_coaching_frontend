@@ -23,7 +23,7 @@ const TeacherLeavePage = () => {
 
     try {
       setLoading(true);
-      const response = await fetch("http://localhost:4000/api/teacher/apply-leave", {
+      const response = await fetch("https://school-backend-1-2xki.onrender.com/api/teacher/apply-leave", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -51,7 +51,7 @@ const TeacherLeavePage = () => {
   useEffect(() => {
     const fetchLeaves = async () => {
       try {
-        const response = await fetch("http://localhost:4000/api/teacher/leaves");
+        const response = await fetch("https://school-backend-1-2xki.onrender.com/api/teacher/leaves");
         const data = await response.json();
         if (response.ok) {
           setLeaveList(data.leaves);

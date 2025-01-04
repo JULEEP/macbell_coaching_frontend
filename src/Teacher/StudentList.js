@@ -22,7 +22,7 @@ const TeacherStudentsPage = () => {
       setError("");
 
       try {
-        const response = await axios.get("http://localhost:4000/api/teacher/students");
+        const response = await axios.get("https://school-backend-1-2xki.onrender.com/api/teacher/students");
         const fetchedStudents = response.data.students.map((student) => ({
           id: student._id,
           name: `${student.firstName} ${student.lastName}`,
@@ -78,7 +78,7 @@ const TeacherStudentsPage = () => {
   const submitComplaint = async () => {
     try {
       await axios.post(
-        `http://localhost:4000/api/teacher/add-complaint/${selectedStudent.id}`,
+        `https://school-backend-1-2xki.onrender.com/api/teacher/add-complaint/${selectedStudent.id}`,
         {
           title: complaintTitle,
           description: complaintDescription,

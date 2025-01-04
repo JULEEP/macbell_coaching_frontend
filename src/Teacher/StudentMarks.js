@@ -13,7 +13,7 @@ const TeacherMarks = () => {
   useEffect(() => {
     const fetchMarks = async () => {
       try {
-        const response = await fetch("http://localhost:4000/api/teacher/marks");
+        const response = await fetch("https://school-backend-1-2xki.onrender.com/api/teacher/marks");
         const data = await response.json();
         if (data.message === "Marks retrieved successfully") {
           setMarksData(data.marks);

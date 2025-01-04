@@ -76,7 +76,7 @@ const AddHomeworkByTeacher = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:4000/api/teacher/add-homework",
+        "https://school-backend-1-2xki.onrender.com/api/teacher/add-homework",
         homeworkData
       );
       alert("Homework added successfully!");

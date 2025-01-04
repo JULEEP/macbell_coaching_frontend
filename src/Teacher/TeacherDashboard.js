@@ -7,6 +7,7 @@ import {
   FaBars,
   FaTimes,
 } from "react-icons/fa";
+import { motion } from "framer-motion"; // Import motion
 import TeacherSidebar from "./TeacherSidebar";
 
 const TeacherDashboard = () => {
@@ -53,50 +54,105 @@ const TeacherDashboard = () => {
           </h1>
 
           {/* Statistics Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {/* Total Students */}
-            <div className="bg-white shadow-md rounded-lg p-4 flex items-center space-x-4 max-w-[90%] mx-auto">
-              <div className="bg-blue-100 text-blue-500 p-3 rounded-full">
-                <FaUserGraduate className="text-3xl" />
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 mb-6">
+            {[
+              { title: "Total Students", value: "120", icon: <FaUserGraduate className="text-3xl" /> },
+              { title: "Total Homework", value: "45", icon: <FaTasks className="text-3xl" /> },
+              { title: "Total Attendance", value: "98%", icon: <FaClipboardList className="text-3xl" /> },
+              { title: "Total Leave", value: "12", icon: <FaPlaneDeparture className="text-3xl" /> },
+              { title: "Total Exams", value: "8", icon: <FaClipboardList className="text-3xl" /> },
+              { title: "Total Subjects", value: "6", icon: <FaClipboardList className="text-3xl" /> },
+              { title: "Total Projects", value: "5", icon: <FaTasks className="text-3xl" /> },
+              { title: "Total Meetings", value: "15", icon: <FaPlaneDeparture className="text-3xl" /> },
+              { title: "Total Reports", value: "22", icon: <FaTasks className="text-3xl" /> },
+              { title: "Total Feedback", value: "30", icon: <FaClipboardList className="text-3xl" /> }
+            ].map((item, index) => (
+              <div key={index} className="bg-white shadow-md rounded-lg p-4 flex flex-col items-center justify-between h-full">
+                {/* Motion Animation for Icon */}
+                <motion.div
+                  className="bg-blue-100 text-blue-500 p-3 rounded-full mb-4"
+                  animate={{
+                    scale: [1, 1.2, 1], // Scale up and down
+                    rotate: [0, 10, -10, 0], // Rotate back and forth
+                  }}
+                  transition={{
+                    repeat: Infinity, // Repeat animation
+                    duration: 2, // Duration for one cycle
+                    ease: "easeInOut",
+                  }}
+                >
+                  {item.icon}
+                </motion.div>
+                <h2 className="text-lg font-semibold text-gray-700">{item.title}</h2>
+                <p className="text-2xl font-bold text-gray-800">{item.value}</p>
               </div>
-              <div>
-                <h2 className="text-lg font-semibold text-gray-700">Total Students</h2>
-                <p className="text-2xl font-bold text-gray-800">120</p>
-              </div>
-            </div>
+            ))}
+          </div>
 
-            {/* Total Homework */}
-            <div className="bg-white shadow-md rounded-lg p-4 flex items-center space-x-4 max-w-[90%] mx-auto">
-              <div className="bg-green-100 text-green-500 p-3 rounded-full">
-                <FaTasks className="text-3xl" />
-              </div>
-              <div>
-                <h2 className="text-lg font-semibold text-gray-700">Total Homework</h2>
-                <p className="text-2xl font-bold text-gray-800">45</p>
-              </div>
-            </div>
+          {/* Table Section */}
+          <div className="bg-white shadow-md rounded-lg p-6">
+            <h2 className="text-xl font-semibold text-blue-400 mb-4">Recent Assignments</h2>
+            <table className="min-w-full table-auto border-collapse border border-gray-200">
+              <thead>
+                <tr className="bg-purple-100 text-purple-700">
+                  <th className="py-2 px-4 border-b">Assignment</th>
+                  <th className="py-2 px-4 border-b">Due Date</th>
+                  <th className="py-2 px-4 border-b">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="odd:bg-gray-50 even:bg-gray-100">
+                  <td className="py-2 px-4 border-b">Math Homework</td>
+                  <td className="py-2 px-4 border-b">2025-01-10</td>
+                  <td className="py-2 px-4 border-b text-green-500">Completed</td>
+                </tr>
+                <tr className="odd:bg-gray-50 even:bg-gray-100">
+                  <td className="py-2 px-4 border-b">Science Project</td>
+                  <td className="py-2 px-4 border-b">2025-01-15</td>
+                  <td className="py-2 px-4 border-b text-yellow-500">In Progress</td>
+                </tr>
+                <tr className="odd:bg-gray-50 even:bg-gray-100">
+                  <td className="py-2 px-4 border-b">History Essay</td>
+                  <td className="py-2 px-4 border-b">2025-01-20</td>
+                  <td className="py-2 px-4 border-b text-red-500">Pending</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
 
-            {/* Total Attendance */}
-            <div className="bg-white shadow-md rounded-lg p-4 flex items-center space-x-4 max-w-[90%] mx-auto">
-              <div className="bg-yellow-100 text-yellow-500 p-3 rounded-full">
-                <FaClipboardList className="text-3xl" />
-              </div>
-              <div>
-                <h2 className="text-lg font-semibold text-gray-700">Total Attendance</h2>
-                <p className="text-2xl font-bold text-gray-800">98%</p>
-              </div>
-            </div>
-
-            {/* Total Leave */}
-            <div className="bg-white shadow-md rounded-lg p-4 flex items-center space-x-4 max-w-[90%] mx-auto">
-              <div className="bg-red-100 text-red-500 p-3 rounded-full">
-                <FaPlaneDeparture className="text-3xl" />
-              </div>
-              <div>
-                <h2 className="text-lg font-semibold text-gray-700">Total Leave</h2>
-                <p className="text-2xl font-bold text-gray-800">12</p>
-              </div>
-            </div>
+          {/* Another Table Section (e.g., Student Grades) */}
+          <div className="bg-white shadow-md rounded-lg p-6 mt-6">
+            <h2 className="text-xl font-semibold text-blue-400 mb-4">Student Grades</h2>
+            <table className="min-w-full table-auto border-collapse border border-gray-200">
+              <thead>
+                <tr className="bg-purple-100 text-purple-700">
+                  <th className="py-2 px-4 border-b">Student Name</th>
+                  <th className="py-2 px-4 border-b">Grade</th>
+                  <th className="py-2 px-4 border-b">Subject</th>
+                  <th className="py-2 px-4 border-b">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="odd:bg-gray-50 even:bg-gray-100">
+                  <td className="py-2 px-4 border-b">John Doe</td>
+                  <td className="py-2 px-4 border-b">A</td>
+                  <td className="py-2 px-4 border-b">Math</td>
+                  <td className="py-2 px-4 border-b text-green-500">Passed</td>
+                </tr>
+                <tr className="odd:bg-gray-50 even:bg-gray-100">
+                  <td className="py-2 px-4 border-b">Jane Smith</td>
+                  <td className="py-2 px-4 border-b">B+</td>
+                  <td className="py-2 px-4 border-b">Science</td>
+                  <td className="py-2 px-4 border-b text-yellow-500">Passed</td>
+                </tr>
+                <tr className="odd:bg-gray-50 even:bg-gray-100">
+                  <td className="py-2 px-4 border-b">Samuel Green</td>
+                  <td className="py-2 px-4 border-b">C</td>
+                  <td className="py-2 px-4 border-b">History</td>
+                  <td className="py-2 px-4 border-b text-red-500">Failed</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>

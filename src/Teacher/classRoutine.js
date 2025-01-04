@@ -13,7 +13,7 @@ const TeacherClassRoutinePage = () => {
   // Fetch class routine data from API
   const fetchRoutine = async () => {
     try {
-      const response = await axios.get("http://localhost:4000/api/teacher/classroutine");
+      const response = await axios.get("https://school-backend-1-2xki.onrender.com/api/teacher/classroutine");
       const data = response.data;
       // Filter based on the class and section
       const filteredRoutine = data.find(

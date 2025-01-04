@@ -21,7 +21,7 @@ const TeacherAttendance = () => {
     // Function to fetch attendance data from the backend
     const fetchAttendanceData = async () => {
         try {
-            const response = await axios.get('http://localhost:4000/api/teacher/get-attendance', {
+            const response = await axios.get('https://school-backend-1-2xki.onrender.com/api/teacher/get-attendance', {
                 params: {
                     class: '5', // Example class
                     section: 'A', // Example section
@@ -40,7 +40,7 @@ const TeacherAttendance = () => {
         const newStatus = currentStatus === 'Present' ? 'Absent' : 'Present'; // Toggle status
 
         try {
-            const response = await axios.put(`http://localhost:4000/api/teacher/update-attendance/${studentId}/${attendanceId}`, {
+            const response = await axios.put(`https://school-backend-1-2xki.onrender.com/api/teacher/update-attendance/${studentId}/${attendanceId}`, {
                 date: selectedDate,
                 subject: selectedSubject,
                 attendanceStatus: newStatus,

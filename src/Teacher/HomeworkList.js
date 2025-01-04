@@ -15,7 +15,7 @@ const TeacherHomework = () => {
   useEffect(() => {
     const fetchHomeworks = async () => {
       try {
-        const response = await fetch("http://localhost:4000/api/teacher/homeworks");
+        const response = await fetch("https://school-backend-1-2xki.onrender.com/api/teacher/homeworks");
         const data = await response.json();
         if (data.message === "Homeworks retrieved successfully!") {
           setHomeworkAssignments(data.homeworks);
@@ -58,7 +58,7 @@ const TeacherHomework = () => {
 
   const handleStatusChange = async (homeworkId, newStatus) => {
     try {
-      const response = await fetch(`http://localhost:4000/api/teacher/update-status/${homeworkId}`, {
+      const response = await fetch(`https://school-backend-1-2xki.onrender.com/api/teacher/update-status/${homeworkId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
