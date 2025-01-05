@@ -73,7 +73,7 @@ const MyChildMarksPage = () => {
 
         {/* Title Section */}
         
-        <div className="bg-white shadow-md rounded-lg p-6 space-y-4">
+        <div className="bg-white shadow-md rounded-lg p-6 space-y-4 mt-4">
           <h2 className="text-xl font-semibold text-gray-800">Result List</h2>
           <div className="my-4 border-t border-gray-300"></div>
 

@@ -63,7 +63,7 @@ const MyChildStudentHomeworkList = () => {
           </button>
         </div>
 
-        <div className="bg-white shadow-md rounded-lg p-4 space-y-4">
+        <div className="bg-white shadow-md mt-6 rounded-lg p-4 space-y-4">
           <h2 className="text-lg font-medium text-gray-800">Nine (A)</h2>
           <div className="my-3 border-t border-gray-300"></div>
 

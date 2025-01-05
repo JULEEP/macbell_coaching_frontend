@@ -68,7 +68,7 @@ const ParentTransportPage = () => {
 
         {/* Transport Title */}
 
-        <div className="flex flex-col lg:flex-row lg:space-x-6">
+        <div className="flex flex-col lg:flex-row lg:space-x-6 mt-6">
           {/* Student Details Card */}
           <div className="bg-white shadow-xl rounded-3xl p-6 w-full lg:w-64 mb-6 lg:mb-0">
             <div className="border-2 border-gray-300 rounded-3xl p-6">

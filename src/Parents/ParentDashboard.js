@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { FaBars, FaTimes } from 'react-icons/fa';
+import { NavLink } from "react-router-dom";
 import ParentSidebar from './ParentSidebar'; // Assuming you have this component
 import { Container, Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
 import subject from "../Images/subject.jpeg";
@@ -14,22 +15,17 @@ const transport = 'https://static.vecteezy.com/system/resources/previews/002/373
 const fees = 'https://th.bing.com/th/id/R.9e223a9b2c0ef9a333764f8c4a87dbd2?rik=ftPQ%2fejiRTWnHw&riu=http%3a%2f%2f4b.lucknowpublicschool.com%2fimages%2ffees.jpg&ehk=18%2b%2b2uaQnzOeBJRpMqhHoLI18ASFTGhI8lWxGvTEfP4%3d&risl=&pid=ImgRaw&r=0';
 const pendingHomework = 'https://th.bing.com/th/id/R.c1a735d2fa8cba39f15d088f3ea069f0?rik=fa6UqGzr2a49ww&riu=http%3a%2f%2fwikiclipart.com%2fwp-content%2fuploads%2f2017%2f09%2fStudent-thinking-students-images-clip-art-clipart-collection.jpg&ehk=bL3ekc6319OyCeNLIQldxn6RYl7IQRc6q2a73cPEnhg%3d&risl=&pid=ImgRaw&r=0';
 
-
-
 const bestCategories = [
-  { img: subject, name: "Subjects" },
-  { img: student, name: "Homeworks" },
-  { img: exam, name: "Exams" },
-  { img: teacher, name: "Teachers" },
-  { img: attendance, name: "Attendance" },
-  { img: notice, name: "Notice" },
-  { img: book, name: "Books" },
-  { img: transport, name: "Transport" },
-  { img: fees, name: "Fees" },
-  { img: pendingHomework, name: "Pending HW" },
-
-
-
+  { img: subject, name: "Subjects", link: "/parent-subjects" },
+  { img: student, name: "Homeworks", link: "/mychild-homework" },
+  { img: exam, name: "Exams", link: "/mychild-exam-schedules" },
+  { img: teacher, name: "Teachers", link: "/parent-teachers" },
+  { img: attendance, name: "Attendance", link: "/mychild-attendance" },
+  { img: notice, name: "Notice", link: "/parent-noticeboard" },
+  { img: book, name: "Books", link: "/parent-booklist" },
+  { img: transport, name: "Transport", link: "/parent-transport" },
+  { img: fees, name: "Fees", link: "/mychild-fees" },
+  { img: pendingHomework, name: "Pending HW", link: "/mychild-pendingleave" },
 ];
 
 const ParentDashboard = () => {
@@ -62,9 +58,7 @@ const ParentDashboard = () => {
     <div className="min-h-screen bg-gray-100 flex">
       {/* Sidebar */}
       <div
-        className={`fixed md:static inset-y-0 left-0 bg-white shadow-lg transform ${
-          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } transition-transform duration-300 w-64 z-50 md:translate-x-0`}
+        className={`fixed md:static inset-y-0 left-0 bg-white shadow-lg transform ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"} transition-transform duration-300 w-64 z-50 md:translate-x-0`}
       >
         <ParentSidebar />
       </div>
@@ -111,7 +105,11 @@ const ParentDashboard = () => {
             }}
           >
             {bestCategories.map((category) => (
-              <Box key={category.name} style={{ padding: "5px" }}>
+              <NavLink
+                to={category.link}
+                key={category.name}
+                style={{ textDecoration: "none", padding: "5px" }}
+              >
                 <Box
                   style={{
                     display: "flex",
@@ -124,7 +122,6 @@ const ParentDashboard = () => {
                     textAlign: "center",
                     transition: "transform 0.3s ease, box-shadow 0.3s ease",
                   }}
-                  className="category-box"
                 >
                   <img
                     src={category.img}
@@ -151,7 +148,7 @@ const ParentDashboard = () => {
                     </p>
                   </Box>
                 </Box>
-              </Box>
+              </NavLink>
             ))}
           </Box>
 

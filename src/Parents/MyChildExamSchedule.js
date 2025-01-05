@@ -80,8 +80,8 @@ const MyChildExamSchedule = () => {
         {/* Title */}
 
         {/* Select Criteria Section */}
-        <div className="bg-white p-6 rounded-lg shadow-lg mb-6">
-          <div className="flex gap-8 mb-4">
+        <div className="bg-white p-6 rounded-lg shadow-lg mb-6 mt-6">
+          <div className="flex gap-8 mb-4 mt-6">
             {/* Exam Dropdown */}
             <div className="w-1/3">
               <label htmlFor="exam" className="block text-xs text-gray-600 mb-1">

@@ -41,7 +41,7 @@ const ParentStudentBookListPage = () => {
 
         {/* Book List Title */}
 
-        <div className="bg-white shadow-md rounded-lg p-6">
+        <div className="bg-white shadow-md rounded-lg p-6 mt-6">
           <h2 className="text-xs font-medium text-blue-500 mb-4">All Books</h2>
 
           {/* Book List Table */}

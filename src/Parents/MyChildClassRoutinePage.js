@@ -72,7 +72,7 @@ const MyChildClassRoutinePage = () => {
 
         {/* Title Section */}
 
-        <div className="bg-white shadow-md rounded-lg p-4 space-y-4">
+        <div className="bg-white shadow-md rounded-lg p-4 space-y-4 mt-8">
           {/* Class Routine Header */}
           {loading ? (
             <div className="flex justify-center">
