@@ -89,7 +89,7 @@ const ExamRoutinePage = () => {
            <div className="flex-grow overflow-y-auto lg:ml-64">
              {/* Header for Mobile */}
              <div className="flex items-center justify-between bg-purple-700 text-white p-4 shadow-lg lg:hidden">
-               <h1 className="text-lg font-bold">Notice Board</h1>
+               <h1 className="text-lg font-bold">Class Routine</h1>
                <button onClick={toggleSidebar} className="text-2xl focus:outline-none">
                  {isSidebarOpen ? <FaTimes /> : <FaBars />}
                </button>
@@ -103,7 +103,7 @@ const ExamRoutinePage = () => {
         {/* Download Button */}
         {examSchedule.length > 0 && (
           <button
-            className="mb-4 px-4 py-2 bg-purple-500 text-white rounded-md hover:bg-blue-600"
+            className="mb-4 mt-8 ml-2 px-4 py-2 bg-purple-500 text-white rounded-md hover:bg-blue-600"
             onClick={handleDownload}
           >
             Download Admit Card

@@ -81,7 +81,7 @@ const StudentSyllabusList = () => {
         {/* Heading */}
 
         {/* Display Class and Section Dynamically */}
-        <h2 className="text-xl font-semibold text-gray-800">{classSection}</h2>
+        <h2 className="text-xl font-semibold mt-6 ml-2 text-gray-800">{classSection}</h2>
         
         <div className="my-4 border-t border-gray-300"></div>
 

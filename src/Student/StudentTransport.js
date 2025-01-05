@@ -78,7 +78,7 @@ const TransportPage = () => {
 
         <div className="flex flex-col lg:flex-row items-start justify-between gap-6">
           {/* ID Card */}
-          <div className="bg-white shadow-xl rounded-3xl p-6 w-full lg:w-64">
+          <div className="bg-white shadow-xl rounded-3xl p-6 w-full lg:w-64 mt-8">
             <div className="border-2 border-gray-300 rounded-3xl p-6">
               {/* Profile Photo */}
               <div className="flex justify-center mb-4">
@@ -114,7 +114,7 @@ const TransportPage = () => {
           </div>
 
           {/* Transport Details */}
-          <div className="flex-1 bg-white shadow-md rounded-lg p-6 ml-6">
+          <div className="flex-1 bg-white shadow-md rounded-lg p-6 ml-2">
             <h3 className="text-xl font-semibold text-gray-700 mb-4">Transport Details</h3>
 
             {/* Route and Vehicle Table */}

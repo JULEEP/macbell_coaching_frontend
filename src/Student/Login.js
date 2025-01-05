@@ -1,37 +1,41 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // for navigation after login
-import axios from 'axios';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // for navigation after login
+import axios from "axios";
 
 const StudentLogin = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate(); // To navigate to another page after login
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('https://school-backend-1-2xki.onrender.com/api/students/login', {
-        firstName: username,
-        randomPassword: password,
-      });
+      const response = await axios.post(
+        "https://school-backend-1-2xki.onrender.com/api/students/login",
+        {
+          firstName: username,
+          randomPassword: password,
+        }
+      );
 
       if (response.status === 200) {
-        const { token, refreshToken, _id } = response.data; // Destructure the student data
+        const { token, refreshToken, _id, firstName } = response.data; // Destructure the student data
 
-        // Store tokens and student ID in localStorage
-        localStorage.setItem('accessToken', token); // Store access token
-        localStorage.setItem('refreshToken', refreshToken); // Store refresh token
-        localStorage.setItem('studentId', _id); // Store studentId
+        // Store tokens, student ID, and firstName in localStorage
+        localStorage.setItem("accessToken", token); // Store access token
+        localStorage.setItem("refreshToken", refreshToken); // Store refresh token
+        localStorage.setItem("studentId", _id); // Store studentId
+        localStorage.setItem("firstName", firstName); // Store student's first name
 
         // Redirect to the student dashboard or another page after login
-        navigate('/student-dashboard'); // Change this to the correct route for your student dashboard
+        navigate("/student-dashboard"); // Change this to the correct route for your student dashboard
       }
     } catch (error) {
       // Handle error: show error message
-      setErrorMessage('Invalid username or password');
-      console.error('Login error:', error);
+      setErrorMessage("Invalid username or password");
+      console.error("Login error:", error);
     }
   };
 

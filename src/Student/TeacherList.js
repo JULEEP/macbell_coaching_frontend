@@ -68,7 +68,7 @@ const TeachersList = () => {
         {/* Title */}
 
         {/* Class and Section */}
-        <h2 className="text-xl font-medium text-gray-700 mb-6">Class: 5 (A)</h2>
+        <h2 className="text-xl font-medium text-gray-700 mb-6 mt-6 ml-2">Class: 5 (A)</h2>
 
         {/* Teacher Names List */}
         <div className="bg-white shadow-md rounded-lg p-6">

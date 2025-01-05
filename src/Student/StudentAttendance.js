@@ -105,7 +105,7 @@ const StudentAttendanceList = () => {
         {/* Title Section */}
 
         {/* Month and Year Dropdowns in Same Row */}
-        <div className="bg-white shadow-md rounded-lg p-6 space-y-4">
+        <div className="bg-white shadow-md rounded-lg p-6 mt-8 space-y-4">
           <div className="flex space-x-4">
             {/* Month Dropdown */}
             <div className="w-full sm:w-1/2">

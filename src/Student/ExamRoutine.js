@@ -101,7 +101,7 @@ const ExamRoutinePage = () => {
         {/* Download Button */}
         {examSchedule.length > 0 && (
           <button
-            className="mb-4 px-4 py-2 bg-purple-500 text-white rounded-md hover:bg-blue-600"
+            className="mb-4 px-4 py-2 bg-purple-500 text-white mt-8 ml-2 rounded-md hover:bg-blue-600"
             onClick={handleDownload}
           >
             Download Admit Card
