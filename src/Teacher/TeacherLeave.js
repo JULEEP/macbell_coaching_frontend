@@ -100,7 +100,6 @@ const TeacherLeavePage = () => {
 
         {/* Content */}
         <div className="p-4 sm:p-6 bg-gray-100 flex-1">
-          <h1 className="text-center text-2xl font-bold mb-6">Leave Application</h1>
 
           {/* Leave Application Form */}
           <div className="bg-white shadow-md rounded-xl p-6 mb-6">

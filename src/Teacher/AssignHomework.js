@@ -205,7 +205,6 @@ const AddHomeworkByTeacher = () => {
             </div>
 
             <div>
-              <label className="block text-sm text-gray-600 mb-1">Homework Title *</label>
               <input
                 type="text"
                 name="homeworkTitle"

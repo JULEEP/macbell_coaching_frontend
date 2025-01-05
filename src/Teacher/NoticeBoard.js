@@ -69,10 +69,9 @@ const NoticeBoardForTeacher = () => {
         </div>
 
         {/* Title */}
-        <h1 className="text-xl text-purple-800 mb-8 hidden lg:block">Notice Board</h1>
 
         {/* Notices Section */}
-        <div className="bg-white shadow-md rounded-lg p-6">
+        <div className="bg-white shadow-md rounded-lg mt-6 p-6">
           <h2 className="text-xl font-medium text-gray-700 mb-4">All Notices</h2>
 
           {/* Display error if there is any */}

@@ -79,10 +79,9 @@ const TeacherMarks = () => {
           </button>
         </div>
 
-        <h1 className="text-xl text-purple-700 mb-6">Student Marks</h1>
 
         {/* Filters */}
-        <div className="flex flex-col lg:flex-row space-y-4 lg:space-y-0 lg:space-x-6 mb-6 bg-white shadow-lg p-4 rounded-lg">
+        <div className="flex flex-col lg:flex-row mt-6 space-y-4 lg:space-y-0 lg:space-x-6 mb-6 bg-white shadow-lg p-4 rounded-lg">
           <div className="flex-1">
             <label className="block mb-2">Select Subject:</label>
             <select

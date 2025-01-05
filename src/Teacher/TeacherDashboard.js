@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { NavLink } from "react-router-dom";
+
 import {
   FaUserGraduate,
   FaTasks,
@@ -53,41 +55,46 @@ const TeacherDashboard = () => {
             Teacher Dashboard
           </h1>
 
-          {/* Statistics Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 mb-6">
-            {[
-              { title: "Total Students", value: "120", icon: <FaUserGraduate className="text-3xl" /> },
-              { title: "Total Homework", value: "45", icon: <FaTasks className="text-3xl" /> },
-              { title: "Total Attendance", value: "98%", icon: <FaClipboardList className="text-3xl" /> },
-              { title: "Total Leave", value: "12", icon: <FaPlaneDeparture className="text-3xl" /> },
-              { title: "Total Exams", value: "8", icon: <FaClipboardList className="text-3xl" /> },
-              { title: "Total Subjects", value: "6", icon: <FaClipboardList className="text-3xl" /> },
-              { title: "Total Projects", value: "5", icon: <FaTasks className="text-3xl" /> },
-              { title: "Total Meetings", value: "15", icon: <FaPlaneDeparture className="text-3xl" /> },
-              { title: "Total Reports", value: "22", icon: <FaTasks className="text-3xl" /> },
-              { title: "Total Feedback", value: "30", icon: <FaClipboardList className="text-3xl" /> }
-            ].map((item, index) => (
-              <div key={index} className="bg-white shadow-md rounded-lg p-4 flex flex-col items-center justify-between h-full">
-                {/* Motion Animation for Icon */}
-                <motion.div
-                  className="bg-blue-100 text-blue-500 p-3 rounded-full mb-4"
-                  animate={{
-                    scale: [1, 1.2, 1], // Scale up and down
-                    rotate: [0, 10, -10, 0], // Rotate back and forth
-                  }}
-                  transition={{
-                    repeat: Infinity, // Repeat animation
-                    duration: 2, // Duration for one cycle
-                    ease: "easeInOut",
-                  }}
-                >
-                  {item.icon}
-                </motion.div>
-                <h2 className="text-lg font-semibold text-gray-700">{item.title}</h2>
-                <p className="text-2xl font-bold text-gray-800">{item.value}</p>
-              </div>
-            ))}
-          </div>
+{/* Statistics Grid */}
+<div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 mb-6">
+  {[
+    { title: "Total Students", value: "120", icon: <FaUserGraduate className="text-3xl" />, link: "/teacher-students" },
+    { title: "Total Homework", value: "45", icon: <FaTasks className="text-3xl" />, link: "/teacher-homeworklist" },
+    { title: "Total Attendance", value: "98%", icon: <FaClipboardList className="text-3xl" />, link: "/teacher-attendance" },
+    { title: "Total Leave", value: "12", icon: <FaPlaneDeparture className="text-3xl" />, link: "/teacher-leave" },
+    { title: "Total Exams", value: "8", icon: <FaClipboardList className="text-3xl" />, link: "/teacher-marks" },
+    { title: "Total Subjects", value: "6", icon: <FaClipboardList className="text-3xl" />, link: "/teacher-dashboard" },
+    { title: "Total Projects", value: "5", icon: <FaTasks className="text-3xl" />, link: "/teacher-dashboard" },
+    { title: "Total Meetings", value: "15", icon: <FaPlaneDeparture className="text-3xl" />, link: "/teacher-dashboard" },
+    { title: "Total Reports", value: "22", icon: <FaTasks className="text-3xl" />, link: "/teacher-dashboard" },
+    { title: "Total Feedback", value: "30", icon: <FaClipboardList className="text-3xl" />, link: "/teacher-dashboard" },
+  ].map((item, index) => (
+    <NavLink
+      to={item.link}
+      key={index}
+      className="bg-white shadow-md rounded-lg p-4 flex flex-col items-center justify-between h-full transform hover:scale-105 transition-transform"
+    >
+      {/* Motion Animation for Icon */}
+      <motion.div
+        className="bg-blue-100 text-blue-500 p-3 rounded-full mb-4"
+        animate={{
+          scale: [1, 1.2, 1], // Scale up and down
+          rotate: [0, 10, -10, 0], // Rotate back and forth
+        }}
+        transition={{
+          repeat: Infinity, // Repeat animation
+          duration: 2, // Duration for one cycle
+          ease: "easeInOut",
+        }}
+      >
+        {item.icon}
+      </motion.div>
+      <h2 className="text-lg font-semibold text-gray-700">{item.title}</h2>
+      <p className="text-2xl font-bold text-gray-800">{item.value}</p>
+    </NavLink>
+  ))}
+</div>
+
 
           {/* Table Section */}
           <div className="bg-white shadow-md rounded-lg p-6">
