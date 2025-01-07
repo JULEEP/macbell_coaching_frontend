@@ -55,7 +55,7 @@ const AddStaffForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-          const response = await axios.post('http://localhost:4000/api/admin/add-staff', staffData);
+          const response = await axios.post('https://school-backend-1-2xki.onrender.com/api/admin/add-staff', staffData);
           alert('Staff added successfully!');
           console.log(response.data);
       

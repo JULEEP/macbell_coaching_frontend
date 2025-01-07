@@ -13,7 +13,7 @@ const MarksList = () => {
 
   const fetchMarks = async () => {
     try {
-      const response = await axios.get("http://localhost:4000/api/admin/marks");
+      const response = await axios.get("https://school-backend-1-2xki.onrender.com/api/admin/marks");
       setMarksList(response.data.marks || []);
     } catch (error) {
       console.error("Error fetching marks:", error);

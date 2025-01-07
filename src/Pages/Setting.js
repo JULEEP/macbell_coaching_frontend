@@ -50,7 +50,7 @@ const Setting = () => {
   
     try {
       const response = await axios.post(
-        "http://localhost:4000/api/admin/settings", // Backend URL
+        "https://school-backend-1-2xki.onrender.com/api/admin/settings", // Backend URL
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );

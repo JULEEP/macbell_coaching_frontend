@@ -96,7 +96,7 @@ const VehiclePage = () => {
 
       try {
         // Make API call to add the driver
-        const response = await fetch("http://localhost:4000/api/admin/add-driver", {
+        const response = await fetch("https://school-backend-1-2xki.onrender.com/api/admin/add-driver", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

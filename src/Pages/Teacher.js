@@ -15,17 +15,18 @@ const Teacher = () => {
     age: "",
     gender: "",
     education: "",
-    joiningDate: new Date().toISOString().split("T")[0], // Current date
+    joiningDate: new Date().toISOString().split("T")[0],
   });
 
-  // Fetch teachers from the API
   useEffect(() => {
     fetchTeachers();
   }, []);
 
   const fetchTeachers = async () => {
     try {
-      const response = await axios.get("https://school-backend-1-2xki.onrender.com/api/admin/get-teacher");
+      const response = await axios.get(
+        "https://school-backend-1-2xki.onrender.com/api/admin/get-teacher"
+      );
       setTeacherList(response.data.data || []);
     } catch (error) {
       console.error("Error fetching teachers:", error);
@@ -52,7 +53,7 @@ const Teacher = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:4000/api/admin/add-teacher",
+        "https://school-backend-1-2xki.onrender.com/api/admin/add-teacher",
         formData,
         {
           headers: {
@@ -81,153 +82,120 @@ const Teacher = () => {
     }
   };
 
-  // Pagination Logic
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const currentTeachers = teacherList.slice(startIndex, endIndex);
-
   const totalPages = Math.ceil(teacherList.length / itemsPerPage);
 
   return (
-    <div className="min-h-screen flex bg-gray-100">
+    <div className="flex min-h-screen bg-gray-100">
       {/* Sidebar */}
-      <div className="w-64 bg-gray-800">
+      <div className="fixed inset-y-0 left-0 bg-white shadow-lg w-64">
         <Sidebar />
       </div>
 
       {/* Main Content */}
-      <div className="flex-grow p-8 bg-white">
+      <div className="ml-72 flex-1">
+        {/* Header */}
         <h1 className="text-3xl font-semibold text-gray-800 mb-8">Teacher List</h1>
 
-        {/* Container for the Form and Teacher List */}
-        <div className="container mx-auto">
-
-          {/* Add Teacher Form Section */}
-          <div className="bg-white p-6 rounded-md shadow-md mb-8">
-            <h2 className="text-lg text-gray-700 mb-4">Add Teacher</h2>
-            <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
-              {[{
-                label: "Teacher Name", name: "name", type: "text", placeholder: "Enter teacher name"
-              }, {
-                label: "Email", name: "email", type: "email", placeholder: "Enter email"
-              }, {
-                label: "Phone", name: "phone", type: "text", placeholder: "Enter phone"
-              }, {
-                label: "Address", name: "address", type: "text", placeholder: "Enter address"
-              }, {
-                label: "Experience", name: "lastExperience", type: "text", placeholder: "Enter experience"
-              }, {
-                label: "Age", name: "age", type: "number", placeholder: "Enter age"
-              }, {
-                label: "Education", name: "education", type: "text", placeholder: "Enter education"
-              }].map((field, index) => (
-                <div key={index} className="mb-4">
-                  <label htmlFor={field.name} className="text-sm text-gray-600">{field.label}</label>
-                  <input
-                    type={field.type}
-                    id={field.name}
-                    name={field.name}
-                    value={teacherDetails[field.name]}
-                    onChange={handleChange}
-                    placeholder={field.placeholder}
-                    className="border border-gray-300 rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-purple-500"
-                    required
-                  />
-                </div>
-              ))}
-              <div className="mb-4">
-                <label className="text-sm text-gray-600">Joining Date</label>
+        {/* Add Teacher Form */}
+        <div className="bg-white p-6 rounded-md shadow-md mb-8 w-full max-w-5xl">
+          <h2 className="text-lg text-gray-700 mb-4">Add Teacher</h2>
+          <form
+            onSubmit={handleSubmit}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          >
+            {[
+              { label: "Teacher Name", name: "name", type: "text", placeholder: "Enter teacher name" },
+              { label: "Email", name: "email", type: "email", placeholder: "Enter email" },
+              { label: "Phone", name: "phone", type: "text", placeholder: "Enter phone" },
+              { label: "Address", name: "address", type: "text", placeholder: "Enter address" },
+              { label: "Experience", name: "lastExperience", type: "text", placeholder: "Enter experience" },
+              { label: "Age", name: "age", type: "number", placeholder: "Enter age" },
+              { label: "Education", name: "education", type: "text", placeholder: "Enter education" },
+            ].map((field, index) => (
+              <div key={index}>
+                <label htmlFor={field.name} className="text-sm text-gray-600">
+                  {field.label}
+                </label>
                 <input
-                  type="date"
-                  name="joiningDate"
-                  value={teacherDetails.joiningDate}
+                  type={field.type}
+                  id={field.name}
+                  name={field.name}
+                  value={teacherDetails[field.name]}
                   onChange={handleChange}
-                  className="border border-gray-300 rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  placeholder={field.placeholder}
+                  className="border border-gray-300 rounded-md p-2 w-full"
+                  required
                 />
               </div>
-              <div className="col-span-1">
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors"
-                >
-                  Save
-                </button>
-              </div>
-            </form>
-          </div>
-
-          {/* Teacher List Section */}
-          <div className="bg-white p-6 rounded-md shadow-md mb-8">
-            <h2 className="text-lg text-gray-700 mb-4">Teacher List</h2>
-            <div className="overflow-x-auto">
-              <table className="min-w-full table-auto">
-                <thead>
-                  <tr className="bg-gray-100">
-                    <th className="px-4 py-2 text-gray-600">SL</th>
-                    <th className="px-4 py-2 text-gray-600">Teacher Name</th>
-                    <th className="px-4 py-2 text-gray-600">Email</th>
-                    <th className="px-4 py-2 text-gray-600">Phone</th>
-                    <th className="px-4 py-2 text-gray-600">Address</th>
-                    <th className="px-4 py-2 text-gray-600">Experience</th>
-                    <th className="px-4 py-2 text-gray-600">Age</th>
-                    <th className="px-4 py-2 text-gray-600">Gender</th>
-                    <th className="px-4 py-2 text-gray-600">Education</th>
-                    <th className="px-4 py-2 text-gray-600">Joining Date</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {currentTeachers.length > 0 ? (
-                    currentTeachers.map((teacher, index) => (
-                      <tr key={teacher._id} className="border-t border-gray-300">
-                        <td className="px-4 py-2 text-gray-600">{startIndex + index + 1}</td>
-                        <td className="px-4 py-2 text-gray-600">{teacher.name}</td>
-                        <td className="px-4 py-2 text-gray-600">{teacher.email}</td>
-                        <td className="px-4 py-2 text-gray-600">{teacher.phone || "N/A"}</td>
-                        <td className="px-4 py-2 text-gray-600">{teacher.address || "N/A"}</td>
-                        <td className="px-4 py-2 text-gray-600">{teacher.lastExperience || "N/A"}</td>
-                        <td className="px-4 py-2 text-gray-600">{teacher.age || "N/A"}</td>
-                        <td className="px-4 py-2 text-gray-600">{teacher.gender || "N/A"}</td>
-                        <td className="px-4 py-2 text-gray-600">{teacher.education || "N/A"}</td>
-                        <td className="px-4 py-2 text-gray-600">{teacher.joiningDate || "N/A"}</td>
-                      </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td colSpan="10" className="px-4 py-2 text-center text-gray-500">
-                        No teachers found.
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
+            ))}
+            <div>
+              <label className="text-sm text-gray-600">Joining Date</label>
+              <input
+                type="date"
+                name="joiningDate"
+                value={teacherDetails.joiningDate}
+                onChange={handleChange}
+                className="border border-gray-300 rounded-md p-2 w-full"
+              />
             </div>
-          </div>
-
-          {/* Pagination */}
-          {totalPages > 1 && (
-            <div className="mt-4 flex justify-between items-center">
+            <div className="col-span-full">
               <button
-                onClick={() => setCurrentPage(currentPage - 1)}
-                className="px-4 py-2 bg-purple-600 text-white rounded-md disabled:opacity-50"
-                disabled={currentPage === 1}
+                type="submit"
+                className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700"
               >
-                Previous
-              </button>
-              <span className="text-gray-600">
-                Page {currentPage} of {totalPages}
-              </span>
-              <button
-                onClick={() => setCurrentPage(currentPage + 1)}
-                className="px-4 py-2 bg-purple-600 text-white rounded-md disabled:opacity-50"
-                disabled={currentPage === totalPages}
-              >
-                Next
+                Save
               </button>
             </div>
-          )}
+          </form>
+        </div>
+
+       {/* Teacher List */}
+<h2 className="text-lg text-gray-700 mb-4">Teacher List</h2>
+<table className="w-full border-collapse border border-gray-300">
+  <thead>
+    <tr className="bg-gray-100">
+      <th className="px-4 py-2 border-b border-gray-300">SL</th>
+      <th className="px-4 py-2 border-b border-gray-300">Teacher Name</th>
+      <th className="px-4 py-2 border-b border-gray-300">Email</th>
+      <th className="px-4 py-2 border-b border-gray-300">Phone</th>
+      <th className="px-4 py-2 border-b border-gray-300">Address</th>
+      <th className="px-4 py-2 border-b border-gray-300">Experience</th>
+      <th className="px-4 py-2 border-b border-gray-300">Age</th>
+      <th className="px-4 py-2 border-b border-gray-300">Gender</th>
+      <th className="px-4 py-2 border-b border-gray-300">Education</th>
+      <th className="px-4 py-2 border-b border-gray-300">Joining Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    {currentTeachers.length > 0 ? (
+      currentTeachers.map((teacher, index) => (
+        <tr key={teacher._id}>
+          <td className="px-4 py-2 border-b">{startIndex + index + 1}</td>
+          <td className="px-4 py-2 border-b">{teacher.name}</td>
+          <td className="px-4 py-2 border-b">{teacher.email}</td>
+          <td className="px-4 py-2 border-b">{teacher.phone || "N/A"}</td>
+          <td className="px-4 py-2 border-b">{teacher.address || "N/A"}</td>
+          <td className="px-4 py-2 border-b">{teacher.lastExperience || "N/A"}</td>
+          <td className="px-4 py-2 border-b">{teacher.age || "N/A"}</td>
+          <td className="px-4 py-2 border-b">{teacher.gender || "N/A"}</td>
+          <td className="px-4 py-2 border-b">{teacher.education || "N/A"}</td>
+          <td className="px-4 py-2 border-b">{teacher.joiningDate || "N/A"}</td>
+        </tr>
+      ))
+    ) : (
+      <tr>
+        <td colSpan="10" className="text-center text-gray-500">
+          No teachers found.
+        </td>
+      </tr>
+    )}
+  </tbody>
+</table>
         </div>
       </div>
-    </div>
   );
 };
 

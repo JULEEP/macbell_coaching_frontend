@@ -13,7 +13,7 @@ const StaffList = () => {
 
   const fetchStaff = async () => {
     try {
-      const response = await axios.get("http://localhost:4000/api/admin/staffs");
+      const response = await axios.get("https://school-backend-1-2xki.onrender.com/api/admin/staffs");
       setStaffList(response.data.staff || []);
     } catch (error) {
       console.error("Error fetching staff:", error);

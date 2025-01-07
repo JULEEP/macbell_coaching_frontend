@@ -10,7 +10,7 @@ const StudentList = () => {
   useEffect(() => {
     const fetchStudents = async () => {
       try {
-        const response = await fetch("http://localhost:4000/api/admin/get-student");
+        const response = await fetch("https://school-backend-1-2xki.onrender.com/api/admin/get-student");
         const data = await response.json();
         if (data.students) {
           setStudents(data.students);

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Sidebar from "./Sidebar";
-import { FaBars, FaTimes } from "react-icons/fa";
 
 const OptionalSubject = () => {
   const [formData, setFormData] = useState({
@@ -8,8 +7,6 @@ const OptionalSubject = () => {
     section: "",
     subject: "",
   });
-
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Sidebar toggle state
 
   const classes = ["Class 1", "Class 2", "Class 3"];
   const sections = ["Section A", "Section B", "Section C"];
@@ -27,46 +24,22 @@ const OptionalSubject = () => {
     console.log("Searching...");
   };
 
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
-
   return (
     <div className="flex min-h-screen bg-gray-100">
-      {/* Sidebar overlay for mobile */}
-      <div
-        className={`fixed inset-0 bg-gray-800 bg-opacity-50 transition-opacity lg:hidden ${
-          isSidebarOpen ? "block" : "hidden"
-        }`}
-        onClick={toggleSidebar}
-      ></div>
-
       {/* Sidebar */}
-      <div
-        className={`fixed inset-y-0 left-0 bg-white shadow-lg transform lg:transform-none lg:relative w-64 transition-transform duration-300 ${
-          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
-      >
+      <div className="fixed inset-y-0 left-0 bg-white shadow-lg w-64">
         <Sidebar />
       </div>
 
       {/* Main Content */}
-      <div className={`flex-1 transition-all duration-300 ${isSidebarOpen ? "ml-64" : "ml-0"}`}>
-        {/* Mobile Header */}
-        <div className="flex items-center justify-between bg-purple-700 text-white p-4 shadow-lg lg:hidden">
-          <h1 className="text-lg font-bold">Optional Subject</h1>
-          <button onClick={toggleSidebar} className="text-2xl focus:outline-none">
-            {isSidebarOpen ? <FaTimes /> : <FaBars />}
-          </button>
-        </div>
-
+      <div className="ml-72 flex-1">
         {/* Main Wrapper */}
-        <div className="w-full max-w-5xl bg-white p-8 rounded-xl shadow-lg mt-4 mx-4 lg:mx-0">
+        <div className="w-full max-w-5xl bg-white p-8 rounded-xl shadow-lg mt-4 ml-16">
           {/* Select Criteria Section */}
           <div className="mb-8">
             <h2 className="text-lg text-gray-500 mb-4">Select Criteria</h2>
             <form className="space-y-4">
-              <div className="flex flex-col lg:flex-row gap-6">
+              <div className="flex flex-row gap-6">
                 {/* Class Dropdown */}
                 <div className="flex-1">
                   <label htmlFor="class" className="text-sm text-gray-600">
@@ -77,7 +50,7 @@ const OptionalSubject = () => {
                     name="class"
                     value={formData.class}
                     onChange={handleChange}
-                    className="border border-gray-300 rounded-md p-3 w-full focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    className="border border-gray-300 rounded-md p-3 w-full"
                     required
                   >
                     <option value="">Select Class</option>
@@ -99,7 +72,7 @@ const OptionalSubject = () => {
                     name="section"
                     value={formData.section}
                     onChange={handleChange}
-                    className="border border-gray-300 rounded-md p-3 w-full focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    className="border border-gray-300 rounded-md p-3 w-full"
                     required
                   >
                     <option value="">Select Section</option>
@@ -121,7 +94,7 @@ const OptionalSubject = () => {
                     name="subject"
                     value={formData.subject}
                     onChange={handleChange}
-                    className="border border-gray-300 rounded-md p-3 w-full focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    className="border border-gray-300 rounded-md p-3 w-full"
                     required
                   >
                     <option value="">Select Subject</option>
