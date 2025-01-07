@@ -1,146 +1,178 @@
-import React, { useState } from 'react';
-import Sidebar from './Sidebar';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import Sidebar from "./Sidebar";
 
-const StaffListPage = () => {
-  const [formData, setFormData] = useState({
-    role: '',
-    staffId: '',
-    staffName: '',
-  });
+const StaffList = () => {
+  const [staffList, setStaffList] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
 
-  const [staffList, setStaffList] = useState([
-    {
-      staffNo: 'S001',
-      name: 'John Doe',
-      role: 'Teacher',
-      department: 'Math',
-      designation: 'Senior Teacher',
-      mobile: '1234567890',
-      email: 'johndoe@example.com',
-    },
-    {
-      staffNo: 'S002',
-      name: 'Jane Smith',
-      role: 'Admin',
-      department: 'Administration',
-      designation: 'Admin Manager',
-      mobile: '0987654321',
-      email: 'janesmith@example.com',
-    },
-    // Add more staff members here for demonstration
-  ]);
+  useEffect(() => {
+    fetchStaff();
+  }, []);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+  const fetchStaff = async () => {
+    try {
+      const response = await axios.get("http://localhost:4000/api/admin/staffs");
+      setStaffList(response.data.staff || []);
+    } catch (error) {
+      console.error("Error fetching staff:", error);
+      alert("Error fetching staff. Please try again.");
+    }
   };
 
-  const handleSearch = () => {
-    // Implement search logic based on staffId or staffName
-    console.log('Search triggered with:', formData);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentStaff = staffList.slice(startIndex, endIndex);
+  const totalPages = Math.ceil(staffList.length / itemsPerPage);
+
+  const formatDate = (date) => {
+    return new Date(date).toLocaleDateString();
+  };
+
+  const exportToCSV = () => {
+    const headers = [
+      "SL,First Name,Last Name,Email,Phone,Position,Department,Gender,Date of Birth,Joining Date,Salary,Employee ID,Profile Picture,Qualifications,Created At",
+    ];
+    const rows = staffList.map((staff, index) => [
+      index + 1,
+      staff.firstName || "N/A",
+      staff.lastName || "N/A",
+      staff.email || "N/A",
+      staff.phone || "N/A",
+      staff.position || "N/A",
+      staff.department || "N/A",
+      staff.gender || "N/A",
+      new Date(staff.dateOfBirth).toLocaleDateString() || "N/A",
+      new Date(staff.joiningDate).toLocaleDateString() || "N/A",
+      staff.salary || "N/A",
+      staff.employeeId || "N/A",
+      staff.profilePicture || "N/A",
+      staff.qualifications.join(", ") || "N/A",
+      formatDate(staff.createdAt) || "N/A",
+    ]);
+
+    const csvContent =
+      "data:text/csv;charset=utf-8," +
+      [headers, ...rows.map((row) => row.join(","))].join("\n");
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "staff_data.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   return (
-    <div className="flex h-screen">
-    {/* Sidebar */}
-    <Sidebar /> {/* Sidebar added here */}
+    <div className="flex min-h-screen">
+      {/* Sidebar */}
+      <aside className="w-64 bg-gray-800 text-white shadow-md">
+        <Sidebar />
+      </aside>
 
-    {/* Main Content */}
-    <div className="flex-1 p-6 ml-64"> {/* Add ml-64 to shift the content right */}      {/* Title */}
-      <h1 className="text-2xl font-semibold text-gray-700 mb-6">Staff List</h1>
+      {/* Main Content */}
+      <main className="flex-grow ml-60 bg-gray-100">
+        <h1 className="text-3xl font-semibold text-gray-800 mb-6 ml-8">Staff List</h1>
 
-      {/* Select Criteria and Search Section */}
-      <div className="bg-white p-6 rounded-lg shadow-md mb-6">
-        <h2 className="text-xl font-semibold text-gray-600 mb-4">Select Criteria</h2>
-        <div className="flex flex-col md:flex-row items-center gap-6 mb-4">
-          {/* Role Dropdown */}
-          <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-600 mb-2">Role</label>
-            <select
-              name="role"
-              value={formData.role}
-              onChange={handleChange}
-              className="w-full border border-gray-300 p-2 rounded"
-            >
-              <option value="">Select Role</option>
-              <option value="Teacher">Teacher</option>
-              <option value="Admin">Admin</option>
-              <option value="Staff">Staff</option>
-              {/* Add more roles as needed */}
-            </select>
-          </div>
-
-          {/* Search By Staff ID */}
-          <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-600 mb-2">Search By Staff ID</label>
-            <input
-              type="text"
-              name="staffId"
-              value={formData.staffId}
-              onChange={handleChange}
-              className="w-full border border-gray-300 p-2 rounded"
-            />
-          </div>
-
-          {/* Search By Name */}
-          <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-600 mb-2">Search By Name</label>
-            <input
-              type="text"
-              name="staffName"
-              value={formData.staffName}
-              onChange={handleChange}
-              className="w-full border border-gray-300 p-2 rounded"
-            />
-          </div>
-
-          {/* Search Button */}
-          <div className="flex items-center justify-center md:justify-start">
+        <div className="bg-white p-6 rounded-md shadow-md">
+          {/* CSV Export Button */}
+          <div className="flex items-center justify-end mb-4">
             <button
-              onClick={handleSearch}
-              className="bg-purple-600 text-white py-2 px-6 rounded-lg hover:bg-blue-700"
+              onClick={exportToCSV}
+              className="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 focus:outline-none"
             >
-              Search
+              Download CSV
             </button>
           </div>
-        </div>
-      </div>
 
-      {/* Staff List Table */}
-      <div className="bg-white p-6 rounded-lg shadow-md">
-        <h2 className="text-xl font-semibold text-gray-600 mb-4">Staff List</h2>
-        <div className="overflow-x-auto">
-          <table className="w-full table-auto border-collapse">
-            <thead>
-              <tr className="border-b">
-                <th className="px-4 py-2 text-sm font-medium text-gray-600">Staff No</th>
-                <th className="px-4 py-2 text-sm font-medium text-gray-600">Name</th>
-                <th className="px-4 py-2 text-sm font-medium text-gray-600">Role</th>
-                <th className="px-4 py-2 text-sm font-medium text-gray-600">Department</th>
-                <th className="px-4 py-2 text-sm font-medium text-gray-600">Designation</th>
-                <th className="px-4 py-2 text-sm font-medium text-gray-600">Mobile</th>
-                <th className="px-4 py-2 text-sm font-medium text-gray-600">Email</th>
-              </tr>
-            </thead>
-            <tbody>
-              {staffList.map((staff, index) => (
-                <tr key={index} className="border-b hover:bg-gray-50">
-                  <td className="px-4 py-2 text-sm text-gray-700">{staff.staffNo}</td>
-                  <td className="px-4 py-2 text-sm text-gray-700">{staff.name}</td>
-                  <td className="px-4 py-2 text-sm text-gray-700">{staff.role}</td>
-                  <td className="px-4 py-2 text-sm text-gray-700">{staff.department}</td>
-                  <td className="px-4 py-2 text-sm text-gray-700">{staff.designation}</td>
-                  <td className="px-4 py-2 text-sm text-gray-700">{staff.mobile}</td>
-                  <td className="px-4 py-2 text-sm text-gray-700">{staff.email}</td>
+          {/* Staff Table */}
+          <div className="overflow-x-auto">
+            <table className="min-w-full border-collapse">
+              <thead>
+                <tr className="bg-gray-100">
+                  <th className="border-b px-4 py-2 text-left">SL</th>
+                  <th className="border-b px-4 py-2 text-left">First Name</th>
+                  <th className="border-b px-4 py-2 text-left">Last Name</th>
+                  <th className="border-b px-4 py-2 text-left">Email</th>
+                  <th className="border-b px-4 py-2 text-left">Phone</th>
+                  <th className="border-b px-4 py-2 text-left">Position</th>
+                  <th className="border-b px-4 py-2 text-left">Department</th>
+                  <th className="border-b px-4 py-2 text-left">Gender</th>
+                  <th className="border-b px-4 py-2 text-left">Date of Birth</th>
+                  <th className="border-b px-4 py-2 text-left">Joining Date</th>
+                  <th className="border-b px-4 py-2 text-left">Salary</th>
+                  <th className="border-b px-4 py-2 text-left">Employee ID</th>
+                  <th className="border-b px-4 py-2 text-left">Profile Picture</th>
+                  <th className="border-b px-4 py-2 text-left">Qualifications</th>
+                  <th className="border-b px-4 py-2 text-left">Created At</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {currentStaff.length > 0 ? (
+                  currentStaff.map((staff, index) => (
+                    <tr key={staff._id}>
+                      <td className="border-b px-4 py-2">{startIndex + index + 1}</td>
+                      <td className="border-b px-4 py-2">{staff.firstName}</td>
+                      <td className="border-b px-4 py-2">{staff.lastName}</td>
+                      <td className="border-b px-4 py-2">{staff.email}</td>
+                      <td className="border-b px-4 py-2">{staff.phone}</td>
+                      <td className="border-b px-4 py-2">{staff.position}</td>
+                      <td className="border-b px-4 py-2">{staff.department}</td>
+                      <td className="border-b px-4 py-2">{staff.gender}</td>
+                      <td className="border-b px-4 py-2">{new Date(staff.dateOfBirth).toLocaleDateString()}</td>
+                      <td className="border-b px-4 py-2">{new Date(staff.joiningDate).toLocaleDateString()}</td>
+                      <td className="border-b px-4 py-2">{staff.salary}</td>
+                      <td className="border-b px-4 py-2">{staff.employeeId}</td>
+                      <td className="border-b px-4 py-2">
+                        {staff.profilePicture ? (
+                          <img src={staff.profilePicture} alt="Profile" className="w-12 h-12 rounded-full" />
+                        ) : (
+                          "N/A"
+                        )}
+                      </td>
+                      <td className="border-b px-4 py-2">{staff.qualifications.join(", ")}</td>
+                      <td className="border-b px-4 py-2">{formatDate(staff.createdAt)}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="15" className="text-center text-gray-500 py-4">
+                      No staff found.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="flex justify-between items-center mt-4">
+              <button
+                onClick={() => setCurrentPage(currentPage - 1)}
+                className="px-4 py-2 bg-purple-600 text-white rounded-md disabled:opacity-50"
+                disabled={currentPage === 1}
+              >
+                Previous
+              </button>
+              <span className="text-gray-600">
+                Page {currentPage} of {totalPages}
+              </span>
+              <button
+                onClick={() => setCurrentPage(currentPage + 1)}
+                className="px-4 py-2 bg-purple-600 text-white rounded-md disabled:opacity-50"
+                disabled={currentPage === totalPages}
+              >
+                Next
+              </button>
+            </div>
+          )}
         </div>
-      </div>
-    </div>
+      </main>
     </div>
   );
 };
 
-export default StaffListPage;
+export default StaffList;

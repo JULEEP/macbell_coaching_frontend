@@ -1,8 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Navbar from './Navbar'; // Import Navbar component
 import Sidebar from './Sidebar';
 import axios from 'axios'; // We'll use axios to make API calls
 import { FaBars, FaTimes } from 'react-icons/fa';
+
+import {
+  Chart,
+  BarController,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+ LineController, LineElement,  PointElement, PieController, ArcElement, Tooltip, Legend,
+} from 'chart.js';
+
+// Registering necessary components for Bar chart
+Chart.register(BarController, BarElement, CategoryScale, LinearScale, LineController, LineElement, PointElement, PieController, ArcElement, Tooltip, Legend );
+
 
 const Dashboard = () => {
   const [notices, setNotices] = useState([]); // State to store notices from API
@@ -17,6 +30,160 @@ const Dashboard = () => {
     postedBy: ''
   });
   const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Sidebar toggle state
+  const chartRef = useRef(null);
+  const chartInstanceRef = useRef(null); // Store chart instance
+  const pieChartRef = useRef(null); // Ref for pie chart
+  const pieChartInstanceRef = useRef(null); // Store pie chart instance
+  const [chartData, setChartData] = useState({
+    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'], // Static labels for months
+    data: [10, 20, 30, 40, 20, 90, 10, 200], // Static data points
+  });
+  const lineChartRef = useRef(null); // Ref for line chart
+  const lineChartInstanceRef = useRef(null); // Store line chart instance
+
+  useEffect(() => {
+    const pieCtx = pieChartRef.current.getContext('2d');
+
+    // Destroy any previous chart instance to avoid conflicts
+    if (pieChartInstanceRef.current) {
+      pieChartInstanceRef.current.destroy();
+    }
+
+    // Create Pie Chart with static data for Students, Teachers, and Subjects
+    pieChartInstanceRef.current = new Chart(pieCtx, {
+      type: 'pie',
+      data: {
+        labels: ['Students', 'Teachers', 'Subjects'], // Labels for the segments
+        datasets: [
+          {
+            label: 'School Data Distribution',
+            data: [500, 50, 10], // Static data: [Students, Teachers, Subjects]
+            backgroundColor: ['#FF5733', '#1E90FF', '#FFD700'], // Slice colors
+            borderWidth: 1, // Adds a border around the segments
+            hoverOffset: 10, // Hover effect - creates 3D-like separation
+          },
+        ],
+      },
+      options: {
+        responsive: true, // Makes the chart responsive
+        plugins: {
+          legend: {
+            position: 'top', // Position the legend at the top
+          },
+          tooltip: {
+            enabled: true, // Enable tooltips
+          },
+        },
+        elements: {
+          arc: {
+            borderWidth: 6, // Thicker border to create a 3D effect
+            borderColor: '#fff', // White border color
+          },
+        },
+        animation: {
+          animateRotate: true, // Rotation effect when chart is drawn
+          animateScale: true,  // Scale effect when chart is drawn
+        },
+      },
+    });
+
+    // Cleanup: Destroy chart when component unmounts
+    return () => {
+      if (pieChartInstanceRef.current) {
+        pieChartInstanceRef.current.destroy();
+      }
+    };
+  }, []); // Empty dependency array ensures this effect runs only once
+
+  useEffect(() => {
+    const lineCtx = lineChartRef.current.getContext('2d');
+
+    // Destroy any previous chart instance to avoid conflicts
+    if (lineChartInstanceRef.current) {
+      lineChartInstanceRef.current.destroy();
+    }
+
+    // Create Line Chart with static data
+    lineChartInstanceRef.current = new Chart(lineCtx, {
+      type: 'line',
+      data: {
+        labels: chartData.labels, // X-axis labels (months)
+        datasets: [
+          {
+            label: 'Growth Over Time',
+            data: chartData.data, // Y-axis data points
+            fill: false, // No fill under the line
+            borderColor: '#4A90E2', // Line color
+            tension: 0.1, // Smoothness of the line curve
+          },
+        ],
+      },
+      options: {
+        responsive: true, // Makes the chart responsive
+        maintainAspectRatio: false, // Allows chart to scale with its container
+        plugins: {
+          legend: {
+            display: true, // Display chart legend
+            position: 'top', // Position of legend
+          },
+        },
+      },
+    });
+
+    // Cleanup: Destroy chart when component unmounts
+    return () => {
+      if (lineChartInstanceRef.current) {
+        lineChartInstanceRef.current.destroy();
+      }
+    };
+  }, [chartData]); // Re-run the effect whenever chartData changes
+
+
+
+  useEffect(() => {
+    const ctx = chartRef.current.getContext('2d');
+
+    // Destroy existing chart instance to avoid canvas reuse conflicts
+    if (chartInstanceRef.current) {
+      chartInstanceRef.current.destroy();
+    }
+
+    // Create a new chart
+    chartInstanceRef.current = new Chart(ctx, {
+      type: 'bar', // Bar chart type
+      data: {
+        labels: ['Students', 'Teachers', 'Parents', 'Staffs', 'Subjects', 'Classes', 'Sections', 'Vehicles'],
+        datasets: [
+          {
+            label: 'Count',
+            data: [0, 50, 0, 0, 10, 5, 8, 4], // Example data
+            backgroundColor: [
+              '#ADD8E6', '#000000', '#FFB6C1', '#90EE90',
+              '#FFFFE0', '#D8BFD8', '#FFA500', '#40E0D0'
+            ],
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false, // Allow resizing
+        plugins: {
+          legend: {
+            display: true,
+            position: 'top',
+          }
+        }
+      }
+    });
+
+    // Cleanup: Destroy the chart instance when the component is unmounted
+    return () => {
+      if (chartInstanceRef.current) {
+        chartInstanceRef.current.destroy();
+      }
+    };
+  }, []); // Empty dependency array ensures this effect runs only once
+
 
   // Function to handle form input changes
   const handleInputChange = (e) => {
@@ -154,6 +321,45 @@ const Dashboard = () => {
           </div>
         </div>
 
+        <div className="bg-white p-6 shadow-md rounded-md mt-6">
+        <h2 className="text-xl font-semibold text-gray-700 mb-4">Dashboard Analytics</h2>
+        <div className="relative w-full max-w-full h-[300px] sm:h-[400px]">
+          <canvas ref={chartRef} className="w-full h-full" />
+        </div>
+      </div>
+
+      <div className="bg-white p-6 shadow-md rounded-md mt-6">
+      <h2 className="text-xl font-semibold text-gray-700 mb-4">Growth Over Time</h2>
+      <div className="relative w-full max-w-full h-[200px] sm:h-[300px] md:h-[400px]">
+        <canvas ref={lineChartRef} className="w-full h-full" />
+      </div>
+    </div>
+
+    <div className="bg-white p-6 shadow-md rounded-md mt-6">
+    <h2 className="text-xl font-semibold text-gray-700 mb-4">3D-like Pie Chart: Students, Teachers, Subjects</h2>
+    <div className="flex items-center justify-between">
+      {/* Left side: Labels for Students, Teachers, Subjects */}
+      <div className="space-y-2">
+        <div className="flex items-center">
+          <span className="inline-block w-3 h-3 bg-[#FF5733] rounded-full mr-2"></span>
+          <span>Students</span>
+        </div>
+        <div className="flex items-center">
+          <span className="inline-block w-3 h-3 bg-[#1E90FF] rounded-full mr-2"></span>
+          <span>Teachers</span>
+        </div>
+        <div className="flex items-center">
+          <span className="inline-block w-3 h-3 bg-[#FFD700] rounded-full mr-2"></span>
+          <span>Subjects</span>
+        </div>
+      </div>
+
+      {/* Right side: Pie Chart */}
+      <div className="relative w-[300px] h-[300px] sm:w-[400px] sm:h-[400px]">
+        <canvas ref={pieChartRef} className="w-full h-full mr-8" />
+      </div>
+    </div>
+  </div>
         {/* Notice Board Section */}
         <div className="bg-white p-6 shadow-md mt-28 rounded-md mb-6">
           <h2 className="text-xl text-gray-500">Notice Board</h2>

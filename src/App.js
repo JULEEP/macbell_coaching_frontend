@@ -9,7 +9,7 @@ import ComplaintBook from './Pages/ComplaintBook';
 import PostalReceive from './Pages/PostalReceive';
 import PostalDispatch from './Pages/PostalDispatch';
 import PhoneCallLog from './Pages/PhoneCallLog';
-import IdCardList from './Pages/IDCardList';
+import StudentList from './Pages/StudentList';
 import CertificatePage from './Pages/CertificatePage';
 import GenerateCertificate from './Pages/GenerateCertificate';
 import GenerateIdCard from './Pages/GenerateIdCard';
@@ -163,10 +163,16 @@ import TeacherLeavePage from './Teacher/TeacherLeave';
 import TeacherStudentsPage from './Teacher/StudentList';
 import Teacher from './Pages/Teacher';
 import TeacherMarks from './Teacher/StudentMarks';
+import DailyRoutinePage from './Student/ClassRoutine';
 import StudentLogin from './Student/Login';
 import TeacherLogin from './Teacher/TeacherLogin';
 import ParentLogin from './Parents/ParentLogin';
 import AdminLogin from './Pages/AdminLogin';
+import TeacherList from './Pages/TeacherList';
+import MarksList from './Pages/MarksList'
+import AddStaffForm from './Pages/AddStaff';
+import StaffList from './Pages/StaffList';
+import Setting from './Pages/Setting';
 function App() {
   return (
     <Router> {/* Wrap everything in Router to enable routing */}        
@@ -182,7 +188,8 @@ function App() {
             <Route path="/postal" element={<PostalReceive/>} />
             <Route path="/postalDispatch" element={<PostalDispatch/>} />
             <Route path="/calllog" element={<PhoneCallLog/>} />
-            <Route path="/cardList" element={<IdCardList/>} />
+            <Route path="/stuList" element={<StudentList/>} />
+            <Route path="/teacherList" element={<TeacherList/>} />
             <Route path="/certificate" element={<CertificatePage/>} />
             <Route path="/generate-certificate" element={<GenerateCertificate/>} />
             <Route path="/generate-idcard" element={<GenerateIdCard/>} />
@@ -286,7 +293,7 @@ function App() {
             <Route path="/studentsubject" element={<StudentSubjectReportPage/>} />
             <Route path="/student-dashboard" element={<StudentDashboard/>} />
             <Route path="/student-profile" element={<StudentDetailsPage/>} />
-            <Route path="/class-routine" element={<ClassRoutinePage/>} />
+            <Route path="/class-routine" element={<DailyRoutinePage/>} />
             <Route path="/student-lessonplan" element={<LessonPlanPage/>} />
             <Route path="/student-lessonplan-overview" element={<LessonPlanOverviewStudent/>} />
             <Route path="/student-homework" element={<StudentHomeworkList/>} />
@@ -308,6 +315,16 @@ function App() {
             <Route path="/teacher" element={<Teacher/>} />
             <Route path="/sidebar" element={<Sidebar/>} />
             <Route path="/student-login" element={<StudentLogin/>} />
+            <Route path="/marks" element={<MarksList/>} />
+            <Route path="/staff" element={<AddStaffForm/>} />
+            <Route path="/staffList" element={<StaffList/>} />
+            <Route path="/settings" element={<Setting/>} />
+
+
+
+
+
+
 
 
 

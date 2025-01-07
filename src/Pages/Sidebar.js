@@ -184,6 +184,9 @@ const toggleWalletDropdown = () => {
            <Link to="/teacher" className="hover:text-gray-400">
            <li className="py-2"><a href="#" className="hover:text-gray-400">Teacher List</a></li>
            </Link>
+           <Link to="/staff" className="hover:text-gray-400">
+           <li className="py-2"><a href="#" className="hover:text-gray-400">Add Staff</a></li>
+           </Link>
            <Link to="/complaint" className="hover:text-gray-400">
               <li className="py-2"><a href="#" className="hover:text-gray-400">Complaint</a></li>
               </Link>
@@ -323,26 +326,23 @@ const toggleWalletDropdown = () => {
     <ul className="mt-4">
     <li className="py-2 flex items-center cursor-pointer" onClick={toggleBulkPrintDropdown}>
       <FaFileAlt className="w-5 h-5 mr-2" />
-      <span>Bulk Print</span>
+      <span>Bulk Download</span>
       <FaCaretDown className={`ml-2 transition-transform ${isBulkPrintOpen ? 'rotate-180' : 'rotate-0'}`} />
     </li>
 
     {isBulkPrintOpen && (
       <ul className="ml-6 mt-2">
-      <Link to="/cardList" className="hover:text-gray-400">
-        <li className="py-2"><a href="#" className="hover:text-gray-400">ID Card</a></li>
+      <Link to="/stuList" className="hover:text-gray-400">
+        <li className="py-2"><a href="#" className="hover:text-gray-400">Students</a></li>
         </Link>
-        <Link to="/certificate" className="hover:text-gray-400">
-        <li className="py-2"><a href="#" className="hover:text-gray-400">Certificate</a></li>
+        <Link to="/teacherList" className="hover:text-gray-400">
+        <li className="py-2"><a href="#" className="hover:text-gray-400">Teachers</a></li>
         </Link>
-        <Link to="/payroll" className="hover:text-gray-400">
-        <li className="py-2"><a href="#" className="hover:text-gray-400">Payroll Bulk Print</a></li>
+        <Link to="/staffList" className="hover:text-gray-400">
+        <li className="py-2"><a href="#" className="hover:text-gray-400">Staffs</a></li>
         </Link>
-        <Link to="/feesinvoice" className="hover:text-gray-400">
-        <li className="py-2"><a href="#" className="hover:text-gray-400">Fees Invoice Bulk Print</a></li>
-        </Link>
-        <Link to="/feesinvoicesetting" className="hover:text-gray-400">
-        <li className="py-2"><a href="#" className="hover:text-gray-400">Fees Invoice Bulk Print Sett</a></li>
+        <Link to="/marks" className="hover:text-gray-400">
+        <li className="py-2"><a href="#" className="hover:text-gray-400">Marks</a></li>
         </Link>
       </ul>
     )}
@@ -943,6 +943,9 @@ const toggleWalletDropdown = () => {
     <li className="py-2"><a href="#" className="hover:text-gray-400">Staff Report</a></li>
     <li className="py-2"><a href="#" className="hover:text-gray-400">Fees Report</a></li>
     <li className="py-2"><a href="#" className="hover:text-gray-400">Accounts Report</a></li>
+    <li className="py-2">
+    <a href="/settings" className="hover:text-gray-400">Settings</a>
+  </li>  
   </ul>
 </ul>
 

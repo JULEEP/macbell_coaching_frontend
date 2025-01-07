@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { FiMenu } from "react-icons/fi"; // Import menu icon for mobile
 import { FaBars, FaTimes } from "react-icons/fa"; // Mobile sidebar toggle icons
 import StudentSidebar from "../Sidebar"; // Import the StudentSidebar component
 
 const ResultPage = () => {
-  const [marks, setMarks] = useState([]);
+  const [marks, setMarks] = useState(null); // Adjusted to handle nested API response
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false); // State for mobile sidebar toggle
@@ -67,65 +66,79 @@ const ResultPage = () => {
           </button>
         </div>
 
-        {/* Title */}
+        {/* Student Details */}
+        {marks && (
+          <div className="bg-white shadow-md rounded-xl p-6 mb-6">
+            <h2 className="text-xl font-medium text-gray-700 mb-4">Student Details</h2>
+            <p className="text-gray-600">
+              <strong>Name:</strong> {marks.student.firstName} {marks.student.lastName}
+            </p>
+            <p className="text-gray-600">
+              <strong>Class:</strong> {marks.student.class} {marks.student.section}
+            </p>
+            <p className="text-gray-600">
+              <strong>Roll:</strong> {marks.student.roll}
+            </p>
+            <p className="text-gray-600">
+              <strong>Father's Name:</strong> {marks.student.fatherName}
+            </p>
+            <p className="text-gray-600">
+              <strong>Mother's Name:</strong> {marks.student.motherName}
+            </p>
+            <p className="text-gray-600">
+              <strong>Overall Percentage:</strong> {marks.overallPercentage}%
+            </p>
+            <p className="text-gray-600">
+              <strong>Status:</strong> {marks.overallStatus}
+            </p>
+          </div>
+        )}
 
         {/* Result Section */}
         <div className="bg-white shadow-md rounded-xl p-6">
-          <h2 className="text-xl font-medium text-gray-700 mb-4">Result List</h2>
+          <h2 className="text-xl font-medium text-gray-700 mb-4">Subject Results</h2>
           <div className="overflow-x-auto">
             <table className="w-full border-collapse bg-gray-50 rounded-lg">
               <thead>
                 <tr className="text-left text-gray-600 border-b">
                   <th className="py-3 px-4">Subject</th>
-                  <th className="py-3 px-4">Exam Date</th>
-                  <th className="py-3 px-4">Total Marks</th>
                   <th className="py-3 px-4">Marks Obtained</th>
-                  <th className="py-3 px-4">Result</th>
+                  <th className="py-3 px-4">Total Marks</th>
+                  <th className="py-3 px-4">Percentage</th>
+                  <th className="py-3 px-4">Grade</th>
                   <th className="py-3 px-4">Status</th>
                 </tr>
               </thead>
               <tbody>
-                {marks.length > 0 ? (
-                  marks.map((mark) => (
-                    <tr key={mark._id}>
-                      <td className="py-3 px-4 text-gray-700">{mark.subject}</td>
+                {marks && marks.subjects.length > 0 ? (
+                  marks.subjects.map((subject, index) => (
+                    <tr key={index}>
+                      <td className="py-3 px-4 text-gray-700">{subject.subject}</td>
+                      <td className="py-3 px-4 text-gray-700">{subject.marksObtained}</td>
+                      <td className="py-3 px-4 text-gray-700">{subject.totalMarks}</td>
+                      <td className="py-3 px-4 text-gray-700">{subject.percentage}%</td>
+                      <td className="py-3 px-4 text-gray-700">{subject.grade}</td>
                       <td className="py-3 px-4 text-gray-700">
-                        {new Date(mark.examDate).toLocaleDateString()}
-                      </td>
-                      <td className="py-3 px-4 text-gray-700">{mark.totalMarks}</td>
-                      <td className="py-3 px-4 text-gray-700">{mark.marksObtained}</td>
-                      <td className="py-3 px-4 text-gray-700">
-                        {mark.marksObtained >= mark.totalMarks / 2 ? "Pass" : "Fail"}
-                      </td>
-                      <td className="py-3 px-4 text-gray-700">
-                        {mark.marksObtained >= mark.totalMarks / 2 ? (
-                          <span className="text-green-500">Passed</span>
-                        ) : (
-                          <span className="text-red-500">Failed</span>
-                        )}
+                        <span className={subject.status === "Pass" ? "text-green-500" : "text-red-500"}>
+                          {subject.status}
+                        </span>
                       </td>
                     </tr>
                   ))
                 ) : (
                   <tr>
                     <td className="py-3 px-4 text-center text-gray-600" colSpan="6">
-                      No Data Available In Table
+                      No Data Available
                     </td>
                   </tr>
                 )}
               </tbody>
             </table>
-            {/* Footer */}
-            <div className="mt-4 text-sm text-gray-600">
-              {marks.length > 0
-                ? `Showing 1 to ${marks.length} of ${marks.length} entries`
-                : "No data to show"}
-            </div>
           </div>
         </div>
 
         {/* Error Message */}
-        {error && <p className="text-red-500">{error}</p>}
+        {error && <p className="text-red-500 mt-4">{error}</p>}
       </div>
     </div>
   );

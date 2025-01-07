@@ -1,68 +1,41 @@
 import React, { useState, useEffect } from "react";
-import { FiMenu } from "react-icons/fi"; // Import menu icon for mobile
 import { FaBars, FaTimes } from "react-icons/fa"; // Mobile sidebar icons
 import StudentSidebar from "../Sidebar"; // Import the StudentSidebar component
 
-const ExamRoutinePage = () => {
-  const [examSchedule, setExamSchedule] = useState([]);
+const DailyRoutinePage = () => {
+  const [routine, setRoutine] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false); // State for mobile sidebar toggle
 
   const studentId = "676cf56dfd1eb1caa8426205"; // Static studentId (could be dynamic based on context)
 
-  // Fetch exam schedule when component mounts
+  // Fetch daily routine when component mounts
   useEffect(() => {
-    const fetchExamSchedule = async () => {
+    const fetchRoutine = async () => {
       setLoading(true);
       setError(""); // Reset error message
       try {
-        // Fetch the exam schedule for the student
+        // Fetch the daily routine for the student
         const response = await fetch(
-          `https://school-backend-1-2xki.onrender.com/api/students/get-exam-schedule/${studentId}`
+          `https://school-backend-1-2xki.onrender.com/api/students/get-routine/${studentId}`
         );
         const data = await response.json();
 
         if (response.ok) {
-          setExamSchedule(data.examSchedules || []); // Ensure it's an empty array if not set
+          setRoutine(data.routine || []); // Ensure it's an empty array if not set
         } else {
-          setError(data.message || "Error fetching exam schedule");
+          setError(data.message || "Error fetching routine");
         }
       } catch (err) {
-        setError("An error occurred while fetching the exam schedule");
+        setError("An error occurred while fetching the routine");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchExamSchedule();
+    fetchRoutine();
   }, []);
-
-  // Handle Admit Card download
-  const handleDownload = async () => {
-    try {
-      const response = await fetch(
-        `https://school-backend-1-2xki.onrender.com/api/students/get-admit-card/${studentId}`
-      );
-
-      if (!response.ok) {
-        const result = await response.json();
-        setError(result.message || "Failed to download admit card");
-        return;
-      }
-
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = `Admit_Card_${studentId}.pdf`;
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-    } catch (err) {
-      setError("Error downloading admit card");
-    }
-  };
 
   // Toggle Sidebar for Mobile View
   const toggleSidebar = () => setIsSidebarOpen((prev) => !prev);
@@ -70,7 +43,6 @@ const ExamRoutinePage = () => {
   return (
     <div className="min-h-screen flex bg-gray-100">
       {/* Sidebar and Menu Icon */}
-    
 
       {/* Sidebar Overlay */}
       <div
@@ -86,65 +58,37 @@ const ExamRoutinePage = () => {
       </div>
 
       {/* Main Content */}
-           <div className="flex-grow overflow-y-auto lg:ml-64">
-             {/* Header for Mobile */}
-             <div className="flex items-center justify-between bg-purple-700 text-white p-4 shadow-lg lg:hidden">
-               <h1 className="text-lg font-bold">Class Routine</h1>
-               <button onClick={toggleSidebar} className="text-2xl focus:outline-none">
-                 {isSidebarOpen ? <FaTimes /> : <FaBars />}
-               </button>
-             </div>
-
-        {/* Heading */}
+      <div className="flex-grow overflow-y-auto lg:ml-64">
+        {/* Header for Mobile */}
+        <div className="flex items-center justify-between bg-purple-700 text-white p-4 shadow-lg lg:hidden">
+          <h1 className="text-lg font-bold">Daily Routine</h1>
+          <button onClick={toggleSidebar} className="text-2xl focus:outline-none">
+            {isSidebarOpen ? <FaTimes /> : <FaBars />}
+          </button>
+        </div>
 
         {/* Error Message */}
         {error && <p className="text-red-500 mt-4">{error}</p>}
 
-        {/* Download Button */}
-        {examSchedule.length > 0 && (
-          <button
-            className="mb-4 mt-8 ml-2 px-4 py-2 bg-purple-500 text-white rounded-md hover:bg-blue-600"
-            onClick={handleDownload}
-          >
-            Download Admit Card
-          </button>
-        )}
-
-        {/* Exam Schedule Table */}
-        {examSchedule.length > 0 ? (
+        {/* Routine Table */}
+        {routine.length > 0 ? (
           <div className="bg-white shadow-md rounded-xl p-6">
-            <h2 className="text-xl font-medium text-gray-700 mb-4">Exam Schedule</h2>
+            <h2 className="text-xl font-medium text-gray-700 mb-4">Daily Routine</h2>
             <div className="overflow-x-auto">
               <table className="w-full border-collapse bg-gray-50 rounded-lg">
                 <thead>
                   <tr className="text-left text-gray-600 border-b">
-                    <th className="py-3 px-4">Exam Title</th>
-                    <th className="py-3 px-4">Class</th>
-                    <th className="py-3 px-4">Section</th>
+                    <th className="py-3 px-4">Day</th>
+                    <th className="py-3 px-4">Time</th>
                     <th className="py-3 px-4">Subject</th>
-                    <th className="py-3 px-4">Exam Date</th>
-                    <th className="py-3 px-4">Start Time</th>
-                    <th className="py-3 px-4">End Time</th>
-                    <th className="py-3 px-4">Exam Type</th>
-                    <th className="py-3 px-4">Admit Card Generated</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {examSchedule.map((exam) => (
-                    <tr key={exam._id}>
-                      <td className="py-3 px-4 text-gray-700">{exam.examTitle}</td>
-                      <td className="py-3 px-4 text-gray-700">{exam.class}</td>
-                      <td className="py-3 px-4 text-gray-700">{exam.section}</td>
-                      <td className="py-3 px-4 text-gray-700">{exam.subject}</td>
-                      <td className="py-3 px-4 text-gray-700">
-                        {new Date(exam.examDate).toLocaleDateString()}
-                      </td>
-                      <td className="py-3 px-4 text-gray-700">{exam.startTime}</td>
-                      <td className="py-3 px-4 text-gray-700">{exam.endTime}</td>
-                      <td className="py-3 px-4 text-gray-700">{exam.examType}</td>
-                      <td className="py-3 px-4 text-gray-700">
-                        {exam.isAdmitCardGenerated ? "Yes" : "No"}
-                      </td>
+                  {routine.map((entry) => (
+                    <tr key={entry._id}>
+                      <td className="py-3 px-4 text-gray-700">{entry.day}</td>
+                      <td className="py-3 px-4 text-gray-700">{entry.time}</td>
+                      <td className="py-3 px-4 text-gray-700">{entry.subject}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -152,14 +96,14 @@ const ExamRoutinePage = () => {
             </div>
           </div>
         ) : (
-          !loading && <p className="text-gray-500">No exam schedule found.</p>
+          !loading && <p className="text-gray-500">No routine found.</p>
         )}
 
         {/* Loading Message */}
-        {loading && <p className="text-gray-500">Loading exam schedule...</p>}
+        {loading && <p className="text-gray-500">Loading routine...</p>}
       </div>
     </div>
   );
 };
 
-export default ExamRoutinePage;
+export default DailyRoutinePage;

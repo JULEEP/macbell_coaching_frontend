@@ -15,21 +15,22 @@ import { Link } from "react-router-dom"; // For navigation
 import StudentSidebar from "../Sidebar";
 
 // Importing images
-import exam from "../Images/exam.jpeg";
-import attendance from "../Images/attendance.jpeg";
 import student from "../Images/student.jpeg";
-import subject from "../Images/subject.jpeg";
-import teacher from "../Images/teacher.jpeg";
-import notice from "../Images/notice.jpeg";
 
-const book = "https://static.vecteezy.com/system/resources/previews/003/812/674/large_2x/pink-book-closed-free-vector.jpg";
-const transport = "https://static.vecteezy.com/system/resources/previews/002/373/903/large_2x/cartoon-school-bus-with-children-free-vector.jpg";
-const routine = 'https://i.pinimg.com/originals/c4/46/bb/c446bbb1d23caacb5c52992aa49492d4.png';
-const result = 'https://static.vecteezy.com/system/resources/previews/026/994/790/non_2x/exam-concept-education-studying-digital-elearnning-degree-graduate-concept-tiny-girl-student-with-test-exam-result-modern-flat-cartoon-style-illustration-on-white-background-vector.jpg';
+const book = "https://media1.tenor.com/images/107e39e6cccecb07771733a383291bd9/tenor.gif?itemid=12632259";
+const transport = "https://i.gifer.com/Wdf9.gif";
+const routine = 'https://www.bing.com/th/id/OGC.59346b4b5c80cc5cf0c483a27dfdcb36?pid=1.7&rurl=https%3a%2f%2fcdn.dribbble.com%2fusers%2f1129235%2fscreenshots%2f3344482%2fgif03.gif&ehk=681MYbrM%2fq597jBw5ssf54CgRSsfohettd%2fV%2fTKmT%2bs%3d';
+const result = 'https://www.bing.com/th/id/OGC.f536b251e81ef82960690777ee76d243?pid=1.7&rurl=https%3a%2f%2fi.pinimg.com%2foriginals%2f80%2f04%2fe7%2f8004e78d9a4d63d94f3cff837e27790c.gif&ehk=CismETbhBNRq0HUnf6OoZs2GFprNe%2fl7vs6XwOpk%2bTY%3d';
+const subject = 'https://media.baamboozle.com/uploads/images/398004/1652344734_36162_gif-url.gif';
+const teacher = 'https://cdn.pixabay.com/animation/2022/11/13/07/16/07-16-26-181_512.gif';
+const homework = 'https://cdn.dribbble.com/users/4241563/screenshots/11874468/lottie-santi-daksa-project03.gif';
+const notice = 'https://i.pinimg.com/originals/fb/11/55/fb1155591460c455edf3ced130b127b9.gif';
+const exam = 'https://cdn.dribbble.com/users/957210/screenshots/2475142/untitled-2.gif';
+const attendance = 'https://cdn.dribbble.com/users/1244169/screenshots/4494753/attendance_final.gif';
 
 const bestCategories = [
   { img: subject, name: "Subjects", link: "/student-subject-details" },
-  { img: student, name: "Homeworks", link: "/student-homework" },
+  { img: homework, name: "Homeworks", link: "/student-homework" },
   { img: exam, name: "Exams", link: "/student-exam-routine" },
   { img: teacher, name: "Teachers", link: "/student-teacher-list" },
   { img: attendance, name: "Attendance", link: "/student-attendance" },
@@ -66,7 +67,7 @@ const StudentDashboard = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-100 flex">
+    <div className="min-h-screen bg-pink-100 flex">
       {/* Sidebar */}
       <div
         className={`fixed md:static inset-y-0 left-0 bg-white shadow-lg transform ${
@@ -100,7 +101,7 @@ const StudentDashboard = () => {
           style={{
             padding: "20px",
             textAlign: "center",
-            backgroundColor: "#e0c8a0",
+            backgroundColor: "#add8e6", // Light blue color
             marginTop: "12px",
           }}
         >
