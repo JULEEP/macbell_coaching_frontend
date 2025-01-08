@@ -157,7 +157,6 @@ const toggleWalletDropdown = () => {
         <Link to="/Admin-dashboard" className="hover:text-gray-400">
           <li className="py-2 flex items-center"><FaHome className="w-5 h-5 mr-2" /><a href="#" className="hover:text-gray-400">Dashboard</a></li>
           </Link>
-          <li className="text-lg mt-2 pb-2">Sidebar Manager</li>
         </ul>
 
         {/* Sidebar Manager Section */}
@@ -458,7 +457,7 @@ const toggleWalletDropdown = () => {
           <Link to="/bankpayment" className="hover:text-gray-400">
           <li className="py-2"><a href="#" className="hover:text-gray-400">Bank Payment</a></li>
           </Link>
-          <Link to="/classroutine" className="hover:text-gray-400">
+          <Link to="/coming-soon" className="hover:text-gray-400">
           <li className="py-2"><a href="#" className="hover:text-gray-400">Fees Carry Forward</a></li>
           </Link>
         </ul>
@@ -474,25 +473,25 @@ const toggleWalletDropdown = () => {
     </li>
     {isBehaviourDropdownOpen && (
       <ul className="ml-6 mt-2">
-      <Link to="/classroutine" className="hover:text-gray-400">
+      <Link to="/coming-soon" className="hover:text-gray-400">
         <li className="py-2"><a href="#" className="hover:text-gray-400">Incidents</a></li>
         </Link>
-        <Link to="/classroutine" className="hover:text-gray-400">
+        <Link to="/coming-soon" className="hover:text-gray-400">
         <li className="py-2"><a href="#" className="hover:text-gray-400">Assign Incident</a></li>
         </Link>
-        <Link to="/classroutine" className="hover:text-gray-400">
+        <Link to="/coming-soon" className="hover:text-gray-400">
         <li className="py-2"><a href="#" className="hover:text-gray-400">Student Incident Report</a></li>
         </Link>
-        <Link to="/classroutine" className="hover:text-gray-400">
+        <Link to="/coming-soon" className="hover:text-gray-400">
         <li className="py-2"><a href="#" className="hover:text-gray-400">Behaviour Report</a></li>
         </Link>
-        <Link to="/classroutine" className="hover:text-gray-400">
+        <Link to="/coming-soon" className="hover:text-gray-400">
         <li className="py-2"><a href="#" className="hover:text-gray-400">Class Section Report</a></li>
         </Link>
-        <Link to="/classroutine" className="hover:text-gray-400">
+        <Link to="/coming-soon" className="hover:text-gray-400">
         <li className="py-2"><a href="#" className="hover:text-gray-400">Incident Wise Report</a></li>
         </Link>
-        <Link to="/classroutine" className="hover:text-gray-400">
+        <Link to="/coming-soon" className="hover:text-gray-400">
         <li className="py-2"><a href="#" className="hover:text-gray-400">Settings</a></li>
         </Link>
       </ul>
@@ -515,7 +514,7 @@ const toggleWalletDropdown = () => {
       <Link to="/homeworklist" className="hover:text-gray-400">
       <li className="py-2"><a href="#" className="hover:text-gray-400">Homework List</a></li>
       </Link>
-      <Link to="/homeworklist" className="hover:text-gray-400">
+      <Link to="/coming-soon" className="hover:text-gray-400">
       <li className="py-2"><a href="#" className="hover:text-gray-400">Homework Report</a></li>
       </Link>
     </ul>
@@ -590,13 +589,13 @@ const toggleWalletDropdown = () => {
 </li>
 {isDormitoryDropdownOpen && (
   <ul className="ml-6 mt-2">
-  <Link to="/classroutine" className="hover:text-gray-400">
+  <Link to="/coming-soon" className="hover:text-gray-400">
     <li className="py-2"><a href="#" className="hover:text-gray-400">Dormitory Rooms</a></li>
     </Link>
-    <Link to="/classroutine" className="hover:text-gray-400">
+    <Link to="/coming-soon" className="hover:text-gray-400">
     <li className="py-2"><a href="#" className="hover:text-gray-400">Dormitory</a></li>
     </Link>
-    <Link to="/classroutine" className="hover:text-gray-400">
+    <Link to="/coming-soon" className="hover:text-gray-400">
     <li className="py-2"><a href="#" className="hover:text-gray-400">Room Type</a></li>
     </Link>
   </ul>
@@ -676,13 +675,13 @@ const toggleWalletDropdown = () => {
     </li>
     {isOnlineExamDropdownOpen && (
       <ul className="ml-6 mt-2">
-      <Link to="/classroutine" className="hover:text-gray-400">
+      <Link to="/coming-soon" className="hover:text-gray-400">
         <li className="py-2"><a href="#" className="hover:text-gray-400">Question Group</a></li>
         </Link>
-        <Link to="/classroutine" className="hover:text-gray-400">
+        <Link to="/coming-soon" className="hover:text-gray-400">
         <li className="py-2"><a href="#" className="hover:text-gray-400">Question Bank</a></li>
         </Link>
-        <Link to="/classroutine" className="hover:text-gray-400">
+        <Link to="/coming-soon" className="hover:text-gray-400">
         <li className="py-2"><a href="#" className="hover:text-gray-400">Online Exam</a></li>
         </Link>
       </ul>
@@ -736,16 +735,16 @@ const toggleWalletDropdown = () => {
       </li>
       {isTeacherEvalDropdownOpen && (
         <ul className="ml-6 mt-2">
-        <Link to="/approvalleave" className="hover:text-gray-400">
+        <Link to="/coming-soon" className="hover:text-gray-400">
           <li className="py-2"><a href="#" className="hover:text-gray-400">Approved Report</a></li>
           </Link>
-          <Link to="/pendingleave" className="hover:text-gray-400">
+          <Link to="/coming-soon" className="hover:text-gray-400">
           <li className="py-2"><a href="#" className="hover:text-gray-400">Pending Report</a></li>
           </Link>
-          <Link to="/classroutine" className="hover:text-gray-400">
+          <Link to="/coming-soon" className="hover:text-gray-400">
           <li className="py-2"><a href="#" className="hover:text-gray-400">Teacher Wise Report</a></li>
           </Link>
-          <Link to="/classroutine" className="hover:text-gray-400">
+          <Link to="/coming-soon" className="hover:text-gray-400">
           <li className="py-2"><a href="#" className="hover:text-gray-400">Settings</a></li>
           </Link>
         </ul>
@@ -765,7 +764,7 @@ const toggleWalletDropdown = () => {
       <Link to="/approvalleave" className="hover:text-gray-400">
         <li className="py-2"><a href="#" className="hover:text-gray-400">Apply Leave</a></li>
         </Link>
-        <Link to="/approvalleave" className="hover:text-gray-400">
+        <Link to="/coming-soon" className="hover:text-gray-400">
         <li className="py-2"><a href="#" className="hover:text-gray-400">Approve Leave Request</a></li>
         </Link>
         <Link to="/pendingleave" className="hover:text-gray-400">
@@ -791,13 +790,13 @@ const toggleWalletDropdown = () => {
       </li>
       {isRolePermissionDropdownOpen && (
         <ul className="ml-6 mt-2">
-        <Link to="/classroutine" className="hover:text-gray-400">
+        <Link to="/coming-soon" className="hover:text-gray-400">
           <li className="py-2"><a href="#" className="hover:text-gray-400">Login Permission</a></li>
           </Link>
-          <Link to="/classroutine" className="hover:text-gray-400">
+          <Link to="/coming-soon" className="hover:text-gray-400">
           <li className="py-2"><a href="#" className="hover:text-gray-400">Role</a></li>
           </Link>
-          <Link to="/classroutine" className="hover:text-gray-400">
+          <Link to="/coming-soon" className="hover:text-gray-400">
           <li className="py-2"><a href="#" className="hover:text-gray-400">Due Fees Login Permission</a></li>
           </Link>
         </ul>
@@ -841,7 +840,7 @@ const toggleWalletDropdown = () => {
         <a href="#" className="hover:text-gray-400">Wallet Transaction</a>
       </li>
     </Link>
-    <Link to="/refund" className="hover:text-gray-400">
+    <Link to="/coming-soon" className="hover:text-gray-400">
       <li className="py-2">
         <a href="#" className="hover:text-gray-400">Refund Request</a>
       </li>
@@ -938,11 +937,21 @@ const toggleWalletDropdown = () => {
 </h2>
 <ul className="mt-4">
   <ul className="ml-6 mt-2">
-    <li className="py-2"><a href="#" className="hover:text-gray-400">Student Report</a></li>
-    <li className="py-2"><a href="#" className="hover:text-gray-400">Exam Report</a></li>
-    <li className="py-2"><a href="#" className="hover:text-gray-400">Staff Report</a></li>
-    <li className="py-2"><a href="#" className="hover:text-gray-400">Fees Report</a></li>
-    <li className="py-2"><a href="#" className="hover:text-gray-400">Accounts Report</a></li>
+  <li className="py-2">
+  <a href="/coming-soon" className="hover:text-gray-400">Student Report</a>
+</li>
+<li className="py-2">
+  <a href="/coming-soon" className="hover:text-gray-400">Exam Report</a>
+</li>
+<li className="py-2">
+  <a href="/coming-soon" className="hover:text-gray-400">Staff Report</a>
+</li>
+<li className="py-2">
+  <a href="/coming-soon" className="hover:text-gray-400">Fees Report</a>
+</li>
+<li className="py-2">
+  <a href="/coming-soon" className="hover:text-gray-400">Accounts Report</a>
+</li>
     <li className="py-2">
     <a href="/settings" className="hover:text-gray-400">Settings</a>
   </li>  

@@ -173,6 +173,8 @@ import MarksList from './Pages/MarksList'
 import AddStaffForm from './Pages/AddStaff';
 import StaffList from './Pages/StaffList';
 import Setting from './Pages/Setting';
+import ImageDisplay from './Pages/ComingSoon';
+import TeacherComingSoon from './Teacher/comingsoon';
 function App() {
   return (
     <Router> {/* Wrap everything in Router to enable routing */}        
@@ -319,6 +321,8 @@ function App() {
             <Route path="/staff" element={<AddStaffForm/>} />
             <Route path="/staffList" element={<StaffList/>} />
             <Route path="/settings" element={<Setting/>} />
+            <Route path="/coming-soon" element={<ImageDisplay/>} />
+
 
 
 
@@ -365,6 +369,8 @@ function App() {
           <Route path="/teacher-students" element={<TeacherStudentsPage/>} />
           <Route path="/teacher-marks" element={<TeacherMarks/>} />
           <Route path="/teacher-login" element={<TeacherLogin/>} />
+          <Route path="/teacher-coming-soon" element={<TeacherComingSoon/>} />
+
 
 
 

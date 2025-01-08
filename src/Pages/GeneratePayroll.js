@@ -121,20 +121,20 @@ const GeneratePayrollPage = () => {
             <tbody>
               {/* Sample rows of payroll */}
               <tr className="border-b hover:bg-gray-50">
-                <td className="px-4 py-2 text-sm text-gray-700">S001</td>
-                <td className="px-4 py-2 text-sm text-gray-700">John Doe</td>
-                <td className="px-4 py-2 text-sm text-gray-700">Teacher</td>
-                <td className="px-4 py-2 text-sm text-gray-700">January</td>
-                <td className="px-4 py-2 text-sm text-gray-700">2024</td>
-                <td className="px-4 py-2 text-sm text-gray-700">$3000</td>
+                <td className="px-4 py-2 text-sm text-gray-700 text-center">S001</td>
+                <td className="px-4 py-2 text-sm text-gray-700 text-center">John Doe</td>
+                <td className="px-4 py-2 text-sm text-gray-700 text-center">Teacher</td>
+                <td className="px-4 py-2 text-sm text-gray-700 text-center">January</td>
+                <td className="px-4 py-2 text-sm text-gray-700 text-center">2024</td>
+                <td className="px-4 py-2 text-sm text-gray-700 text-center">$3000</td>
               </tr>
               <tr className="border-b hover:bg-gray-50">
-                <td className="px-4 py-2 text-sm text-gray-700">S002</td>
-                <td className="px-4 py-2 text-sm text-gray-700">Jane Smith</td>
-                <td className="px-4 py-2 text-sm text-gray-700">Admin</td>
-                <td className="px-4 py-2 text-sm text-gray-700">February</td>
-                <td className="px-4 py-2 text-sm text-gray-700">2024</td>
-                <td className="px-4 py-2 text-sm text-gray-700">$2500</td>
+                <td className="px-4 py-2 text-sm text-gray-700 text-center">S002</td>
+                <td className="px-4 py-2 text-sm text-gray-700 text-center">Jane Smith</td>
+                <td className="px-4 py-2 text-sm text-gray-700 text-center">Admin</td>
+                <td className="px-4 py-2 text-sm text-gray-700 text-center">February</td>
+                <td className="px-4 py-2 text-sm text-gray-700 text-center">2024</td>
+                <td className="px-4 py-2 text-sm text-gray-700 text-center">$2500</td>
               </tr>
               {/* Add more payroll rows as needed */}
             </tbody>

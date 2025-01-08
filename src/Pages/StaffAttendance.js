@@ -89,18 +89,18 @@ const StaffAttendancePage = () => {
             <tbody>
               {/* Sample rows of staff attendance */}
               <tr className="border-b hover:bg-gray-50">
-                <td className="px-4 py-2 text-sm text-gray-700">S001</td>
-                <td className="px-4 py-2 text-sm text-gray-700">John Doe</td>
-                <td className="px-4 py-2 text-sm text-gray-700">Teacher</td>
-                <td className="px-4 py-2 text-sm text-gray-700">12/17/2024</td>
-                <td className="px-4 py-2 text-sm text-gray-700">Present</td>
+                <td className="px-4 py-2 text-sm text-gray-700 text-center">S001</td>
+                <td className="px-4 py-2 text-sm text-gray-700 text-center">John Doe</td>
+                <td className="px-4 py-2 text-sm text-gray-700 text-center">Teacher</td>
+                <td className="px-4 py-2 text-sm text-gray-700 text-center">12/17/2024</td>
+                <td className="px-4 py-2 text-sm text-gray-700 text-center">Present</td>
               </tr>
               <tr className="border-b hover:bg-gray-50">
-                <td className="px-4 py-2 text-sm text-gray-700">S002</td>
-                <td className="px-4 py-2 text-sm text-gray-700">Jane Smith</td>
-                <td className="px-4 py-2 text-sm text-gray-700">Admin</td>
-                <td className="px-4 py-2 text-sm text-gray-700">12/17/2024</td>
-                <td className="px-4 py-2 text-sm text-gray-700">Absent</td>
+                <td className="px-4 py-2 text-sm text-gray-700 text-center">S002</td>
+                <td className="px-4 py-2 text-sm text-gray-700 text-center">Jane Smith</td>
+                <td className="px-4 py-2 text-sm text-gray-700 text-center">Admin</td>
+                <td className="px-4 py-2 text-sm text-gray-700 text-center">12/17/2024</td>
+                <td className="px-4 py-2 text-sm text-gray-700 text-center">Absent</td>
               </tr>
               {/* Add more attendance rows as needed */}
             </tbody>

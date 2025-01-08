@@ -169,12 +169,6 @@ const SectionPage = () => {
                     <td className="px-4 py-2 text-gray-600 text-center">{section.name}</td>
                     <td className="px-4 py-2 text-gray-600 text-center">
                       <button
-                        onClick={() => handleEditSection(section._id)}
-                        className="text-blue-600 hover:text-blue-800 mr-4"
-                      >
-                        Edit
-                      </button>
-                      <button
                         onClick={() => handleRemoveSection(section._id)}
                         className="text-red-600 hover:text-red-800"
                       >

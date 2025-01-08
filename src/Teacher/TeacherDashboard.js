@@ -64,11 +64,11 @@ const TeacherDashboard = () => {
               { title: "Total Attendance", value: "98%", icon: <FaClipboardList className="text-3xl" />, link: "/teacher-attendance" },
               { title: "Total Leave", value: "12", icon: <FaPlaneDeparture className="text-3xl" />, link: "/teacher-leave" },
               { title: "Total Exams", value: "8", icon: <FaClipboardList className="text-3xl" />, link: "/teacher-marks" },
-              { title: "Total Subjects", value: "6", icon: <FaClipboardList className="text-3xl" />, link: "/teacher-dashboard" },
-              { title: "Total Projects", value: "5", icon: <FaTasks className="text-3xl" />, link: "/teacher-dashboard" },
-              { title: "Total Meetings", value: "15", icon: <FaPlaneDeparture className="text-3xl" />, link: "/teacher-dashboard" },
-              { title: "Total Reports", value: "22", icon: <FaTasks className="text-3xl" />, link: "/teacher-dashboard" },
-              { title: "Total Feedback", value: "30", icon: <FaClipboardList className="text-3xl" />, link: "/teacher-dashboard" },
+              { title: "Total Subjects", value: "6", icon: <FaClipboardList className="text-3xl" />, link: "/teacher-coming-soon" },
+              { title: "Total Projects", value: "5", icon: <FaTasks className="text-3xl" />, link: "/teacher-coming-soon" },
+              { title: "Total Meetings", value: "15", icon: <FaPlaneDeparture className="text-3xl" />, link: "/teacher-coming-soon" },
+              { title: "Total Reports", value: "22", icon: <FaTasks className="text-3xl" />, link: "/teacher-coming-soon" },
+              { title: "Total Feedback", value: "30", icon: <FaClipboardList className="text-3xl" />, link: "/teacher-coming-soon" },
             ].map((item, index) => (
               <NavLink
                 to={item.link}

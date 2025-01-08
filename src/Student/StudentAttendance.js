@@ -170,6 +170,8 @@ const StudentAttendanceList = () => {
                     <tr>
                       <th className="px-4 py-2 text-left text-gray-400">Date</th>
                       <th className="px-4 py-2 text-left text-gray-400">Attendance Status</th>
+                      <th className="px-4 py-2 text-left text-gray-400">Subject</th>
+
                     </tr>
                   </thead>
                   <tbody>
@@ -179,6 +181,8 @@ const StudentAttendanceList = () => {
                           {new Date(entry.date).toLocaleDateString()}
                         </td>
                         <td className="px-4 py-2 text-gray-600">{entry.attendanceStatus}</td>
+                        <td className="px-4 py-2 text-gray-600">{entry.subject}</td>
+
                       </tr>
                     ))}
                   </tbody>
