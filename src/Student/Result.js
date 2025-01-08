@@ -40,15 +40,35 @@ const ResultPage = () => {
 
   const downloadPDF = async () => {
     const element = marksheetRef.current;
+  
+    // Store the original styles
+    const originalOverflow = element.style.overflow;
+    const originalWidth = element.style.width;
+    const originalHeight = element.style.height;
+  
+    // Temporarily adjust the styles for full rendering
+    element.style.overflow = "visible";
+    element.style.width = "1000px"; // A4 size width
+    element.style.height = "auto"; // Let it expand naturally
+  
+    // Capture the content using html2canvas
     const canvas = await html2canvas(element, { scale: 2 });
+  
+    // Revert styles back to the original state
+    element.style.overflow = originalOverflow;
+    element.style.width = originalWidth;
+    element.style.height = originalHeight;
+  
+    // Generate the PDF
     const imgData = canvas.toDataURL("image/png");
     const pdf = new jsPDF("p", "mm", "a4");
     const pdfWidth = pdf.internal.pageSize.getWidth();
     const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-
+  
     pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
     pdf.save("Marksheet.pdf");
   };
+  
 
   if (loading) {
     return <div>Loading...</div>;
