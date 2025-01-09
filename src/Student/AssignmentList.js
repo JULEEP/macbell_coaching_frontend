@@ -95,7 +95,6 @@ const StudentAssignmentList = () => {
                 <th className="px-4 py-2 text-left text-gray-400">Date</th>
                 <th className="px-4 py-2 text-left text-gray-400">Available For</th>
                 <th className="px-4 py-2 text-left text-gray-400">Description</th>
-                <th className="px-4 py-2 text-left text-gray-400">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -110,9 +109,6 @@ const StudentAssignmentList = () => {
                     </td>
                     <td className="px-4 py-2 text-gray-600">{item.availableFor}</td>
                     <td className="px-4 py-2 text-gray-600">{item.description}</td>
-                    <td className="px-4 py-2 text-gray-600">
-                      <button className="text-blue-500 hover:underline">View</button>
-                    </td>
                   </tr>
                 ))
               ) : (

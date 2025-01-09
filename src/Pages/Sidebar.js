@@ -438,7 +438,7 @@ const toggleWalletDropdown = () => {
       {/* Fees Dropdown */}
       <li className="py-2 flex items-center cursor-pointer" onClick={toggleFeesDropdown}>
         <FaClipboardList className="w-5 h-5 mr-2" />
-        <span>Fees</span>
+        <span>Fees(Coming Soon)</span>
         <FaCaretDown className={`ml-2 transition-transform ${isFeesOpen ? 'rotate-180' : 'rotate-0'}`} />
       </li>
 
@@ -466,7 +466,7 @@ const toggleWalletDropdown = () => {
     <ul>
     <li className="py-2 flex items-center cursor-pointer" onClick={toggleBehaviourDropdown}>
       <FaBook className="w-5 h-5 mr-2" />
-      <span>Behaviour Records</span>
+      <span>Behaviour Records(Coming Soon)</span>
       <FaCaretDown
         className={`ml-2 transition-transform ${isBehaviourDropdownOpen ? 'rotate-180' : 'rotate-0'}`}
       />
@@ -515,7 +515,7 @@ const toggleWalletDropdown = () => {
       <li className="py-2"><a href="#" className="hover:text-gray-400">Homework List</a></li>
       </Link>
       <Link to="/coming-soon" className="hover:text-gray-400">
-      <li className="py-2"><a href="#" className="hover:text-gray-400">Homework Report</a></li>
+      <li className="py-2"><a href="#" className="hover:text-gray-400">Homework Report(Coming Soon)</a></li>
       </Link>
     </ul>
   )}
@@ -524,7 +524,7 @@ const toggleWalletDropdown = () => {
 {/* Library Section */}
 <li className="py-2 flex items-center cursor-pointer" onClick={toggleLibraryDropdown}>
   <FaBook className="w-5 h-5 mr-2" />
-  <span>Library</span>
+  <span>Library(Coming Soon)</span>
   <FaCaretDown
     className={`ml-2 transition-transform ${isLibraryDropdownOpen ? 'rotate-180' : 'rotate-0'}`}
   />
@@ -582,7 +582,7 @@ const toggleWalletDropdown = () => {
 {/* Dormitory Section */}
 <li className="py-2 flex items-center cursor-pointer" onClick={toggleDormitoryDropdown}>
   <FaFileAlt className="w-5 h-5 mr-2" />
-  <span>Dormitory</span>
+  <span>Dormitory(Coming Soon)</span>
   <FaCaretDown
     className={`ml-2 transition-transform ${isDormitoryDropdownOpen ? 'rotate-180' : 'rotate-0'}`}
   />
@@ -627,19 +627,19 @@ const toggleWalletDropdown = () => {
             <li className="py-2"><a href="#" className="hover:text-gray-400">Exam Schedule</a></li>
             </Link>
             <Link to="/examattendance" className="hover:text-gray-400">
-            <li className="py-2"><a href="#" className="hover:text-gray-400">Exam Attendance</a></li>
+            <li className="py-2"><a href="#" className="hover:text-gray-400">Exam Attendance(Coming Soon)</a></li>
             </Link>
             <Link to="/markregister" className="hover:text-gray-400">
-            <li className="py-2"><a href="#" className="hover:text-gray-400">Marks Register</a></li>
+            <li className="py-2"><a href="#" className="hover:text-gray-400">Marks Register(Coming Soon)</a></li>
             </Link>
             <Link to="/marksgrade" className="hover:text-gray-400">
-            <li className="py-2"><a href="#" className="hover:text-gray-400">Marks Grade</a></li>
+            <li className="py-2"><a href="#" className="hover:text-gray-400">Marks Grade(Coming Soon)</a></li>
             </Link>
             <Link to="/sendmarksbysms" className="hover:text-gray-400">
-            <li className="py-2"><a href="#" className="hover:text-gray-400">Send Marks By SMS</a></li>
+            <li className="py-2"><a href="#" className="hover:text-gray-400">Send Marks By SMS(Coming Soon)</a></li>
             </Link>
             <Link to="/marksheetreport" className="hover:text-gray-400">
-            <li className="py-2"><a href="#" className="hover:text-gray-400">Marksheet Report</a></li>
+            <li className="py-2"><a href="#" className="hover:text-gray-400">Marksheet Report(Coming Soon)</a></li>
             </Link>
           </ul>
         )}
@@ -668,7 +668,7 @@ const toggleWalletDropdown = () => {
     {/* Online Exam Section */}
     <li className="py-2 flex items-center cursor-pointer" onClick={toggleOnlineExamDropdown}>
       <FaClipboardList className="w-5 h-5 mr-2" />
-      <span>Online Exam</span>
+      <span>Online Exam(Coming Soon)</span>
       <FaCaretDown
         className={`ml-2 transition-transform ${isOnlineExamDropdownOpen ? 'rotate-180' : 'rotate-0'}`}
       />
@@ -690,13 +690,13 @@ const toggleWalletDropdown = () => {
   </ul>
 
         {/* HR Section */}
-        <h2 className="text-lg font-bold mt-6 pb-2 pl-2">HR</h2>
+        <h2 className="text-lg font-bold mt-6 pb-2 pl-2">HR(Coming Soon)</h2>
         <ul className="mt-4">
         <ul>
         {/* Human Resource Section */}
         <li className="py-2 flex items-center cursor-pointer" onClick={toggleHRDropdown}>
           <FaUsers className="w-5 h-5 mr-2" />
-          <span>Human Resource</span>
+          <span>Human Resource(Coming Soon)</span>
           <FaCaretDown
             className={`ml-2 transition-transform ${isHRDropdownOpen ? 'rotate-180' : 'rotate-0'}`}
           />
@@ -806,14 +806,14 @@ const toggleWalletDropdown = () => {
 
      {/* Accounts Section */}
      <h2 className="text-lg font mt-6 pb-2 pl-2 flex items-center">
-     <FaWallet className="w-5 h-5 mr-2" /> Accounts
+     <FaWallet className="w-5 h-5 mr-2" /> Accounts(Coming Soon)
    </h2>
    <ul className="mt-4">
   <ul className="ml-6 mt-2">
 {/* Wallet Section */}
 <li className="py-2 flex items-center cursor-pointer" onClick={toggleWalletDropdown}>
   <FaWallet className="w-5 h-5 mr-2" />
-  <span>Wallet</span>
+  <span>Wallet(Coming Soon)</span>
   <FaCaretDown
     className={`ml-2 transition-transform ${isWalletDropdownOpen ? 'rotate-180' : 'rotate-0'}`}
   />
@@ -850,7 +850,7 @@ const toggleWalletDropdown = () => {
 {/* Accounts Section */}
 <li className="py-2 flex items-center cursor-pointer" onClick={toggleAccountsDropdown}>
   <FaBook className="w-5 h-5 mr-2" />
-  <span>Accounts</span>
+  <span>Accounts(Coming Soon)</span>
   <FaCaretDown
     className={`ml-2 transition-transform ${isAccountsDropdownOpen ? 'rotate-180' : 'rotate-0'}`}
   />
@@ -895,7 +895,7 @@ const toggleWalletDropdown = () => {
 
 {/* Utilities Section */}
 <h2 className="text-lg font mt-6 pb-2 pl-2 flex items-center">
-  <FaCog className="w-5 h-5 mr-2" /> Utilities
+  <FaCog className="w-5 h-5 mr-2" /> Utilities(Coming Soon)
 </h2>
 <ul className="mt-4">
   <ul className="ml-6 mt-2">
@@ -926,14 +926,14 @@ const toggleWalletDropdown = () => {
     </Link>
   </ul>
 )}
-    <li className="py-2"><a href="#" className="hover:text-gray-400">Communicate</a></li>
-    <li className="py-2"><a href="#" className="hover:text-gray-400">Style</a></li>
+    <li className="py-2"><a href="#" className="hover:text-gray-400">Communicate(Coming Soon)</a></li>
+    <li className="py-2"><a href="#" className="hover:text-gray-400">Style(Coming Soon)</a></li>
   </ul>
 </ul>
 
 {/* Report Section */}
 <h2 className="text-lg font mt-6 pb-2 pl-2 flex items-center">
-  <FaChartBar className="w-5 h-5 mr-2" /> Report
+  <FaChartBar className="w-5 h-5 mr-2" /> Report(Coming Soon)
 </h2>
 <ul className="mt-4">
   <ul className="ml-6 mt-2">

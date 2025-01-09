@@ -41,35 +41,75 @@ const ResultPage = () => {
   const downloadPDF = async () => {
     const element = marksheetRef.current;
   
-    // Store the original styles
+    // Save original styles
     const originalOverflow = element.style.overflow;
     const originalWidth = element.style.width;
     const originalHeight = element.style.height;
   
-    // Temporarily adjust the styles for full rendering
+    // Temporarily adjust styles for rendering
     element.style.overflow = "visible";
     element.style.width = "1000px"; // A4 size width
-    element.style.height = "auto"; // Let it expand naturally
+    element.style.height = "auto";
   
-    // Capture the content using html2canvas
-    const canvas = await html2canvas(element, { scale: 2 });
+    try {
+      // Capture the content using html2canvas
+      const canvas = await html2canvas(element, { scale: 2 });
   
-    // Revert styles back to the original state
-    element.style.overflow = originalOverflow;
-    element.style.width = originalWidth;
-    element.style.height = originalHeight;
+      // Restore original styles
+      element.style.overflow = originalOverflow;
+      element.style.width = originalWidth;
+      element.style.height = originalHeight;
   
-    // Generate the PDF
-    const imgData = canvas.toDataURL("image/png");
-    const pdf = new jsPDF("p", "mm", "a4");
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+      // Convert content to image
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF("p", "mm", "a4");
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
   
-    pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-    pdf.save("Marksheet.pdf");
+      // Add content image to the PDF
+      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+  
+      // Add the logo in the top-right corner
+      const logoUrl = "https://res.cloudinary.com/dokfnv3vy/image/upload/v1736084543/custom/yhbii0wbedftmpvlpnon.jpg";
+  
+      try {
+        const response = await fetch(logoUrl, { mode: "cors" }); // Ensure CORS is enabled
+        if (!response.ok) {
+          throw new Error(`Failed to fetch the logo. Status: ${response.status}`);
+        }
+        const blob = await response.blob();
+        const logoBase64 = await new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onloadend = () => resolve(reader.result);
+          reader.onerror = reject;
+          reader.readAsDataURL(blob);
+        });
+  
+        // Logo dimensions
+        const logoWidth = 20; // mm
+        const logoHeight = 20; // mm
+  
+        // Add the logo to the PDF
+        pdf.addImage(
+          logoBase64,
+          "PNG",
+          pdfWidth - logoWidth - 10, // Top-right position
+          4, // Margin from top
+          logoWidth,
+          logoHeight
+        );
+      } catch (logoError) {
+        console.error("Error adding the logo to the PDF:", logoError);
+      }
+  
+      // Save the PDF
+      pdf.save("Marksheet.pdf");
+    } catch (error) {
+      console.error("Error generating the PDF:", error);
+    }
   };
   
-
+  
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -112,10 +152,8 @@ const ResultPage = () => {
             className="bg-white shadow-md rounded-xl p-8 my-6"
           >
             <div className="text-center border-b pb-4">
-              <h1 className="text-3xl font-bold text-purple-700">Marksheet</h1>
-              <p className="text-gray-500">
-                Academic Year: 2023-24 | Student ID: {studentId}
-              </p>
+              <h1 className="text-3xl font-bold text-purple-700">I Start School</h1>
+              <p className="text-gray-500">Academic Year: 2023-24</p>
             </div>
             <div className="mt-6">
               <h2 className="text-lg font-medium text-gray-700 mb-4">
