@@ -288,10 +288,6 @@ const StudentSidebar = () => {
               }`
             }
           >
-            <div className="bg-blue-500 text-white p-2 rounded-full">
-              <FaBus />
-            </div>
-            <span className="ml-3 text-black">Transport</span>
           </NavLink>
         </li>
       </ul>

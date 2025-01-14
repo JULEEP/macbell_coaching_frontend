@@ -83,7 +83,7 @@ const Setting = () => {
 
       <div className="min-h-screen flex flex-col items-center bg-gray-50 py-10 w-full px-5">
         <div className="bg-white p-8 ml-40 rounded-lg shadow-lg w-full max-w-4xl">
-          <h2 className="text-2xl font-bold text-gray-700 mb-6">School Details</h2>
+          <h2 className="text-2xl font-bold text-gray-700 mb-6">Coaching Details</h2>
 
           {/* Success/Error Message */}
           {successMessage && (
@@ -98,7 +98,7 @@ const Setting = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {/* School Name */}
               <div>
-                <label className="block text-gray-600">School Name</label>
+                <label className="block text-gray-600">Coaching Name</label>
                 <input
                   type="text"
                   value={schoolName}
@@ -145,7 +145,7 @@ const Setting = () => {
 
               {/* Description */}
               <div>
-                <label className="block text-gray-600">School Description</label>
+                <label className="block text-gray-600">Coaching Description</label>
                 <textarea
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
@@ -176,7 +176,7 @@ const Setting = () => {
 
               {/* School Image Upload */}
               <div className="col-span-1 sm:col-span-2 lg:col-span-3">
-                <label className="block text-gray-600">Upload School Image</label>
+                <label className="block text-gray-600">Upload Coaching Image</label>
                 <input
                   type="file"
                   onChange={handleSchoolImageChange}

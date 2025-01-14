@@ -313,9 +313,9 @@ const Dashboard = () => {
 
               {/* Vehicles Section (Light Teal) */}
               <div className="bg-teal-100 p-4 shadow-md rounded-md">
-                <h2 className="font-semibold text-lg">Vehicles</h2>
-                <p className="text-gray-500">Total Vehicles</p>
-                <p className="text-2xl font-bold">4</p>
+                <h2 className="font-semibold text-lg">Fees</h2>
+                <p className="text-gray-500">Total</p>
+                <p className="text-2xl font-bold">4000</p>
               </div>
             </div>
           </div>

@@ -177,9 +177,6 @@ const toggleWalletDropdown = () => {
               Admission Query
             </Link>
           </li>
-          <Link to="/visitor" className="hover:text-gray-400">
-           <li className="py-2"><a href="#" className="hover:text-gray-400">Visitor Book</a></li>
-           </Link>
            <Link to="/teacher" className="hover:text-gray-400">
            <li className="py-2"><a href="#" className="hover:text-gray-400">Teacher List</a></li>
            </Link>
@@ -189,20 +186,11 @@ const toggleWalletDropdown = () => {
            <Link to="/complaint" className="hover:text-gray-400">
               <li className="py-2"><a href="#" className="hover:text-gray-400">Complaint</a></li>
               </Link>
-              <Link to="/postal" className="hover:text-gray-400">
-              <li className="py-2"><a href="#" className="hover:text-gray-400">Postal Receive</a></li>
-              </Link>
-              <Link to="/postalDispatch" className="hover:text-gray-400">
-              <li className="py-2"><a href="#" className="hover:text-gray-400">Postal Dispatch</a></li>
-              </Link>
               <Link to="/calllog" className="hover:text-gray-400">
               <li className="py-2"><a href="#" className="hover:text-gray-400">Phone Call Log</a></li>
               </Link>
               <Link to="/visitor" className="hover:text-gray-400">
               <li className="py-2"><a href="#" className="hover:text-gray-400">Admin Setup</a></li>
-              </Link>
-              <Link to="/cardList" className="hover:text-gray-400">
-              <li className="py-2"><a href="#" className="hover:text-gray-400">ID Card</a></li>
               </Link>
               <Link to="/certificate" className="hover:text-gray-400">
               <li className="py-2"><a href="#" className="hover:text-gray-400">Certificate</a></li>
@@ -428,9 +416,6 @@ const toggleWalletDropdown = () => {
             <Link to="/studentexport" className="hover:text-gray-400">
             <li className="py-2"><a href="#" className="hover:text-gray-400">Student Export</a></li>
             </Link>
-            <Link to="/sendmarksbysms" className="hover:text-gray-400">
-            <li className="py-2"><a href="#" className="hover:text-gray-400">SMS Sending Time</a></li>
-            </Link>
           </ul>
         )}
       </ul>
@@ -438,27 +423,18 @@ const toggleWalletDropdown = () => {
       {/* Fees Dropdown */}
       <li className="py-2 flex items-center cursor-pointer" onClick={toggleFeesDropdown}>
         <FaClipboardList className="w-5 h-5 mr-2" />
-        <span>Fees(Coming Soon)</span>
+        <span>Fees</span>
         <FaCaretDown className={`ml-2 transition-transform ${isFeesOpen ? 'rotate-180' : 'rotate-0'}`} />
       </li>
 
       {/* Dropdown Items */}
       {isFeesOpen && (
         <ul className="ml-6 mt-2">
-        <Link to="/feesgroup" className="hover:text-gray-400">
-          <li className="py-2"><a href="#" className="hover:text-gray-400">Fees Group</a></li>
+        <Link to="/fees" className="hover:text-gray-400">
+          <li className="py-2"><a href="#" className="hover:text-gray-400">Add Fees</a></li>
           </Link>
-          <Link to="/feestype" className="hover:text-gray-400">
-          <li className="py-2"><a href="#" className="hover:text-gray-400">Fees Type</a></li>
-          </Link>
-          <Link to="/feesinvo" className="hover:text-gray-400">
-          <li className="py-2"><a href="#" className="hover:text-gray-400">Fees Invoice</a></li>
-          </Link>
-          <Link to="/bankpayment" className="hover:text-gray-400">
-          <li className="py-2"><a href="#" className="hover:text-gray-400">Bank Payment</a></li>
-          </Link>
-          <Link to="/coming-soon" className="hover:text-gray-400">
-          <li className="py-2"><a href="#" className="hover:text-gray-400">Fees Carry Forward</a></li>
+          <Link to="/fees-details" className="hover:text-gray-400">
+          <li className="py-2"><a href="#" className="hover:text-gray-400">Fees Record</a></li>
           </Link>
         </ul>
       )}
@@ -521,85 +497,6 @@ const toggleWalletDropdown = () => {
   )}
 </ul>
 <ul>
-{/* Library Section */}
-<li className="py-2 flex items-center cursor-pointer" onClick={toggleLibraryDropdown}>
-  <FaBook className="w-5 h-5 mr-2" />
-  <span>Library(Coming Soon)</span>
-  <FaCaretDown
-    className={`ml-2 transition-transform ${isLibraryDropdownOpen ? 'rotate-180' : 'rotate-0'}`}
-  />
-</li>
-{isLibraryDropdownOpen && (
-  <ul className="ml-6 mt-2">
-  <Link to="/addbook" className="hover:text-gray-400">
-    <li className="py-2"><a href="#" className="hover:text-gray-400">Add Book</a></li>
-    </Link>
-    <Link to="/booklist" className="hover:text-gray-400">
-    <li className="py-2"><a href="#" className="hover:text-gray-400">Book List</a></li>
-    </Link>
-    <Link to="/bookcategories" className="hover:text-gray-400">
-    <li className="py-2"><a href="#" className="hover:text-gray-400">Book Categories</a></li>
-    </Link>
-    <Link to="/addmember" className="hover:text-gray-400">
-    <li className="py-2"><a href="#" className="hover:text-gray-400">Add Member</a></li>
-    </Link>
-    <Link to="/issuebook" className="hover:text-gray-400">
-    <li className="py-2"><a href="#" className="hover:text-gray-400">Issue/Return Book</a></li>
-    </Link>
-    <Link to="/issuebooklist" className="hover:text-gray-400">
-    <li className="py-2"><a href="#" className="hover:text-gray-400">All Issued Book</a></li>
-    </Link>
-    <Link to="/subjectpage" className="hover:text-gray-400">
-    <li className="py-2"><a href="#" className="hover:text-gray-400">Subject</a></li>
-    </Link>
-  </ul>
-)}
-</ul>
-<ul>
-{/* Transport Section */}
-<li className="py-2 flex items-center cursor-pointer" onClick={toggleTransportDropdown}>
-  <FaDownload className="w-5 h-5 mr-2" />
-  <span>Transport</span>
-  <FaCaretDown
-    className={`ml-2 transition-transform ${isTransportDropdownOpen ? 'rotate-180' : 'rotate-0'}`}
-  />
-</li>
-{isTransportDropdownOpen && (
-  <ul className="ml-6 mt-2">
-  <Link to="/transport" className="hover:text-gray-400">
-    <li className="py-2"><a href="#" className="hover:text-gray-400">Routes</a></li>
-    </Link>
-    <Link to="/vehicle" className="hover:text-gray-400">
-    <li className="py-2"><a href="#" className="hover:text-gray-400">Vehicle</a></li>
-    </Link>
-    <Link to="/assignvehicle" className="hover:text-gray-400">
-    <li className="py-2"><a href="#" className="hover:text-gray-400">Assign Vehicle</a></li>
-    </Link>
-  </ul>
-)}
-</ul>
-<ul>
-{/* Dormitory Section */}
-<li className="py-2 flex items-center cursor-pointer" onClick={toggleDormitoryDropdown}>
-  <FaFileAlt className="w-5 h-5 mr-2" />
-  <span>Dormitory(Coming Soon)</span>
-  <FaCaretDown
-    className={`ml-2 transition-transform ${isDormitoryDropdownOpen ? 'rotate-180' : 'rotate-0'}`}
-  />
-</li>
-{isDormitoryDropdownOpen && (
-  <ul className="ml-6 mt-2">
-  <Link to="/coming-soon" className="hover:text-gray-400">
-    <li className="py-2"><a href="#" className="hover:text-gray-400">Dormitory Rooms</a></li>
-    </Link>
-    <Link to="/coming-soon" className="hover:text-gray-400">
-    <li className="py-2"><a href="#" className="hover:text-gray-400">Dormitory</a></li>
-    </Link>
-    <Link to="/coming-soon" className="hover:text-gray-400">
-    <li className="py-2"><a href="#" className="hover:text-gray-400">Room Type</a></li>
-    </Link>
-  </ul>
-)}
 </ul>
  </ul>
 
@@ -626,9 +523,6 @@ const toggleWalletDropdown = () => {
             <Link to="/examshedule" className="hover:text-gray-400">
             <li className="py-2"><a href="#" className="hover:text-gray-400">Exam Schedule</a></li>
             </Link>
-            <Link to="/examattendance" className="hover:text-gray-400">
-            <li className="py-2"><a href="#" className="hover:text-gray-400">Exam Attendance(Coming Soon)</a></li>
-            </Link>
             <Link to="/markregister" className="hover:text-gray-400">
             <li className="py-2"><a href="#" className="hover:text-gray-400">Marks Register(Coming Soon)</a></li>
             </Link>
@@ -646,83 +540,14 @@ const toggleWalletDropdown = () => {
       </ul>
       <ul>
       {/* Exam Plan Section */}
-      <li className="py-2 flex items-center cursor-pointer" onClick={toggleExamPlanDropdown}>
-        <FaListAlt className="w-5 h-5 mr-2" />
-        <span>Exam Plan</span>
-        <FaCaretDown
-          className={`ml-2 transition-transform ${isExamPlanDropdownOpen ? 'rotate-180' : 'rotate-0'}`}
-        />
-      </li>
-      {isExamPlanDropdownOpen && (
-        <ul className="ml-6 mt-2">
-        <Link to="/admitcard" className="hover:text-gray-400">
-          <li className="py-2"><a href="#" className="hover:text-gray-400">Admit Card</a></li>
-          </Link>
-          <Link to="/seatplan" className="hover:text-gray-400">
-          <li className="py-2"><a href="#" className="hover:text-gray-400">Seat Plan</a></li>
-          </Link>
-        </ul>
-      )}
     </ul>
     <ul>
-    {/* Online Exam Section */}
-    <li className="py-2 flex items-center cursor-pointer" onClick={toggleOnlineExamDropdown}>
-      <FaClipboardList className="w-5 h-5 mr-2" />
-      <span>Online Exam(Coming Soon)</span>
-      <FaCaretDown
-        className={`ml-2 transition-transform ${isOnlineExamDropdownOpen ? 'rotate-180' : 'rotate-0'}`}
-      />
-    </li>
-    {isOnlineExamDropdownOpen && (
-      <ul className="ml-6 mt-2">
-      <Link to="/coming-soon" className="hover:text-gray-400">
-        <li className="py-2"><a href="#" className="hover:text-gray-400">Question Group</a></li>
-        </Link>
-        <Link to="/coming-soon" className="hover:text-gray-400">
-        <li className="py-2"><a href="#" className="hover:text-gray-400">Question Bank</a></li>
-        </Link>
-        <Link to="/coming-soon" className="hover:text-gray-400">
-        <li className="py-2"><a href="#" className="hover:text-gray-400">Online Exam</a></li>
-        </Link>
-      </ul>
-    )}
   </ul>
   </ul>
 
         {/* HR Section */}
-        <h2 className="text-lg font-bold mt-6 pb-2 pl-2">HR(Coming Soon)</h2>
         <ul className="mt-4">
         <ul>
-        {/* Human Resource Section */}
-        <li className="py-2 flex items-center cursor-pointer" onClick={toggleHRDropdown}>
-          <FaUsers className="w-5 h-5 mr-2" />
-          <span>Human Resource(Coming Soon)</span>
-          <FaCaretDown
-            className={`ml-2 transition-transform ${isHRDropdownOpen ? 'rotate-180' : 'rotate-0'}`}
-          />
-        </li>
-        {isHRDropdownOpen && (
-          <ul className="ml-6 mt-2">
-          <Link to="/designation" className="hover:text-gray-400">
-            <li className="py-2"><a href="#" className="hover:text-gray-400">Designation</a></li>
-            </Link>
-            <Link to="/department" className="hover:text-gray-400">
-            <li className="py-2"><a href="#" className="hover:text-gray-400">Department</a></li>
-            </Link>
-            <Link to="/addnewstaff" className="hover:text-gray-400">
-            <li className="py-2"><a href="#" className="hover:text-gray-400">Add Staff</a></li>
-            </Link>
-            <Link to="/stafflist" className="hover:text-gray-400">
-            <li className="py-2"><a href="#" className="hover:text-gray-400">Staff Directory</a></li>
-            </Link>
-            <Link to="/staffattendance" className="hover:text-gray-400">
-            <li className="py-2"><a href="#" className="hover:text-gray-400">Staff Attendance</a></li>
-            </Link>
-            <Link to="/generatepayroll" className="hover:text-gray-400">
-            <li className="py-2"><a href="#" className="hover:text-gray-400">Payroll</a></li>
-            </Link>
-          </ul>
-        )}
       </ul>
       <ul>
       {/* Teacher Evaluation Section */}
@@ -751,185 +576,10 @@ const toggleWalletDropdown = () => {
       )}
     </ul>
     <ul>
-    {/* Leave Section */}
-    <li className="py-2 flex items-center cursor-pointer" onClick={toggleLeaveDropdown}>
-      <FaFileAlt className="w-5 h-5 mr-2" />
-      <span>Leave</span>
-      <FaCaretDown
-        className={`ml-2 transition-transform ${isLeaveDropdownOpen ? 'rotate-180' : 'rotate-0'}`}
-      />
-    </li>
-    {isLeaveDropdownOpen && (
-      <ul className="ml-6 mt-2">
-      <Link to="/approvalleave" className="hover:text-gray-400">
-        <li className="py-2"><a href="#" className="hover:text-gray-400">Apply Leave</a></li>
-        </Link>
-        <Link to="/coming-soon" className="hover:text-gray-400">
-        <li className="py-2"><a href="#" className="hover:text-gray-400">Approve Leave Request</a></li>
-        </Link>
-        <Link to="/pendingleave" className="hover:text-gray-400">
-        <li className="py-2"><a href="#" className="hover:text-gray-400">Pending Leave Request</a></li>
-        </Link>
-        <Link to="/leavedefine" className="hover:text-gray-400">
-        <li className="py-2"><a href="#" className="hover:text-gray-400">Leave Define</a></li>
-        </Link>
-        <Link to="/leavetype" className="hover:text-gray-400">
-        <li className="py-2"><a href="#" className="hover:text-gray-400">Leave Type</a></li>
-        </Link>
-      </ul>
-    )}
   </ul>
   <ul>
-      {/* Role & Permission Section */}
-      <li className="py-2 flex items-center cursor-pointer" onClick={toggleRolePermissionDropdown}>
-        <FaCog className="w-5 h-5 mr-2" />
-        <span>Role & Permission</span>
-        <FaCaretDown
-          className={`ml-2 transition-transform ${isRolePermissionDropdownOpen ? 'rotate-180' : 'rotate-0'}`}
-        />
-      </li>
-      {isRolePermissionDropdownOpen && (
-        <ul className="ml-6 mt-2">
-        <Link to="/coming-soon" className="hover:text-gray-400">
-          <li className="py-2"><a href="#" className="hover:text-gray-400">Login Permission</a></li>
-          </Link>
-          <Link to="/coming-soon" className="hover:text-gray-400">
-          <li className="py-2"><a href="#" className="hover:text-gray-400">Role</a></li>
-          </Link>
-          <Link to="/coming-soon" className="hover:text-gray-400">
-          <li className="py-2"><a href="#" className="hover:text-gray-400">Due Fees Login Permission</a></li>
-          </Link>
-        </ul>
-      )}
     </ul>
      </ul>
-
-     {/* Accounts Section */}
-     <h2 className="text-lg font mt-6 pb-2 pl-2 flex items-center">
-     <FaWallet className="w-5 h-5 mr-2" /> Accounts(Coming Soon)
-   </h2>
-   <ul className="mt-4">
-  <ul className="ml-6 mt-2">
-{/* Wallet Section */}
-<li className="py-2 flex items-center cursor-pointer" onClick={toggleWalletDropdown}>
-  <FaWallet className="w-5 h-5 mr-2" />
-  <span>Wallet(Coming Soon)</span>
-  <FaCaretDown
-    className={`ml-2 transition-transform ${isWalletDropdownOpen ? 'rotate-180' : 'rotate-0'}`}
-  />
-</li>
-{isWalletDropdownOpen && (
-  <ul className="ml-6 mt-2">
-    <Link to="/pending" className="hover:text-gray-400">
-      <li className="py-2">
-        <a href="#" className="hover:text-gray-400">Pending Deposit</a>
-      </li>
-    </Link>
-    <Link to="/approval" className="hover:text-gray-400">
-      <li className="py-2">
-        <a href="#" className="hover:text-gray-400">Approve Deposit</a>
-      </li>
-    </Link>
-    <Link to="/reject" className="hover:text-gray-400">
-      <li className="py-2">
-        <a href="#" className="hover:text-gray-400">Reject Deposit</a>
-      </li>
-    </Link>
-    <Link to="/refund" className="hover:text-gray-400">
-      <li className="py-2">
-        <a href="#" className="hover:text-gray-400">Wallet Transaction</a>
-      </li>
-    </Link>
-    <Link to="/coming-soon" className="hover:text-gray-400">
-      <li className="py-2">
-        <a href="#" className="hover:text-gray-400">Refund Request</a>
-      </li>
-    </Link>
-  </ul>
-)}
-{/* Accounts Section */}
-<li className="py-2 flex items-center cursor-pointer" onClick={toggleAccountsDropdown}>
-  <FaBook className="w-5 h-5 mr-2" />
-  <span>Accounts(Coming Soon)</span>
-  <FaCaretDown
-    className={`ml-2 transition-transform ${isAccountsDropdownOpen ? 'rotate-180' : 'rotate-0'}`}
-  />
-</li>
-{isAccountsDropdownOpen && (
-  <ul className="ml-6 mt-2">
-    <Link to="/profitloss" className="hover:text-gray-400">
-      <li className="py-2">
-        <a href="#" className="hover:text-gray-400">Profit & Loss</a>
-      </li>
-    </Link>
-    <Link to="/addincome" className="hover:text-gray-400">
-      <li className="py-2">
-        <a href="#" className="hover:text-gray-400">Income</a>
-      </li>
-    </Link>
-    <Link to="/addexpenses" className="hover:text-gray-400">
-      <li className="py-2">
-        <a href="#" className="hover:text-gray-400">Expense</a>
-      </li>
-    </Link>
-    <Link to="/chartofaccount" className="hover:text-gray-400">
-      <li className="py-2">
-        <a href="#" className="hover:text-gray-400">Chart Of Account</a>
-      </li>
-    </Link>
-    <Link to="/bankaccount" className="hover:text-gray-400">
-      <li className="py-2">
-        <a href="#" className="hover:text-gray-400">Bank Account</a>
-      </li>
-    </Link>
-    <Link to="/bankaccount" className="hover:text-gray-400">
-      <li className="py-2">
-        <a href="#" className="hover:text-gray-400">Fund Transfer</a>
-      </li>
-    </Link>
-  </ul>
-)}
-    <li className="py-2"><a href="#" className="hover:text-gray-400">Inventory</a></li>
-  </ul>
-</ul>
-
-{/* Utilities Section */}
-<h2 className="text-lg font mt-6 pb-2 pl-2 flex items-center">
-  <FaCog className="w-5 h-5 mr-2" /> Utilities(Coming Soon)
-</h2>
-<ul className="mt-4">
-  <ul className="ml-6 mt-2">
-{/* Chat Section */}
-<li className="py-2 flex items-center cursor-pointer" onClick={toggleChatDropdown}>
-  <FaComments className="w-5 h-5 mr-2" />
-  <span>Chat</span>
-  <FaCaretDown
-    className={`ml-2 transition-transform ${isChatDropdownOpen ? 'rotate-180' : 'rotate-0'}`}
-  />
-</li>
-{isChatDropdownOpen && (
-  <ul className="ml-6 mt-2">
-    <Link to="/connection" className="hover:text-gray-400">
-      <li className="py-2">
-        <a href="#" className="hover:text-gray-400">Invitation</a>
-      </li>
-    </Link>
-    <Link to="/blockeduser" className="hover:text-gray-400">
-      <li className="py-2">
-        <a href="#" className="hover:text-gray-400">Blocked User</a>
-      </li>
-    </Link>
-    <Link to="/chat" className="hover:text-gray-400">
-      <li className="py-2">
-        <a href="#" className="hover:text-gray-400">Chat Box</a>
-      </li>
-    </Link>
-  </ul>
-)}
-    <li className="py-2"><a href="#" className="hover:text-gray-400">Communicate(Coming Soon)</a></li>
-    <li className="py-2"><a href="#" className="hover:text-gray-400">Style(Coming Soon)</a></li>
-  </ul>
-</ul>
 
 {/* Report Section */}
 <h2 className="text-lg font mt-6 pb-2 pl-2 flex items-center">
