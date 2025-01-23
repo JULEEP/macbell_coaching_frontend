@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "./Sidebar";
+import { FaBars, FaTimes } from "react-icons/fa";
 import axios from "axios";
 
 const MultiClassStudent = () => {
@@ -7,20 +8,29 @@ const MultiClassStudent = () => {
   const [classValue, setClassValue] = useState("");
   const [section, setSection] = useState("");
   const [search, setSearch] = useState("");
-  const [students, setStudents] = useState([]); // State to store student data
-  const [loading, setLoading] = useState(false); // State for loading indicator
+  const [students, setStudents] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Sidebar toggle state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [studentsPerPage] = useState(10);
 
   // Fetch students data from API
   useEffect(() => {
     const fetchStudents = async () => {
       setLoading(true);
+      setError(null);
       try {
-        const response = await axios.get("https://school-backend-1-2xki.onrender.com/api/admin/get-student");
+        const response = await axios.get(
+          "https://school-backend-1-2xki.onrender.com/api/admin/get-student"
+        );
         if (response.status === 200) {
           setStudents(response.data.students);
+        } else {
+          setError(response.data.message || "Error fetching students");
         }
       } catch (error) {
-        console.error("Error fetching students:", error);
+        setError("Error fetching students");
       } finally {
         setLoading(false);
       }
@@ -29,32 +39,54 @@ const MultiClassStudent = () => {
     fetchStudents();
   }, []);
 
-  // Filter students based on selected criteria
-  const filteredStudents = students.filter((student) => {
-    return (
-      (academicYear === "" || student.class === academicYear) &&
-      (classValue === "" || student.class === classValue) &&
-      (section === "" || student.classSection.includes(section)) &&
-      (search === "" || student.firstName.toLowerCase().includes(search.toLowerCase()) || student.lastName.toLowerCase().includes(search.toLowerCase()))
-    );
-  });
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen); // Toggle sidebar visibility
+  };
+
+  // Pagination logic
+  const indexOfLastStudent = currentPage * studentsPerPage;
+  const indexOfFirstStudent = indexOfLastStudent - studentsPerPage;
+  const currentStudents = students.slice(indexOfFirstStudent, indexOfLastStudent);
+
+  // Change page
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
-    <div className="flex h-screen">
+    <div className="flex min-h-screen">
+      {/* Sidebar Overlay */}
+      <div
+        className={`fixed inset-0 bg-gray-800 bg-opacity-50 transition-opacity lg:hidden ${
+          isSidebarOpen ? "block" : "hidden"
+        }`}
+        onClick={toggleSidebar}
+      ></div>
+
       {/* Sidebar */}
-      <Sidebar /> {/* Sidebar added here */}
+      <div
+        className={`fixed inset-y-0 left-0 bg-white shadow-lg transform lg:transform-none lg:relative w-64 transition-transform duration-300 ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        <Sidebar />
+      </div>
 
       {/* Main Content */}
-      <div className="flex-1 p-6 ml-64">
-        <h1 className="text-xl text-gray-700">Multi Class Student</h1>
+      <div className={`flex-1 transition-all duration-300 ${isSidebarOpen ? "ml-64" : "ml-0"}`}>
+        {/* Mobile View: Header and Sidebar Toggle Icon */}
+        <div className="flex items-center justify-between bg-purple-700 text-white p-4 shadow-lg lg:hidden">
+          <h1 className="text-lg font-bold">Multi Class Student</h1>
+          <button onClick={toggleSidebar} className="text-2xl focus:outline-none">
+            {isSidebarOpen ? <FaTimes /> : <FaBars />}
+          </button>
+        </div>
 
-        {/* Select Criteria Section */}
-        <div className="space-y-6">
-          <div className="flex gap-4">
-            <div className="w-1/3">
+        <div className="p-4 sm:p-6">
+          {/* Filters */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+            <div>
               <label className="block text-gray-700">Academic Year</label>
               <select
-                className="w-full border border-gray-300 rounded p-2"
+                className="w-full border border-gray-300 rounded p-2 text-gray-700"
                 value={academicYear}
                 onChange={(e) => setAcademicYear(e.target.value)}
               >
@@ -64,10 +96,10 @@ const MultiClassStudent = () => {
                 <option value="2026">2026</option>
               </select>
             </div>
-            <div className="w-1/3">
+            <div>
               <label className="block text-gray-700">Class</label>
               <select
-                className="w-full border border-gray-300 rounded p-2"
+                className="w-full border border-gray-300 rounded p-2 text-gray-700"
                 value={classValue}
                 onChange={(e) => setClassValue(e.target.value)}
               >
@@ -77,10 +109,10 @@ const MultiClassStudent = () => {
                 <option value="8">8</option>
               </select>
             </div>
-            <div className="w-1/3">
+            <div>
               <label className="block text-gray-700">Section</label>
               <select
-                className="w-full border border-gray-300 rounded p-2"
+                className="w-full border border-gray-300 rounded p-2 text-gray-700"
                 value={section}
                 onChange={(e) => setSection(e.target.value)}
               >
@@ -93,41 +125,75 @@ const MultiClassStudent = () => {
           </div>
 
           {/* Search Button */}
-          <div className="flex justify-end mt-4">
-            <button className="bg-purple-500 hover:bg-purple-600 text-white px-6 py-2 rounded">
+          <div className="flex justify-end mt-4 mb-6">
+            <button className="bg-purple-500 text-white px-6 py-2 rounded">
               Search
             </button>
           </div>
-        </div>
 
-        {/* Student List Section */}
-        <div className="bg-white p-6 shadow-md rounded space-y-6">
-          <h2 className="text-lg text-gray-700 mb-4">Student List</h2>
+          {/* Student List Section */}
+          <div className="bg-white p-4 sm:p-6 shadow-md rounded">
+            <h2 className="text-lg text-gray-700 mb-4">Student List</h2>
 
-          {/* Loading Indicator */}
-          {loading && <p>Loading...</p>}
+            {/* Loading Indicator */}
+            {loading && <p>Loading...</p>}
+            {error && <p className="text-red-500">{error}</p>}
 
-          {/* Table for Student List */}
-          <table className="w-full border-collapse">
-            <thead>
-              <tr className="bg-gray-100">
-                <th className="px-4 py-2 text-left border-b">Admission No</th>
-                <th className="px-4 py-2 text-left border-b">Name</th>
-                <th className="px-4 py-2 text-left border-b">Class(Section)</th>
-                <th className="px-4 py-2 text-left border-b">Gender</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredStudents.map((student) => (
-                <tr key={student._id}>
-                  <td className="px-4 py-2 border-b">{student.admissionNumber || "N/A"}</td>
-                  <td className="px-4 py-2 border-b">{`${student.firstName} ${student.lastName}`}</td>
-                  <td className="px-4 py-2 border-b">{student.class}</td>
-                  <td className="px-4 py-2 border-b">{student.gender}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+            {/* Table for Student List */}
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse">
+                <thead>
+                  <tr className="bg-gray-100">
+                    <th className="border px-4 py-2 text-left">Admission No</th>
+                    <th className="border px-4 py-2 text-left">Name</th>
+                    <th className="border px-4 py-2 text-left">Class</th>
+                    <th className="border px-4 py-2 text-left">Gender</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {currentStudents
+                    .filter(
+                      (student) =>
+                        (academicYear === "" || student.class === academicYear) &&
+                        (classValue === "" || student.class === classValue) &&
+                        (section === "" || student.classSection.includes(section)) &&
+                        (search === "" ||
+                          student.firstName.toLowerCase().includes(search.toLowerCase()) ||
+                          student.lastName.toLowerCase().includes(search.toLowerCase()))
+                    )
+                    .map((student) => (
+                      <tr key={student._id} className="hover:bg-gray-50">
+                        <td className="border px-4 py-2">{student.admissionNumber || "N/A"}</td>
+                        <td className="border px-4 py-2">{`${student.firstName} ${student.lastName}`}</td>
+                        <td className="border px-4 py-2">{student.class}</td>
+                        <td className="border px-4 py-2">{student.gender}</td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Pagination Controls */}
+          <div className="flex justify-center mt-4">
+            <button
+              onClick={() => paginate(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="bg-purple-500 text-white px-4 py-2 rounded mx-2"
+            >
+              Prev
+            </button>
+            <span className="text-gray-700">
+              Page {currentPage}
+            </span>
+            <button
+              onClick={() => paginate(currentPage + 1)}
+              disabled={currentPage * studentsPerPage >= students.length}
+              className="bg-purple-500 text-white px-4 py-2 rounded mx-2"
+            >
+              Next
+            </button>
+          </div>
         </div>
       </div>
     </div>
