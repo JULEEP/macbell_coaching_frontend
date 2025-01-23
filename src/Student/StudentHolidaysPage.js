@@ -53,7 +53,7 @@ const StudentHolidayPage = () => {
         {/* Page Content */}
         <div className="p-6 flex justify-center">
           {/* Holiday List Table */}
-          <div className="w-full max-w-4xl mr-6">
+          <div className="w-full max-w-4xl mr-4">
             <h2 className="text-xl font-bold text-center text-blue-600 mb-4">Holiday List</h2>
             <table className="w-full bg-white shadow-md rounded-lg mr-4">
               <thead>

@@ -48,7 +48,7 @@ const ParentHolidayPage = () => {
         <div className="p-6">
 
           {/* Holiday List Table */}
-          <div className="mt-8">
+          <div className="w-full max-w-4xl mr-4">
             <h2 className="text-xl font-bold text-center text-blue-600 mb-4">Holiday List</h2>
             <table className="min-w-full bg-white shadow-md rounded-lg">
               <thead>

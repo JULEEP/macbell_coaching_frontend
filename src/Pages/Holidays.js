@@ -85,8 +85,8 @@ const HolidayPage = () => {
                 </div>
 
                 {/* Holiday Name */}
-                <div className="mb-4">
-                  <label className="block text-lg font-medium mb-2">Holiday Name</label>
+                <div className="w-full max-w-4xl mr-4">
+                <label className="block text-lg font-medium mb-2">Holiday Name</label>
                   <input
                     type="text"
                     value={holidayName}
