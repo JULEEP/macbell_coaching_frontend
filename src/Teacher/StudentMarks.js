@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
 import TeacherSidebar from "./TeacherSidebar"; // Import TeacherSidebar component
@@ -162,3 +163,4 @@ const TeacherMarks = () => {
 };
 
 export default TeacherMarks;
+

@@ -373,7 +373,7 @@ function App() {
 
 
 
-          {/* Parents Sections */} 
+          {/* teacher Sections */} 
           <Route path="/teacher-sidebar" element={<TeacherSidebar/>} />
           <Route path="/teacher-dashboard" element={<TeacherDashboard/>} />
           <Route path="/teacher-attendance" element={<TeacherAttendance/>} />
@@ -384,7 +384,7 @@ function App() {
           <Route path="/teacher-noticeboard" element={<NoticeBoardForTeacher/>} />
           <Route path="/teacher-leave" element={<TeacherLeavePage/>} />
           <Route path="/teacher-students" element={<TeacherStudentsPage/>} />
-          <Route path="/teacher-marks" element={<TeacherMarks/>} />
+          {/* <Route path="/teacher-marks" element={<TeacherMarks/>} /> */}
           <Route path="/teacher-login" element={<TeacherLogin/>} />
           <Route path="/teacher-coming-soon" element={<TeacherComingSoon/>} />
           <Route path="/teacher-holidays" element={<TeacherHolidayPage/>} />

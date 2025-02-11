@@ -1,3 +1,5 @@
+
+
 import React, { useEffect, useState } from "react";
 import TeacherSidebar from "./TeacherSidebar";
 import { FaBars, FaTimes } from "react-icons/fa"; // Import icons for sidebar toggling
@@ -114,3 +116,4 @@ const NoticeBoardForTeacher = () => {
 };
 
 export default NoticeBoardForTeacher;
+

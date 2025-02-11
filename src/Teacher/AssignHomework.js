@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
 import axios from "axios";
@@ -5,14 +6,15 @@ import TeacherSidebar from "./TeacherSidebar";
 
 const AddHomeworkByTeacher = () => {
   const [formData, setFormData] = useState({
-    class: "5",
-    subject: "Math",
-    section: "A",
+    class: "8", // Default class
+    section: "", // Default section
+    subject: "", // Default subject
     homeworkDate: "",
     submissionDate: "",
     marks: 50,
-    description: "This is a sample homework description.",
-    homeworkTitle: "Math Homework - Chapter 1",
+    description: "Solve problems from Chapter 5 on page 23.",
+    homeworkTitle: "Math Assignment: Chapter 5 Problems",
+    homeworkBy: "", // Teacher's name will be added here manually
   });
 
   const [classes, setClasses] = useState([]);
@@ -23,6 +25,7 @@ const AddHomeworkByTeacher = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // Fetch classes, sections, and subjects
         const classResponse = await axios.get(
           "https://school-backend-1-2xki.onrender.com/api/admin/get-classes"
         );
@@ -55,23 +58,13 @@ const AddHomeworkByTeacher = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.homeworkDate || !formData.submissionDate || !formData.homeworkTitle) {
+    if (!formData.homeworkDate || !formData.submissionDate || !formData.homeworkTitle || !formData.homeworkBy) {
       alert("Please fill all required fields.");
-      return;
-    }
-
-    // Fetch teacher ID from localStorage or sessionStorage
-    const teacherId = localStorage.getItem("teacherId"); // Assuming teacherId is stored in localStorage
-
-    if (!teacherId) {
-      alert("Teacher ID is missing. Please login again.");
       return;
     }
 
     const homeworkData = {
       ...formData,
-      teacherId, // Add teacherId to the form data
-      marksObtained: 0,
     };
 
     try {
@@ -192,19 +185,10 @@ const AddHomeworkByTeacher = () => {
                   className="w-full sm:w-48 md:w-56 p-2 border rounded"
                 />
               </div>
-              <div>
-                <label className="block text-sm text-gray-600 mb-1">Marks *</label>
-                <input
-                  type="number"
-                  name="marks"
-                  value={formData.marks}
-                  onChange={handleInputChange}
-                  className="w-full sm:w-48 md:w-56 p-2 border rounded"
-                />
-              </div>
             </div>
 
             <div>
+              <label className="block text-sm text-gray-600 mb-1">Homework Title *</label>
               <input
                 type="text"
                 name="homeworkTitle"
@@ -225,6 +209,18 @@ const AddHomeworkByTeacher = () => {
               ></textarea>
             </div>
 
+            {/* Manually Input Teacher's Name */}
+            <div>
+              <label className="block text-sm text-gray-600 mb-1">Teacher's Name *</label>
+              <input
+                type="text"
+                name="homeworkBy"
+                value={formData.homeworkBy}
+                onChange={handleInputChange}
+                className="w-full sm:w-48 md:w-56 p-2 border rounded"
+              />
+            </div>
+
             <div className="text-right">
               <button type="submit" className="bg-purple-500 text-white px-4 py-2 rounded">
                 Save Homework
@@ -238,3 +234,5 @@ const AddHomeworkByTeacher = () => {
 };
 
 export default AddHomeworkByTeacher;
+
+

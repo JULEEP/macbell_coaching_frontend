@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
 import TeacherSidebar from "./TeacherSidebar";
@@ -13,13 +14,8 @@ const TeacherStudentsPage = () => {
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [complaintTitle, setComplaintTitle] = useState("");
   const [complaintDescription, setComplaintDescription] = useState("");
+  const [complaintBy, setComplaintBy] = useState("");
   const [filedComplaints, setFiledComplaints] = useState([]);
-  const [marksSubject, setMarksSubject] = useState("");
-  const [marksObtained, setMarksObtained] = useState("");
-  const [totalMarks, setTotalMarks] = useState("");
-  const [examDate, setExamDate] = useState("");
-  const [subjects, setSubjects] = useState([]);
-  const [examType, setExamType] = useState(""); // Add this line to define the state
   const [currentPage, setCurrentPage] = useState(1);
   const [studentsPerPage] = useState(5); // Show 5 students per page
   const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Added missing state
@@ -47,18 +43,7 @@ const TeacherStudentsPage = () => {
       }
     };
 
-    const fetchSubjects = async () => {
-      try {
-        const subjectResponse = await axios.get('https://school-backend-1-2xki.onrender.com/api/admin/get-subjects-names');
-        const uniqueSubjects = [...new Set(subjectResponse.data.subjectNames.filter((name) => name))];
-        setSubjects(uniqueSubjects || []);
-      } catch (err) {
-        console.error("Failed to fetch subjects", err);
-      }
-    };
-
     fetchStudents();
-    fetchSubjects();
   }, []);
 
   // Pagination logic
@@ -101,50 +86,20 @@ const TeacherStudentsPage = () => {
     setSelectedStudent(null);
   };
 
-  const openMarksModal = (student) => {
-    setSelectedStudent(student);
-    setMarksSubject("");
-    setMarksObtained("");
-    setTotalMarks("");
-    setExamDate("");
-  };
-
-  const closeMarksModal = () => {
-    setSelectedStudent(null);
-  };
-
   const submitComplaint = async () => {
     try {
       await axios.post(
-        `https://school-backend-1-2xki.onrender.com/api/teacher/file-complaint/${selectedStudent.id}`,
+        `http://localhost:4000/api/teacher/add-complaint/${selectedStudent.id}`,
         {
           title: complaintTitle,
           description: complaintDescription,
+          complaintBy: complaintBy,
         }
       );
       alert("Complaint filed successfully!");
       closeComplaintModal();
     } catch (err) {
       alert("Failed to file complaint. Please try again.");
-    }
-  };
-
-  const submitMarks = async () => {
-    try {
-      await axios.post(
-        `https://school-backend-1-2xki.onrender.com/api/teacher/add-marks/${selectedStudent.id}`,
-        {
-          subject: marksSubject,
-          marksObtained: marksObtained,
-          totalMarks: totalMarks,
-          examDate: examDate,
-          examType: examType
-        }
-      );
-      alert("Marks added successfully!");
-      closeMarksModal();
-    } catch (err) {
-      alert("Failed to add marks. Please try again.");
     }
   };
 
@@ -253,19 +208,12 @@ const TeacherStudentsPage = () => {
                           <td className="py-3 px-4 text-gray-700">{student.section}</td>
                           <td className="py-3 px-4 text-gray-700">
                             <button
-                              className="px-4 py-2 rounded-md text-white bg-blue-500 mr-2 sm:px-2 mb-2 h-20 sm:py-1 sm:mr-1"
-                              onClick={() => openMarksModal(student)}
-                            >
-                              Add Marks
-                            </button>
-                            <button
                               className="px-4 py-2 rounded-md text-white bg-red-500 sm:px-2 sm:py-1"
                               onClick={() => openComplaintModal(student)}
                             >
                               File Complaint
                             </button>
                           </td>
-
                         </tr>
                       ))
                     ) : (
@@ -325,6 +273,14 @@ const TeacherStudentsPage = () => {
                 onChange={(e) => setComplaintDescription(e.target.value)}
               />
             </div>
+            <div className="mb-4">
+            <label className="block text-gray-700 mb-2">Complaint By</label>
+            <textarea
+              className="w-full border border-gray-300 rounded-md px-4 py-2"
+              value={complaintBy}
+              onChange={(e) => setComplaintBy(e.target.value)}
+            />
+          </div>
             <div className="flex justify-end gap-4">
               <button
                 className="px-4 py-2 bg-gray-300 rounded-md"
@@ -342,89 +298,9 @@ const TeacherStudentsPage = () => {
           </div>
         </div>
       )}
-
-      {/* Add Marks Modal */}
-      {selectedStudent && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center px-4">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md">
-            <h2 className="text-xl font-bold mb-4">
-              Add Marks for {selectedStudent.name}
-            </h2>
-            <div className="mb-4">
-              <label className="block text-gray-700 mb-2">Subject</label>
-              <select
-                className="w-full border border-gray-300 rounded-md px-4 py-2"
-                value={marksSubject}
-                onChange={(e) => setMarksSubject(e.target.value)}
-              >
-                <option value="">Select Subject</option>
-                {subjects.map((subject, index) => (
-                  <option key={index} value={subject}>
-                    {subject}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="mb-4">
-              <label className="block text-gray-700 mb-2">Marks Obtained</label>
-              <input
-                type="number"
-                className="w-full border border-gray-300 rounded-md px-4 py-2"
-                value={marksObtained}
-                onChange={(e) => setMarksObtained(e.target.value)}
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block text-gray-700 mb-2">Total Marks</label>
-              <input
-                type="number"
-                className="w-full border border-gray-300 rounded-md px-4 py-2"
-                value={totalMarks}
-                onChange={(e) => setTotalMarks(e.target.value)}
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block text-gray-700 mb-2">Exam Date</label>
-              <input
-                type="date"
-                className="w-full border border-gray-300 rounded-md px-4 py-2"
-                value={examDate}
-                onChange={(e) => setExamDate(e.target.value)}
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block text-gray-700 mb-2">Exam Type</label>
-              <select
-                className="w-full border border-gray-300 rounded-md px-4 py-2"
-                value={examType} // Set value from state
-                onChange={(e) => setExamType(e.target.value)} // Update the state on change
-              >
-                <option value="">Select Exam Type</option>
-                <option value="Mid-Term">Mid-Term</option>
-                <option value="Final">Final</option>
-                <option value="Class Test">Class Test</option>
-              </select>
-            </div>
-            <div className="flex justify-end gap-4">
-              <button
-                className="px-4 py-2 bg-gray-300 rounded-md"
-                onClick={closeMarksModal}
-              >
-                Cancel
-              </button>
-              <button
-                className="px-4 py-2 bg-purple-500 text-white rounded-md"
-                onClick={submitMarks}
-              >
-                Submit Marks
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
     </div>
   );
 };
 
 export default TeacherStudentsPage;
+
