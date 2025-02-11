@@ -182,6 +182,9 @@ import StudentHolidayPage from './Student/StudentHolidaysPage';
 import TeacherHolidayPage from './Teacher/TeacherHolidayPage';
 import ParentHolidayPage from './Parents/ParentHolidayPage';
 import HolidayPage from './Pages/Holidays';
+import StudentBusTracking from './Student/StudentBusTracking';
+import LiveClass from './Student/LiveClass';
+
 function App() {
   return (
     <Router> {/* Wrap everything in Router to enable routing */}        
@@ -334,6 +337,9 @@ function App() {
             <Route path="/fees" element={<FeesManagement/>} />
             <Route path="/fees-details" element={<FeeDetails/>} />
             <Route path="/holidays" element={<HolidayPage/>} />
+            <Route path="/studentbus-tracking" element={<StudentBusTracking/>}/>
+            <Route path="/live-class" element={<LiveClass/>}/>
+
 
 
 
