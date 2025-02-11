@@ -1,649 +1,796 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-
-import { FaHome, FaUsers, FaBook, FaClipboardList, FaChalkboardTeacher, FaDownload, FaCertificate, FaFileAlt, FaCog, FaListAlt, FaCaretDown, FaWallet, FaChartBar, FaComments  } from 'react-icons/fa'; // Import React Icons
+import React, { useState } from "react";
+import { FaHome, FaUser, FaWallet, FaCog, FaSignOutAlt, FaList, FaDownload, FaFileAlt, FaPlusCircle, FaChalkboardTeacher, FaBook, FaClipboardCheck, FaChevronDown, FaChevronRight, FaPlus, FaLaptopCode } from "react-icons/fa"; // Added icons
+import { NavLink } from "react-router-dom"; // Import NavLink from react-router-dom
+import { useNavigate } from "react-router-dom";
+import axios from 'axios'
+import { toast, ToastContainer } from "react-toastify"; // Importing toast and ToastContainer
+import "react-toastify/dist/ReactToastify.css"; // Importing the toast styles
 
 const Sidebar = () => {
-  const [isAdminOpen, setIsAdminOpen] = useState(false); // State to handle the dropdown toggle
-  const [isAcademicsOpen, setIsAcademicsOpen] = useState(false); // State to handle the dropdown toggle for Academics Section
-  const [isStudyMaterialOpen, setIsStudyMaterialOpen] = useState(false); // State for Study Material dropdown
-  const [isDownloadCenterOpen, setIsDownloadCenterOpen] = useState(false); // State for Download Center dropdown
-  const [isLessonPlanOpen, setIsLessonPlanOpen] = useState(false); // State for Lesson Plan dropdown
-  const [isBulkPrintOpen, setIsBulkPrintOpen] = useState(false); // State for Bulk Print dropdown
-  const [isCertificateAddonOpen, setIsCertificateAddonOpen] = useState(false); // State for Certificate Addon dropdown
-  const [isStudentInfoOpen, setIsStudentInfoOpen] = useState(false); // State for dropdown
-  const [isFeesOpen, setIsFeesOpen] = useState(false); // State for dropdown
-  const [isBehaviourDropdownOpen, setIsBehaviourDropdownOpen] = useState(false);
-  const [isHomeworkDropdownOpen, setIsHomeworkDropdownOpen] = useState(false);
-  const [isLibraryDropdownOpen, setIsLibraryDropdownOpen] = useState(false);
-  const [isTransportDropdownOpen, setIsTransportDropdownOpen] = useState(false);
-  const [isDormitoryDropdownOpen, setIsDormitoryDropdownOpen] = useState(false);
-  const [isExaminationDropdownOpen, setIsExaminationDropdownOpen] = useState(false);
-  const [isExamPlanDropdownOpen, setIsExamPlanDropdownOpen] = useState(false);
-  const [isOnlineExamDropdownOpen, setIsOnlineExamDropdownOpen] = useState(false);
-  const [isHRDropdownOpen, setIsHRDropdownOpen] = useState(false);
-  const [isTeacherEvalDropdownOpen, setIsTeacherEvalDropdownOpen] = useState(false);
-  const [isLeaveDropdownOpen, setIsLeaveDropdownOpen] = useState(false);
-  const [isRolePermissionDropdownOpen, setIsRolePermissionDropdownOpen] = useState(false);
-  const [isWalletDropdownOpen, setIsWalletDropdownOpen] = useState(false);
-  const [isAccountsDropdownOpen, setIsAccountsDropdownOpen] = useState(false);
-  const [isChatDropdownOpen, setIsChatDropdownOpen] = useState(false);
-
-const toggleChatDropdown = () => {
-  setIsChatDropdownOpen(!isChatDropdownOpen);
-};
+  const [isAddItemsOpen, setIsAddItemsOpen] = useState(false);
+  const [isViewRecordsOpen, setViewRecordsOpen] = useState(false);
+  const [isModifyEntriesOpen, setModifyEntriesOpen] = useState(false);
+  const [isExportDataOpen, setExportDataOpen] = useState(false);
+  const [isAssigningSectionOpen, setIsAssigningSectionOpen] = useState(false);
+  const [isParentSectionOpen, setIsParentSectionOpen] = useState(false);
+  const [isStudentAttendanceOpen, setIsStudentAttendanceOpen] = useState(false);
+  const [isStudentPromoteOpen, setIsStudentPromoteOpen] = useState(false);
+  const [isStudentHomeworkOpen, setIsStudentHomeworkOpen] = useState(false);
+  const [isAssignmentsOpen, setIsAssignmentsOpen] = useState(false); // New state for Assignments
 
 
-const toggleAccountsDropdown = () => {
-  setIsAccountsDropdownOpen(!isAccountsDropdownOpen);
-};
 
 
-const toggleWalletDropdown = () => {
-  setIsWalletDropdownOpen(!isWalletDropdownOpen);
-};
+  // State Hooks for Subsections
+  const [isTeacherSectionOpen, setIsTeacherSectionOpen] = useState(false);
+  const [isStudentSectionOpen, setIsStudentSectionOpen] = useState(false);
+  const [isStaffSectionOpen, setIsStaffSectionOpen] = useState(false);
+  const [isHolidaySectionOpen, setIsHolidaySectionOpen] = useState(false);
+  const [isClassSectionOpen, setIsClassSectionOpen] = useState(false);
+  const [isContentSectionOpen, setIsContentSectionOpen] = useState(false);
+  const [isFeesSectionOpen, setIsFeesSectionOpen] = useState(false);
+  const [isTransportSectionOpen, setIsTransportSectionOpen] = useState(false);
+  const [isExamSectionOpen, setIsExamSectionOpen] = useState(false);
+
+  // Define state for each section
+  const [isSectionSectionOpen, setIsSectionSectionOpen] = useState(false);
+  const [isSubjectSectionOpen, setIsSubjectSectionOpen] = useState(false);
+  const [isRoutineSectionOpen, setIsRoutineSectionOpen] = useState(false);
+  const [isLessonSectionOpen, setIsLessonSectionOpen] = useState(false);
+  const [isTopicSectionOpen, setIsTopicSectionOpen] = useState(false);
+  const [isLeaveSectionOpen, setIsLeaveSectionOpen] = useState(false);
 
 
-  const toggleRolePermissionDropdown = () => {
-    setIsRolePermissionDropdownOpen(!isRolePermissionDropdownOpen);
-  };
+  const [isTeacherExportOpen, setIsTeacherExportOpen] = useState(false);
+  const [isStudentExportOpen, setIsStudentExportOpen] = useState(false);
+  const [isStaffExportOpen, setIsStaffExportOpen] = useState(false);
+  const [isMarksExportOpen, setIsMarksExportOpen] = useState(false);
 
-  const toggleLeaveDropdown = () => {
-    setIsLeaveDropdownOpen(!isLeaveDropdownOpen);
-  };
+  const [isTeacherAssigningOpen, setIsTeacherAssigningOpen] = useState(false);
+  const [isSubjectAssigningOpen, setIsSubjectAssigningOpen] = useState(false);
+  const [isVehicleAssigningOpen, setIsVehicleAssigningOpen] = useState(false);
 
-  const toggleTeacherEvalDropdown = () => {
-    setIsTeacherEvalDropdownOpen(!isTeacherEvalDropdownOpen);
-  };
+  const navigate = useNavigate();
 
+  const handleAdminLogout = async () => {
+    try {
+      const response = await axios.post(
+        "https://school-backend-1-2xki.onrender.com/api/admin/admin-logout",
+        {},
+        { withCredentials: true }
+      );
 
-  const toggleHRDropdown = () => {
-    setIsHRDropdownOpen(!isHRDropdownOpen);
-  };
-
-  const toggleOnlineExamDropdown = () => {
-    setIsOnlineExamDropdownOpen(!isOnlineExamDropdownOpen);
-  };
-
-
-  const toggleExamPlanDropdown = () => {
-    setIsExamPlanDropdownOpen(!isExamPlanDropdownOpen);
-  };
-
-
-  const toggleExaminationDropdown = () => {
-    setIsExaminationDropdownOpen(!isExaminationDropdownOpen);
-  };
-
-
-  const toggleDormitoryDropdown = () => {
-    setIsDormitoryDropdownOpen(!isDormitoryDropdownOpen);
-  };
-  const toggleTransportDropdown = () => {
-    setIsTransportDropdownOpen(!isTransportDropdownOpen);
-  };
-
-
-  const toggleLibraryDropdown = () => {
-    setIsLibraryDropdownOpen(!isLibraryDropdownOpen);
-  };
-
-  const toggleHomeworkDropdown = () => {
-    setIsHomeworkDropdownOpen(!isHomeworkDropdownOpen);
-  };
-
-  const toggleBehaviourDropdown = () => {
-    setIsBehaviourDropdownOpen(!isBehaviourDropdownOpen);
-  };
-
-  // Toggle function for Fees dropdown
-  const toggleFeesDropdown = () => {
-    setIsFeesOpen(!isFeesOpen);
-  };
-
-
-  // Toggle function for Student Info dropdown
-  const toggleStudentInfoDropdown = () => {
-    setIsStudentInfoOpen(!isStudentInfoOpen);
-  };
-
-  // Toggle function for Certificate Addon dropdown
-  const toggleCertificateAddonDropdown = () => {
-    setIsCertificateAddonOpen(!isCertificateAddonOpen);
-  };
-
-
-  // Toggle function for Bulk Print dropdown
-  const toggleBulkPrintDropdown = () => {
-    setIsBulkPrintOpen(!isBulkPrintOpen);
-  };
-
-
-  // Toggle function for Lesson Plan dropdown
-  const toggleLessonPlanDropdown = () => {
-    setIsLessonPlanOpen(!isLessonPlanOpen);
-  };
-
-
-  // Toggle function for Download Center dropdown
-  const toggleDownloadCenterDropdown = () => {
-    setIsDownloadCenterOpen(!isDownloadCenterOpen);
+      if (response.status === 200) {
+        toast.success(response.data.message); // Success toast
+        navigate("/admin-login"); // Redirect to admin login page
+      } else {
+        toast.error("Logout failed. Please try again."); // Error toast
+      }
+    } catch (error) {
+      console.error("Logout error:", error);
+      toast.error("An error occurred while logging out."); // Error toast
+    }
   };
 
 
 
-  // Function to toggle the Academics dropdown
-  const toggleAcademicsDropdown = () => {
-    setIsAcademicsOpen(!isAcademicsOpen);
+
+  // Function to toggle the Add Items section
+  const toggleAddItems = () => {
+    setIsAddItemsOpen(!isAddItemsOpen); // Ensure this matches the useState variable
   };
 
-  // Function to toggle the dropdown
-  const toggleAdminDropdown = () => {
-    setIsAdminOpen(!isAdminOpen);
+
+  const toggleViewRecords = () => {
+    setViewRecordsOpen((prev) => !prev);
   };
 
-    // Function to toggle the dropdown
-    const toggleStudyMaterialDropdown = () => {
-      setIsStudyMaterialOpen(!isStudyMaterialOpen);
-    };
-  
+  const toggleModifyEntries = () => {
+    setModifyEntriesOpen((prev) => !prev);
+  };
+
+  const toggleExportData = () => {
+    setExportDataOpen((prev) => !prev);
+  };
+  const toggleAssigningSection = () => {
+    setIsAssigningSectionOpen(!isAssigningSectionOpen);
+  };
 
   return (
-    <div className="h-full w-64 bg-black text-white overflow-y-auto fixed">
-      <div className="p-4">
-        {/* Dashboard Section */}
-        <h2 className="text-lg font-bold border-gray-700 pb-2">Admin Dashboard</h2>
-        <ul className="mt-4">
-        <Link to="/Admin-dashboard" className="hover:text-gray-400">
-          <li className="py-2 flex items-center"><FaHome className="w-5 h-5 mr-2" /><a href="#" className="hover:text-gray-400">Dashboard</a></li>
-          </Link>
-        </ul>
-
-        {/* Sidebar Manager Section */}
-        <h2 className="text-lg font mt-6 pb-2 pl-2">Administration</h2>
-        <ul className="mt-4">
-          {/* Admin Section with Dropdown */}
-          <li className="py-2 flex items-center cursor-pointer" onClick={toggleAdminDropdown}>
-            <FaUsers className="w-5 h-5 mr-2" />
-            <span>Admin Section</span>
-            <FaCaretDown className={`ml-2 transition-transform ${isAdminOpen ? 'rotate-180' : 'rotate-0'}`} />
-          </li>
-          
-          {/* Dropdown Menu for Admin Section */}
-          {isAdminOpen && (
-            <ul className="ml-6 mt-2">
-            <li className="py-2">
-          </li>
-           <Link to="/teacher" className="hover:text-gray-400">
-           <li className="py-2"><a href="#" className="hover:text-gray-400">Teacher List</a></li>
-           </Link>
-           <Link to="/staff" className="hover:text-gray-400">
-           <li className="py-2"><a href="#" className="hover:text-gray-400">Add Staff</a></li>
-           </Link>
-           <Link to="/holidays" className="hover:text-gray-400">
-           <li className="py-2"><a href="#" className="hover:text-gray-400">Holidays</a></li>
-           </Link>
-           <Link to="/complaint" className="hover:text-gray-400">
-              <li className="py-2"><a href="#" className="hover:text-gray-400">Complaint</a></li>
-              </Link>
-            </ul>
-          )}
-
-           {/* Academics Section with Dropdown */}
-          <li className="py-2 flex items-center cursor-pointer" onClick={toggleAcademicsDropdown}>
-            <FaBook className="w-5 h-5 mr-2" />
-            <span>Academics</span>
-            <FaCaretDown className={`ml-2 transition-transform ${isAcademicsOpen ? 'rotate-180' : 'rotate-0'}`} />
-          </li>
-
-          {/* Dropdown Menu for Academics Section */}
-          {isAcademicsOpen && (
-            <ul className="ml-6 mt-2">
-            <Link to="/optional-subject" className="hover:text-gray-400">
-              <li className="py-2"><a href="#" className="hover:text-gray-400">Optional Subject</a></li>
-              </Link>
-              <Link to="/section" className="hover:text-gray-400">
-              <li className="py-2"><a href="#" className="hover:text-gray-400">Section</a></li>
-              </Link>
-              <Link to="/class" className="hover:text-gray-400">
-              <li className="py-2"><a href="#" className="hover:text-gray-400">Class</a></li>
-              </Link>
-              <Link to="/subject" className="hover:text-gray-400">
-              <li className="py-2"><a href="#" className="hover:text-gray-400">Subjects</a></li>
-              </Link>
-              <Link to="/assign-teacher" className="hover:text-gray-400">
-              <li className="py-2"><a href="#" className="hover:text-gray-400">Assign Class Teacher</a></li>
-              </Link>
-              <Link to="/assign-subject" className="hover:text-gray-400">
-              <li className="py-2"><a href="#" className="hover:text-gray-400">Assign Subject</a></li>
-              </Link>
-              <Link to="/classroom" className="hover:text-gray-400">
-              <li className="py-2"><a href="#" className="hover:text-gray-400">Class Room</a></li>
-              </Link>
-              <Link to="/classroutine" className="hover:text-gray-400">
-              <li className="py-2"><a href="#" className="hover:text-gray-400">Class Routine</a></li>
-              </Link> 
-            </ul>
-          )}
-          <ul className="mt-4">
-          <li className="py-2 flex items-center cursor-pointer" onClick={toggleStudyMaterialDropdown}>
-            <FaBook className="w-5 h-5 mr-2" />
-            <span>Study Material</span>
-            <FaCaretDown className={`ml-2 transition-transform ${isStudyMaterialOpen ? 'rotate-180' : 'rotate-0'}`} />
-          </li>
-
-          {/* Study Material Dropdown */}
-          {isStudyMaterialOpen && (
-            <ul className="ml-6 mt-2">
-            <Link to="/updatecontent" className="hover:text-gray-400">
-              <li className="py-2"><a href="#" className="hover:text-gray-400">Upload Content</a></li>
-              </Link>
-              <Link to="/assignment" className="hover:text-gray-400">
-              <li className="py-2"><a href="#" className="hover:text-gray-400">Assignment</a></li>
-              </Link>
-              <Link to="/syllabus" className="hover:text-gray-400">
-              <li className="py-2"><a href="#" className="hover:text-gray-400">Syllabus</a></li>
-              </Link>
-              <Link to="/downloads" className="hover:text-gray-400">
-              <li className="py-2"><a href="#" className="hover:text-gray-400">Other Downloads</a></li>
-              </Link>
-            </ul>
-          )}
-        </ul>
-      <ul className="mt-4">
-      <li className="py-2 flex items-center cursor-pointer" onClick={toggleLessonPlanDropdown}>
-        <FaChalkboardTeacher className="w-5 h-5 mr-2" />
-        <span>Lesson Plan</span>
-        <FaCaretDown className={`ml-2 transition-transform ${isLessonPlanOpen ? 'rotate-180' : 'rotate-0'}`} />
-      </li>
-
-      {isLessonPlanOpen && (
-        <ul className="ml-6 mt-2">
-        <Link to="/lesson" className="hover:text-gray-400">
-          <li className="py-2"><a href="#" className="hover:text-gray-400">Lesson</a></li>
-          </Link>
-          <Link to="/topic" className="hover:text-gray-400">
-          <li className="py-2"><a href="#" className="hover:text-gray-400">Topic</a></li>
-          </Link>
-          <Link to="/lessonplan" className="hover:text-gray-400">
-          <li className="py-2"><a href="#" className="hover:text-gray-400">Topic Overview</a></li>
-          </Link>
-          <Link to="/lessonplanoverview" className="hover:text-gray-400">
-          <li className="py-2"><a href="#" className="hover:text-gray-400">Lesson Plan Overview</a></li>
-          </Link>
-        </ul>
-      )}
-    </ul>
-    <ul className="mt-4">
-    <li className="py-2 flex items-center cursor-pointer" onClick={toggleBulkPrintDropdown}>
-      <FaFileAlt className="w-5 h-5 mr-2" />
-      <span>Bulk Download</span>
-      <FaCaretDown className={`ml-2 transition-transform ${isBulkPrintOpen ? 'rotate-180' : 'rotate-0'}`} />
-    </li>
-
-    {isBulkPrintOpen && (
-      <ul className="ml-6 mt-2">
-      <Link to="/stuList" className="hover:text-gray-400">
-        <li className="py-2"><a href="#" className="hover:text-gray-400">Students</a></li>
-        </Link>
-        <Link to="/teacherList" className="hover:text-gray-400">
-        <li className="py-2"><a href="#" className="hover:text-gray-400">Teachers</a></li>
-        </Link>
-        <Link to="/staffList" className="hover:text-gray-400">
-        <li className="py-2"><a href="#" className="hover:text-gray-400">Staffs</a></li>
-        </Link>
-        <Link to="/marks" className="hover:text-gray-400">
-        <li className="py-2"><a href="#" className="hover:text-gray-400">Marks</a></li>
-        </Link>
-      </ul>
-    )}
-  </ul>
-  <ul className="mt-4">
-  <li className="py-2 flex items-center cursor-pointer" onClick={toggleCertificateAddonDropdown}>
-    <FaCertificate className="w-5 h-5 mr-2" />
-    <span>Certificate Addon</span>
-    <FaCaretDown className={`ml-2 transition-transform ${isCertificateAddonOpen ? 'rotate-180' : 'rotate-0'}`} />
-  </li>
-
-  {isCertificateAddonOpen && (
-    <ul className="ml-6 mt-2">
-    <Link to="/certificatetype" className="hover:text-gray-400">
-      <li className="py-2"><a href="#" className="hover:text-gray-400">Types</a></li>
-      </Link>
-      <Link to="/certificatetemplate" className="hover:text-gray-400">
-      <li className="py-2"><a href="#" className="hover:text-gray-400">Templates</a></li>
-      </Link>
-      <Link to="/studentcertificate" className="hover:text-gray-400">
-      <li className="py-2"><a href="#" className="hover:text-gray-400">Student Certificate</a></li>
-      </Link>
-      <Link to="/staffcertificate" className="hover:text-gray-400">
-      <li className="py-2"><a href="#" className="hover:text-gray-400">Staff Certificate</a></li>
-      </Link>
-      <Link to="/conditionalcertificate" className="hover:text-gray-400">
-      <li className="py-2"><a href="#" className="hover:text-gray-400">Certificate Records</a></li>
-      </Link>
-      <Link to="/certificatesetting" className="hover:text-gray-400">
-      <li className="py-2"><a href="#" className="hover:text-gray-400">Settings</a></li>
-      </Link>
-    </ul>
-  )}
-</ul>
- </ul>
-
-        {/* Student Section */}
-        <h2 className="text-lg font mt-6 pb-2 pl-2">Student</h2>
-        <ul className="mt-4">
-        <ul className="mt-4">
-        {/* Student Info Dropdown */}
-        <li className="py-2 flex items-center cursor-pointer" onClick={toggleStudentInfoDropdown}>
-          <FaUsers className="w-5 h-5 mr-2" />
-          <span>Student Info</span>
-          <FaCaretDown className={`ml-2 transition-transform ${isStudentInfoOpen ? 'rotate-180' : 'rotate-0'}`} />
+    <div className="w-64 bg-gray-800 overflow-y-auto h-screen">
+      {/* Sidebar Links */}
+      <ul className="space-y-2">
+        {/* Dashboard Link */}
+        <li className="flex items-center text-lg p-3 rounded-md hover:bg-gray-700 mt-8">
+          <NavLink
+            to="/Admin-dashboard"
+            className="flex items-center text-white hover:text-gray-400"
+            activeClassName="bg-gray-700 rounded-full"
+          >
+            <FaHome className="mr-3 text-white" />
+            <span>Admin Home</span>
+          </NavLink>
         </li>
-  
-        {/* Dropdown Items */}
-        {isStudentInfoOpen && (
-          <ul className="ml-6 mt-2">
-          <Link to="/studentcat" className="hover:text-gray-400">
-            <li className="py-2"><a href="#" className="hover:text-gray-400">Student Category</a></li>
-            </Link>
-            <Link to="/studentadmission" className="hover:text-gray-400">
-            <li className="py-2"><a href="#" className="hover:text-gray-400">Add Student</a></li>
-            </Link>
-            <Link to="/managestudent" className="hover:text-gray-400">
-            <li className="py-2"><a href="#" className="hover:text-gray-400">Student List</a></li>
-            </Link>
-            <Link to="/multistudent" className="hover:text-gray-400">
-            <li className="py-2"><a href="#" className="hover:text-gray-400">Multi Class Student</a></li>
-            </Link>
-            <Link to="/deletestudent" className="hover:text-gray-400">
-            <li className="py-2"><a href="#" className="hover:text-gray-400">Delete Student Record</a></li>
-            </Link>
-            <Link to="/unassignedstudent" className="hover:text-gray-400">
-            <li className="py-2"><a href="#" className="hover:text-gray-400">Unassigned Student</a></li>
-            </Link>
-            <Link to="/studentattendance" className="hover:text-gray-400">
-            <li className="py-2"><a href="#" className="hover:text-gray-400">Student Attendance</a></li>
-            </Link>
-            <Link to="/studentgrp" className="hover:text-gray-400">
-            <li className="py-2"><a href="#" className="hover:text-gray-400">Student Group</a></li>
-            </Link>
-            <Link to="/studentpromote" className="hover:text-gray-400">
-            <li className="py-2"><a href="#" className="hover:text-gray-400">Student Promote</a></li>
-            </Link>
-            <Link to="/disabledstudent" className="hover:text-gray-400">
-            <li className="py-2"><a href="#" className="hover:text-gray-400">Disabled Students</a></li>
-            </Link>
-            <Link to="/subjectwiseatten" className="hover:text-gray-400">
-            <li className="py-2"><a href="#" className="hover:text-gray-400">Subject Wise Attendance</a></li>
-            </Link>
-            <Link to="/studentexport" className="hover:text-gray-400">
-            <li className="py-2"><a href="#" className="hover:text-gray-400">Student Export</a></li>
-            </Link>
-            <Link to="/sendmarksbysms" className="hover:text-gray-400">
-            <li className="py-2"><a href="#" className="hover:text-gray-400">SMS Sending Time</a></li>
-            </Link>
-          </ul>
-        )}
-      </ul>
-      <ul className="mt-4">
-      {/* Fees Dropdown */}
-      <li className="py-2 flex items-center cursor-pointer" onClick={toggleFeesDropdown}>
-        <FaClipboardList className="w-5 h-5 mr-2" />
-        <span>Fees</span>
-        <FaCaretDown className={`ml-2 transition-transform ${isFeesOpen ? 'rotate-180' : 'rotate-0'}`} />
-      </li>
 
-      {/* Dropdown Items */}
-      {isFeesOpen && (
-        <ul className="ml-6 mt-2">
-        <Link to="/fees" className="hover:text-gray-400">
-          <li className="py-2"><a href="#" className="hover:text-gray-400">Add Fees</a></li>
-          </Link>
-          <Link to="/fees-details" className="hover:text-gray-400">
-          <li className="py-2"><a href="#" className="hover:text-gray-400">Fees Record</a></li>
-          </Link>
-        </ul>
-      )}
-    </ul>
-    <ul>
-    <li className="py-2 flex items-center cursor-pointer" onClick={toggleBehaviourDropdown}>
-      <FaBook className="w-5 h-5 mr-2" />
-      <span>Behaviour Records(Coming Soon)</span>
-      <FaCaretDown
-        className={`ml-2 transition-transform ${isBehaviourDropdownOpen ? 'rotate-180' : 'rotate-0'}`}
-      />
-    </li>
-    {isBehaviourDropdownOpen && (
-      <ul className="ml-6 mt-2">
-      <Link to="/coming-soon" className="hover:text-gray-400">
-        <li className="py-2"><a href="#" className="hover:text-gray-400">Incidents</a></li>
-        </Link>
-        <Link to="/coming-soon" className="hover:text-gray-400">
-        <li className="py-2"><a href="#" className="hover:text-gray-400">Assign Incident</a></li>
-        </Link>
-        <Link to="/coming-soon" className="hover:text-gray-400">
-        <li className="py-2"><a href="#" className="hover:text-gray-400">Student Incident Report</a></li>
-        </Link>
-        <Link to="/coming-soon" className="hover:text-gray-400">
-        <li className="py-2"><a href="#" className="hover:text-gray-400">Behaviour Report</a></li>
-        </Link>
-        <Link to="/coming-soon" className="hover:text-gray-400">
-        <li className="py-2"><a href="#" className="hover:text-gray-400">Class Section Report</a></li>
-        </Link>
-        <Link to="/coming-soon" className="hover:text-gray-400">
-        <li className="py-2"><a href="#" className="hover:text-gray-400">Incident Wise Report</a></li>
-        </Link>
-        <Link to="/coming-soon" className="hover:text-gray-400">
-        <li className="py-2"><a href="#" className="hover:text-gray-400">Settings</a></li>
-        </Link>
-      </ul>
-    )}
-  </ul>
-  <ul>
-  {/* Homework Section */}
-  <li className="py-2 flex items-center cursor-pointer" onClick={toggleHomeworkDropdown}>
-    <FaClipboardList className="w-5 h-5 mr-2" />
-    <span>Homework</span>
-    <FaCaretDown
-      className={`ml-2 transition-transform ${isHomeworkDropdownOpen ? 'rotate-180' : 'rotate-0'}`}
-    />
-  </li>
-  {isHomeworkDropdownOpen && (
-    <ul className="ml-6 mt-2">
-    <Link to="/homework" className="hover:text-gray-400">
-      <li className="py-2"><a href="#" className="hover:text-gray-400">Add Homework</a></li>
-      </Link>
-      <Link to="/homeworklist" className="hover:text-gray-400">
-      <li className="py-2"><a href="#" className="hover:text-gray-400">Homework List</a></li>
-      </Link>
-      <Link to="/coming-soon" className="hover:text-gray-400">
-      <li className="py-2"><a href="#" className="hover:text-gray-400">Homework Report(Coming Soon)</a></li>
-      </Link>
-    </ul>
-  )}
-</ul>
- </ul>
+        {/* Add Items Section */}
+        <li className="flex flex-col items-start text-lg p-3 rounded-md hover:bg-gray-700">
+          <div className="flex items-center w-full cursor-pointer" onClick={() => setIsAddItemsOpen(!isAddItemsOpen)}>
+            <FaPlusCircle className="mr-3 text-white" />
+            <span className="text-white">Add Items</span>
+            {isAddItemsOpen ? <FaChevronDown className="ml-2 text-white" /> : <FaChevronRight className="ml-2 text-white" />}
+          </div>
 
-        {/* Exam Section */}
-        <h2 className="text-lg font-bold mt-6 pb-2 pl-2">Exam</h2>
-        <ul className="mt-4">
-        <ul>
-        {/* Examination Section */}
-        <li className="py-2 flex items-center cursor-pointer" onClick={toggleExaminationDropdown}>
-          <FaClipboardList className="w-5 h-5 mr-2" />
-          <span>Examination</span>
-          <FaCaretDown
-            className={`ml-2 transition-transform ${isExaminationDropdownOpen ? 'rotate-180' : 'rotate-0'}`}
-          />
+          {isAddItemsOpen && (
+            <ul className="pl-8 space-y-4 mt-2">
+              {/* Teachers Section */}
+              <li>
+                <div className="flex items-center cursor-pointer" onClick={() => setIsTeacherSectionOpen(!isTeacherSectionOpen)}>
+                  <span className="text-sm font-semibold text-gray-300">Teachers</span>
+                  {isTeacherSectionOpen ? <FaChevronDown className="ml-2 text-white" /> : <FaChevronRight className="ml-2 text-white" />}
+                </div>
+                {isTeacherSectionOpen && (
+                  <ul className="pl-4 space-y-2">
+                    <li>
+                      <NavLink to="/add-teacher" className="flex items-center text-sm text-white hover:text-gray-400">
+                        <span>Add Teacher</span>
+                      </NavLink>
+                    </li>
+                    <li>
+                    <NavLink to="/meetform" className="flex items-center text-sm text-white hover:text-gray-400">
+                      <span>Arrenge Meeting</span>
+                    </NavLink>
+                  </li>
+                  </ul>
+                )}
+              </li>
+
+              {/* Students Section */}
+              <li>
+                <div className="flex items-center cursor-pointer" onClick={() => setIsStudentSectionOpen(!isStudentSectionOpen)}>
+                  <span className="text-sm font-semibold text-gray-300">Students</span>
+                  {isStudentSectionOpen ? <FaChevronDown className="ml-2 text-white" /> : <FaChevronRight className="ml-2 text-white" />}
+                </div>
+                {isStudentSectionOpen && (
+                  <ul className="pl-4 space-y-2">
+                    <li>
+                      <NavLink to="/studentadmission" className="flex items-center text-sm text-white hover:text-gray-400">
+                        <span>Student Admission</span>
+                      </NavLink>
+                    </li>
+                  </ul>
+                )}
+              </li>
+
+              {/* Staff Section */}
+              <li>
+                <div className="flex items-center cursor-pointer" onClick={() => setIsStaffSectionOpen(!isStaffSectionOpen)}>
+                  <span className="text-sm font-semibold text-gray-300">Staff</span>
+                  {isStaffSectionOpen ? <FaChevronDown className="ml-2 text-white" /> : <FaChevronRight className="ml-2 text-white" />}
+                </div>
+                {isStaffSectionOpen && (
+                  <ul className="pl-4 space-y-2">
+                    <li>
+                      <NavLink to="/staff" className="flex items-center text-sm text-white hover:text-gray-400">
+                        <span>Add Staff</span>
+                      </NavLink>
+                    </li>
+                  </ul>
+                )}
+              </li>
+
+              {/* Holidays Section */}
+              <li>
+                <div className="flex items-center cursor-pointer" onClick={() => setIsHolidaySectionOpen(!isHolidaySectionOpen)}>
+                  <span className="text-sm font-semibold text-gray-300">Holidays</span>
+                  {isHolidaySectionOpen ? <FaChevronDown className="ml-2 text-white" /> : <FaChevronRight className="ml-2 text-white" />}
+                </div>
+                {isHolidaySectionOpen && (
+                  <ul className="pl-4 space-y-2">
+                    <li>
+                      <NavLink to="/add-holiday" className="flex items-center text-sm text-white hover:text-gray-400">
+                        <span>Add Holiday</span>
+                      </NavLink>
+                    </li>
+                  </ul>
+                )}
+              </li>
+
+              {/* Classes Section */}
+              <li>
+                <div className="flex items-center cursor-pointer" onClick={() => setIsClassSectionOpen(!isClassSectionOpen)}>
+                  <span className="text-sm font-semibold text-gray-300">Classes</span>
+                  {isClassSectionOpen ? <FaChevronDown className="ml-2 text-white" /> : <FaChevronRight className="ml-2 text-white" />}
+                </div>
+                {isClassSectionOpen && (
+                  <ul className="pl-4 space-y-2">
+                    <li>
+                      <NavLink to="/class" className="flex items-center text-sm text-white hover:text-gray-400">
+                        <span>Add Class</span>
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink to="/section" className="flex items-center text-sm text-white hover:text-gray-400">
+                        <span>Add Section</span>
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink to="/classroom" className="flex items-center text-sm text-white hover:text-gray-400">
+                        <span>Add Classroom</span>
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink to="/subject" className="flex items-center text-sm text-white hover:text-gray-400">
+                        <span>Add Subject</span>
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink to="/optional-subject" className="flex items-center text-sm text-white hover:text-gray-400">
+                        <span>Add Optional Subject</span>
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink to="/classroutine" className="flex items-center text-sm text-white hover:text-gray-400">
+                        <span>Add Routine</span>
+                      </NavLink>
+                    </li>
+                  </ul>
+                )}
+              </li>
+              {/* Fees Section */}
+              <li>
+                <div className="flex items-center cursor-pointer" onClick={() => setIsFeesSectionOpen(!isFeesSectionOpen)}>
+                  <span className="text-sm font-semibold text-gray-300">Fees</span>
+                  {isFeesSectionOpen ? <FaChevronDown className="ml-2 text-white" /> : <FaChevronRight className="ml-2 text-white" />}
+                </div>
+                {isFeesSectionOpen && (
+                  <ul className="pl-4 space-y-2">
+                    <li>
+                      <NavLink to="/fees" className="flex items-center text-sm text-white hover:text-gray-400">
+                        <span>Add Fees</span>
+                      </NavLink>
+                    </li>
+                  </ul>
+                )}
+              </li>
+
+              {/* Transport Section */}
+              <li>
+                <div className="flex items-center cursor-pointer" onClick={() => setIsTransportSectionOpen(!isTransportSectionOpen)}>
+                  <span className="text-sm font-semibold text-gray-300">Transport</span>
+                  {isTransportSectionOpen ? <FaChevronDown className="ml-2 text-white" /> : <FaChevronRight className="ml-2 text-white" />}
+                </div>
+                {isTransportSectionOpen && (
+                  <ul className="pl-4 space-y-2">
+                    <li>
+                      <NavLink to="/add-driver" className="flex items-center text-sm text-white hover:text-gray-400">
+                        <span>Add Driver</span>
+                      </NavLink>
+                    </li>
+                    <li>
+                    <NavLink to="/bus-form" className="flex items-center text-sm text-white hover:text-gray-400">
+                      <span>Add Bus Route</span>
+                    </NavLink>
+                  </li>
+                  </ul>
+                )}
+              </li>
+
+              {/* Exams Section */}
+              <li>
+                <div className="flex items-center cursor-pointer" onClick={() => setIsExamSectionOpen(!isExamSectionOpen)}>
+                  <span className="text-sm font-semibold text-gray-300">Exams</span>
+                  {isExamSectionOpen ? <FaChevronDown className="ml-2 text-white" /> : <FaChevronRight className="ml-2 text-white" />}
+                </div>
+                {isExamSectionOpen && (
+                  <ul className="pl-4 space-y-2">
+
+                    <li>
+                      <NavLink to="/addexam" className="flex items-center text-sm text-white hover:text-gray-400">
+                        <span>Add Exam</span>
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink to="/examshedule" className="flex items-center text-sm text-white hover:text-gray-400">
+                        <span>Add Exam Schedule</span>
+                      </NavLink>
+                    </li>
+                    <li>
+                    <NavLink to="/add-marks" className="flex items-center text-sm text-white hover:text-gray-400">
+                      <span>Add Marks</span>
+                    </NavLink>
+                  </li>
+                  </ul>
+                )}
+              </li>
+            </ul>
+          )}
         </li>
-        {isExaminationDropdownOpen && (
-          <ul className="ml-6 mt-2">
-          <Link to="/addexam" className="hover:text-gray-400">
-            <li className="py-2"><a href="#" className="hover:text-gray-400">Exam Type</a></li>
-            </Link>
-            <Link to="/examsetup" className="hover:text-gray-400">
-            <li className="py-2"><a href="#" className="hover:text-gray-400">Exam Setup</a></li>
-            </Link>
-            <Link to="/examshedule" className="hover:text-gray-400">
-            <li className="py-2"><a href="#" className="hover:text-gray-400">Exam Schedule</a></li>
-            </Link>
-            <Link to="/examattendance" className="hover:text-gray-400">
-            <li className="py-2"><a href="#" className="hover:text-gray-400">Exam Attendance(Coming Soon)</a></li>
-            </Link>
-            <Link to="/markregister" className="hover:text-gray-400">
-            <li className="py-2"><a href="#" className="hover:text-gray-400">Marks Register(Coming Soon)</a></li>
-            </Link>
-            <Link to="/marksgrade" className="hover:text-gray-400">
-            <li className="py-2"><a href="#" className="hover:text-gray-400">Marks Grade(Coming Soon)</a></li>
-            </Link>
-            <Link to="/sendmarksbysms" className="hover:text-gray-400">
-            <li className="py-2"><a href="#" className="hover:text-gray-400">Send Marks By SMS(Coming Soon)</a></li>
-            </Link>
-          </ul>
-        )}
+
+
+        {/* View Records Section */}
+        <li className="flex flex-col items-start text-lg p-3 rounded-md hover:bg-gray-700">
+          <div className="flex items-center w-full cursor-pointer" onClick={toggleViewRecords}>
+            <FaFileAlt className="mr-3 text-white" />
+            <span className="text-white">View Records</span>
+            {isViewRecordsOpen ? <FaChevronDown className="ml-2 text-white" /> : <FaChevronRight className="ml-2 text-white" />}
+          </div>
+          {isViewRecordsOpen && (
+            <ul className="pl-8 space-y-4 mt-2">
+              {/* Teachers Section */}
+              <li>
+                <div className="flex items-center cursor-pointer" onClick={() => setIsTeacherSectionOpen(!isTeacherSectionOpen)}>
+                  <span className="text-sm font-semibold text-gray-300">Teachers</span>
+                  {isTeacherSectionOpen ? <FaChevronDown className="ml-2 text-white" /> : <FaChevronRight className="ml-2 text-white" />}
+                </div>
+                {isTeacherSectionOpen && (
+                  <ul className="pl-4 space-y-2">
+                    <li>
+                      <NavLink to="/teacher" className="flex items-center text-sm text-white hover:text-gray-400">
+                        <span>View Teachers</span>
+                      </NavLink>
+                    </li>
+                    <li>
+                    <NavLink to="/managemeeting" className="flex items-center text-sm text-white hover:text-gray-400">
+                      <span>View Meetings</span>
+                    </NavLink>
+                  </li>
+                  </ul>
+                )}
+              </li>
+
+              {/* Students Section */}
+              <li>
+                <div className="flex items-center cursor-pointer" onClick={() => setIsStudentSectionOpen(!isStudentSectionOpen)}>
+                  <span className="text-sm font-semibold text-gray-300">Students</span>
+                  {isStudentSectionOpen ? <FaChevronDown className="ml-2 text-white" /> : <FaChevronRight className="ml-2 text-white" />}
+                </div>
+                {isStudentSectionOpen && (
+                  <ul className="pl-4 space-y-2">
+                    <li>
+                      <NavLink to="/managestudent" className="flex items-center text-sm text-white hover:text-gray-400">
+                        <span>View Students</span>
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink to="/complaintlist" className="flex items-center text-sm text-white hover:text-gray-400">
+                        <span>View Complaints</span>
+                      </NavLink>
+                    </li>
+                    <li>
+                    <NavLink to="/studentmeeting" className="flex items-center text-sm text-white hover:text-gray-400">
+                      <span>Student Online Classes</span>
+                    </NavLink>
+                  </li>
+                  </ul>
+                )}
+              </li>
+
+              {/* Parents Section */}
+              <li>
+                <div
+                  className="flex items-center cursor-pointer"
+                  onClick={() => setIsParentSectionOpen(!isParentSectionOpen)}
+                >
+                  <span className="text-sm font-semibold text-gray-300">Parents</span>
+                  {isParentSectionOpen ? (
+                    <FaChevronDown className="ml-2 text-white" />
+                  ) : (
+                    <FaChevronRight className="ml-2 text-white" />
+                  )}
+                </div>
+                {isParentSectionOpen && (
+                  <ul className="pl-4 space-y-2">
+                    <li>
+                      <NavLink
+                        to="/parentlist"
+                        className="flex items-center text-sm text-white hover:text-gray-400"
+                      >
+                        <span>View Parents</span>
+                      </NavLink>
+                    </li>
+                  </ul>
+                )}
+              </li>
+
+
+              {/* Staff Section */}
+              <li>
+                <div className="flex items-center cursor-pointer" onClick={() => setIsStaffSectionOpen(!isStaffSectionOpen)}>
+                  <span className="text-sm font-semibold text-gray-300">Staff</span>
+                  {isStaffSectionOpen ? <FaChevronDown className="ml-2 text-white" /> : <FaChevronRight className="ml-2 text-white" />}
+                </div>
+                {isStaffSectionOpen && (
+                  <ul className="pl-4 space-y-2">
+                    <li>
+                      <NavLink to="/staffs" className="flex items-center text-sm text-white hover:text-gray-400">
+                        <span>View Staff</span>
+                      </NavLink>
+                    </li>
+                  </ul>
+                )}
+              </li>
+
+              {/* Holidays Section */}
+              <li>
+                <div className="flex items-center cursor-pointer" onClick={() => setIsHolidaySectionOpen(!isHolidaySectionOpen)}>
+                  <span className="text-sm font-semibold text-gray-300">Holidays</span>
+                  {isHolidaySectionOpen ? <FaChevronDown className="ml-2 text-white" /> : <FaChevronRight className="ml-2 text-white" />}
+                </div>
+                {isHolidaySectionOpen && (
+                  <ul className="pl-4 space-y-2">
+                    <li>
+                      <NavLink to="/holidays" className="flex items-center text-sm text-white hover:text-gray-400">
+                        <span>View Holidays</span>
+                      </NavLink>
+                    </li>
+                  </ul>
+                )}
+              </li>
+
+              {/* Sections Section */}
+              <li>
+                <div className="flex items-center cursor-pointer" onClick={() => setIsSectionSectionOpen(!isSectionSectionOpen)}>
+                  <span className="text-sm font-semibold text-gray-300">Sections</span>
+                  {isSectionSectionOpen ? <FaChevronDown className="ml-2 text-white" /> : <FaChevronRight className="ml-2 text-white" />}
+                </div>
+                {isSectionSectionOpen && (
+                  <ul className="pl-4 space-y-2">
+                    <li>
+                      <NavLink to="/sections" className="flex items-center text-sm text-white hover:text-gray-400">
+                        <span>View Sections</span>
+                      </NavLink>
+                    </li>
+                  </ul>
+                )}
+              </li>
+
+              {/* Classes Section */}
+              <li>
+                <div className="flex items-center cursor-pointer" onClick={() => setIsClassSectionOpen(!isClassSectionOpen)}>
+                  <span className="text-sm font-semibold text-gray-300">Classes</span>
+                  {isClassSectionOpen ? <FaChevronDown className="ml-2 text-white" /> : <FaChevronRight className="ml-2 text-white" />}
+                </div>
+                {isClassSectionOpen && (
+                  <ul className="pl-4 space-y-2">
+                    <li>
+                      <NavLink to="/classlist" className="flex items-center text-sm text-white hover:text-gray-400">
+                        <span>View Classes</span>
+                      </NavLink>
+                    </li>
+                  </ul>
+                )}
+              </li>
+
+              {/* Subjects Section */}
+              <li>
+                <div className="flex items-center cursor-pointer" onClick={() => setIsSubjectSectionOpen(!isSubjectSectionOpen)}>
+                  <span className="text-sm font-semibold text-gray-300">Subjects</span>
+                  {isSubjectSectionOpen ? <FaChevronDown className="ml-2 text-white" /> : <FaChevronRight className="ml-2 text-white" />}
+                </div>
+                {isSubjectSectionOpen && (
+                  <ul className="pl-4 space-y-2">
+                    <li>
+                      <NavLink to="/subjectlist" className="flex items-center text-sm text-white hover:text-gray-400">
+                        <span>View Subject List</span>
+                      </NavLink>
+                    </li>
+                  </ul>
+                )}
+              </li>
+              {/* Student Attendance */}
+              <li>
+                <div className="flex items-center cursor-pointer" onClick={() => setIsStudentAttendanceOpen(!isStudentAttendanceOpen)}>
+                  <span className="text-sm font-semibold text-gray-300">Student Attendance</span>
+                  {isStudentAttendanceOpen ? <FaChevronDown className="ml-2 text-white" /> : <FaChevronRight className="ml-2 text-white" />}
+                </div>
+                {isStudentAttendanceOpen && (
+                  <ul className="pl-4 space-y-2">
+                    <li>
+                      <NavLink to="/studentattendance" className="flex items-center text-sm text-white hover:text-gray-400">
+                        <span>View Student Attendance List</span>
+                      </NavLink>
+                    </li>
+                  </ul>
+                )}
+              </li>
+
+              {/* Student Promote */}
+              <li>
+                <div className="flex items-center cursor-pointer" onClick={() => setIsStudentPromoteOpen(!isStudentPromoteOpen)}>
+                  <span className="text-sm font-semibold text-gray-300">Student Promote</span>
+                  {isStudentPromoteOpen ? <FaChevronDown className="ml-2 text-white" /> : <FaChevronRight className="ml-2 text-white" />}
+                </div>
+                {isStudentPromoteOpen && (
+                  <ul className="pl-4 space-y-2">
+                    <li>
+                      <NavLink to="/studentpromote" className="flex items-center text-sm text-white hover:text-gray-400">
+                        <span>Promote Student</span>
+                      </NavLink>
+                    </li>
+                  </ul>
+                )}
+              </li>
+
+              {/* Student Homework */}
+              <li>
+                <div className="flex items-center cursor-pointer" onClick={() => setIsStudentHomeworkOpen(!isStudentHomeworkOpen)}>
+                  <span className="text-sm font-semibold text-gray-300">Student Homework</span>
+                  {isStudentHomeworkOpen ? <FaChevronDown className="ml-2 text-white" /> : <FaChevronRight className="ml-2 text-white" />}
+                </div>
+                {isStudentHomeworkOpen && (
+                  <ul className="pl-4 space-y-2">
+                    <li>
+                      <NavLink to="/homeworklist" className="flex items-center text-sm text-white hover:text-gray-400">
+                        <span>Student Homework List</span>
+                      </NavLink>
+                    </li>
+                  </ul>
+                )}
+              </li>
+
+              {/* Routine Section */}
+              <li>
+                <div className="flex items-center cursor-pointer" onClick={() => setIsRoutineSectionOpen(!isRoutineSectionOpen)}>
+                  <span className="text-sm font-semibold text-gray-300">Routine</span>
+                  {isRoutineSectionOpen ? <FaChevronDown className="ml-2 text-white" /> : <FaChevronRight className="ml-2 text-white" />}
+                </div>
+                {isRoutineSectionOpen && (
+                  <ul className="pl-4 space-y-2">
+                    <li>
+                      <NavLink to="/classroutinelist" className="flex items-center text-sm text-white hover:text-gray-400">
+                        <span>View Routine List</span>
+                      </NavLink>
+                    </li>
+                  </ul>
+                )}
+              </li>
+
+              {/* Topic Section */}
+              <li>
+                <div className="flex items-center cursor-pointer" onClick={() => setIsLeaveSectionOpen(!isLeaveSectionOpen)}>
+                  <span className="text-sm font-semibold text-gray-300">Leaves</span>
+                  {isLeaveSectionOpen ? <FaChevronDown className="ml-2 text-white" /> : <FaChevronRight className="ml-2 text-white" />}
+                </div>
+                {isLeaveSectionOpen && (
+                  <ul className="pl-4 space-y-2">
+                    <li>
+                      <NavLink to="/leaves" className="flex items-center text-sm text-white hover:text-gray-400">
+                        <span>Student Leave List</span>
+                      </NavLink>
+                    </li>
+                    <li>
+                    <NavLink to="/teacher-leaves" className="flex items-center text-sm text-white hover:text-gray-400">
+                      <span>Teacher Leave List</span>
+                    </NavLink>
+                  </li>
+                  </ul>
+                )}
+              </li>
+
+
+              {/* Fees Section */}
+              <li>
+                <div className="flex items-center cursor-pointer" onClick={() => setIsFeesSectionOpen(!isFeesSectionOpen)}>
+                  <span className="text-sm font-semibold text-gray-300">Fees</span>
+                  {isFeesSectionOpen ? <FaChevronDown className="ml-2 text-white" /> : <FaChevronRight className="ml-2 text-white" />}
+                </div>
+                {isFeesSectionOpen && (
+                  <ul className="pl-4 space-y-2">
+                    <li>
+                      <NavLink to="/fees-details" className="flex items-center text-sm text-white hover:text-gray-400">
+                        <span>View Fee List</span>
+                      </NavLink>
+                    </li>
+                  </ul>
+                )}
+              </li>
+
+              {/* Transport Section */}
+              <li>
+                <div className="flex items-center cursor-pointer" onClick={() => setIsTransportSectionOpen(!isTransportSectionOpen)}>
+                  <span className="text-sm font-semibold text-gray-300">Transport</span>
+                  {isTransportSectionOpen ? <FaChevronDown className="ml-2 text-white" /> : <FaChevronRight className="ml-2 text-white" />}
+                </div>
+                {isTransportSectionOpen && (
+                  <ul className="pl-4 space-y-2">
+                    <li>
+                      <NavLink to="/driverlist" className="flex items-center text-sm text-white hover:text-gray-400">
+                        <span>View Drivers</span>
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink to="/transportlist" className="flex items-center text-sm text-white hover:text-gray-400">
+                        <span>View Transport Routes</span>
+                      </NavLink>
+                    </li>
+                  </ul>
+                )}
+              </li>
+
+              {/* Transport Section */}
+              <li>
+                <div className="flex items-center cursor-pointer" onClick={() => setIsExamSectionOpen(!isExamSectionOpen)}>
+                  <span className="text-sm font-semibold text-gray-300">Exam</span>
+                  {isExamSectionOpen ? <FaChevronDown className="ml-2 text-white" /> : <FaChevronRight className="ml-2 text-white" />}
+                </div>
+                {isExamSectionOpen && (
+                  <ul className="pl-4 space-y-2">
+                    <li>
+                      <NavLink
+                        to="/examtypelist"
+                        className="flex items-center text-sm text-white hover:text-gray-400"
+                        activeClassName="bg-gray-700 rounded-full"
+                      >
+                        <span>ExamTypeList</span>
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink
+                        to="/examshedulelist"
+                        className="flex items-center text-sm text-white hover:text-gray-400"
+                        activeClassName="bg-gray-700 rounded-full"
+                      >
+                        <span>ExamScheduleList</span>
+                      </NavLink>
+                    </li>
+                  </ul>
+                )}
+              </li>
+            </ul>
+          )}
+        </li>
+        {/* Export Data Section */}
+        <li className="flex flex-col items-start text-lg p-3 rounded-md hover:bg-gray-700">
+          <div className="flex items-center w-full cursor-pointer" onClick={toggleExportData}>
+            <FaDownload className="mr-3 text-white" />
+            <span className="text-white">Export Data</span>
+            {isExportDataOpen ? <FaChevronDown className="ml-2 text-white" /> : <FaChevronRight className="ml-2 text-white" />}
+          </div>
+          {isExportDataOpen && (
+            <ul className="pl-8 space-y-4 mt-2">
+              {/* Teachers Section */}
+              <li>
+                <div className="flex items-center cursor-pointer" onClick={() => setIsTeacherExportOpen(!isTeacherExportOpen)}>
+                  <span className="text-sm font-semibold text-gray-300">Teachers</span>
+                  {isTeacherExportOpen ? <FaChevronDown className="ml-2 text-white" /> : <FaChevronRight className="ml-2 text-white" />}
+                </div>
+                {isTeacherExportOpen && (
+                  <ul className="pl-4 space-y-2">
+                    <li>
+                      <NavLink to="/teacherList" className="flex items-center text-sm text-white hover:text-gray-400">
+                        <span>Export Teachers</span>
+                      </NavLink>
+                    </li>
+                  </ul>
+                )}
+              </li>
+
+              {/* Students Section */}
+              <li>
+                <div className="flex items-center cursor-pointer" onClick={() => setIsStudentExportOpen(!isStudentExportOpen)}>
+                  <span className="text-sm font-semibold text-gray-300">Students</span>
+                  {isStudentExportOpen ? <FaChevronDown className="ml-2 text-white" /> : <FaChevronRight className="ml-2 text-white" />}
+                </div>
+                {isStudentExportOpen && (
+                  <ul className="pl-4 space-y-2">
+                    <li>
+                      <NavLink to="/stuList" className="flex items-center text-sm text-white hover:text-gray-400">
+                        <span>Export Students</span>
+                      </NavLink>
+                    </li>
+                  </ul>
+                )}
+              </li>
+
+              {/* Staff Section */}
+              <li>
+                <div className="flex items-center cursor-pointer" onClick={() => setIsStaffExportOpen(!isStaffExportOpen)}>
+                  <span className="text-sm font-semibold text-gray-300">Staff</span>
+                  {isStaffExportOpen ? <FaChevronDown className="ml-2 text-white" /> : <FaChevronRight className="ml-2 text-white" />}
+                </div>
+                {isStaffExportOpen && (
+                  <ul className="pl-4 space-y-2">
+                    <li>
+                      <NavLink to="/staffList" className="flex items-center text-sm text-white hover:text-gray-400">
+                        <span>Export Staff</span>
+                      </NavLink>
+                    </li>
+                  </ul>
+                )}
+              </li>
+
+              {/* Marks Section */}
+              <li>
+                <div className="flex items-center cursor-pointer" onClick={() => setIsMarksExportOpen(!isMarksExportOpen)}>
+                  <span className="text-sm font-semibold text-gray-300">Marks</span>
+                  {isMarksExportOpen ? <FaChevronDown className="ml-2 text-white" /> : <FaChevronRight className="ml-2 text-white" />}
+                </div>
+                {isMarksExportOpen && (
+                  <ul className="pl-4 space-y-2">
+                    <li>
+                      <NavLink to="/marks" className="flex items-center text-sm text-white hover:text-gray-400">
+                        <span>Export Marks</span>
+                      </NavLink>
+                    </li>
+                  </ul>
+                )}
+              </li>
+            </ul>
+          )}
+        </li>
+
+
+        {/* Assigning Section */}
+        <li className="flex flex-col items-start text-lg p-3 rounded-md hover:bg-gray-700">
+          <div className="flex items-center w-full cursor-pointer" onClick={toggleAssigningSection}>
+            <FaPlus className="mr-3 text-white" /> {/* New Icon for Assigning Section */}
+            <span className="text-white">Assigning Section</span>
+            {isAssigningSectionOpen ? (
+              <FaChevronDown className="ml-2 text-white" />
+            ) : (
+              <FaChevronRight className="ml-2 text-white" />
+            )}
+          </div>
+          {isAssigningSectionOpen && (
+            <ul className="pl-8 space-y-4 mt-2">
+              {/* Teacher Assignment Section */}
+              <li>
+                <div className="flex items-center cursor-pointer" onClick={() => setIsTeacherAssigningOpen(!isTeacherAssigningOpen)}>
+                  <span className="text-sm font-semibold text-gray-300">Teachers</span>
+                  {isTeacherAssigningOpen ? <FaChevronDown className="ml-2 text-white" /> : <FaChevronRight className="ml-2 text-white" />}
+                </div>
+                {isTeacherAssigningOpen && (
+                  <ul className="pl-4 space-y-2">
+                    <li>
+                      <NavLink to="/assign-teacher" className="flex items-center text-sm text-white hover:text-gray-400">
+                        <span>Assign Teacher</span>
+                      </NavLink>
+                    </li>
+                  </ul>
+                )}
+              </li>
+
+              {/* Subject Assignment Section */}
+              <li>
+                <div className="flex items-center cursor-pointer" onClick={() => setIsSubjectAssigningOpen(!isSubjectAssigningOpen)}>
+                  <span className="text-sm font-semibold text-gray-300">Subjects</span>
+                  {isSubjectAssigningOpen ? <FaChevronDown className="ml-2 text-white" /> : <FaChevronRight className="ml-2 text-white" />}
+                </div>
+                {isSubjectAssigningOpen && (
+                  <ul className="pl-4 space-y-2">
+                    <li>
+                      <NavLink to="/assign-subject" className="flex items-center text-sm text-white hover:text-gray-400">
+                        <span>Assign Subject</span>
+                      </NavLink>
+                    </li>
+                  </ul>
+                )}
+              </li>
+            </ul>
+          )}
+        </li>
+
+        {/* Admin Setting */}
+        <li className="flex items-center text-lg p-3 rounded-md hover:bg-gray-700 mt-8">
+          <NavLink
+            to="/settings"
+            className="flex items-center text-white hover:text-gray-400"
+            activeClassName="bg-gray-700 rounded-full"
+          >
+            <FaCog className="mr-3 text-white" />
+            <span>Admin Setting</span>
+          </NavLink>
+        </li>
+
+        <li
+          className="flex items-center text-lg p-3 rounded-md hover:bg-gray-700 mt-8 cursor-pointer"
+          onClick={handleAdminLogout}
+        >
+          <FaSignOutAlt className="mr-3 text-white" />
+          <span className="text-white hover:text-gray-400">Admin Logout</span>
+        </li>
       </ul>
-    <ul>
-    {/* Online Exam Section */}
-    <li className="py-2 flex items-center cursor-pointer" onClick={toggleOnlineExamDropdown}>
-      <FaClipboardList className="w-5 h-5 mr-2" />
-      <span>Online Exam(Coming Soon)</span>
-      <FaCaretDown
-        className={`ml-2 transition-transform ${isOnlineExamDropdownOpen ? 'rotate-180' : 'rotate-0'}`}
-      />
-    </li>
-    {isOnlineExamDropdownOpen && (
-      <ul className="ml-6 mt-2">
-      <Link to="/coming-soon" className="hover:text-gray-400">
-        <li className="py-2"><a href="#" className="hover:text-gray-400">Question Group</a></li>
-        </Link>
-        <Link to="/coming-soon" className="hover:text-gray-400">
-        <li className="py-2"><a href="#" className="hover:text-gray-400">Question Bank</a></li>
-        </Link>
-        <Link to="/coming-soon" className="hover:text-gray-400">
-        <li className="py-2"><a href="#" className="hover:text-gray-400">Online Exam</a></li>
-        </Link>
-      </ul>
-    )}
-  </ul>
-  </ul>
-
-     {/* Accounts Section */}
-     <h2 className="text-lg font mt-6 pb-2 pl-2 flex items-center">
-     <FaWallet className="w-5 h-5 mr-2" /> Accounts(Coming Soon)
-   </h2>
-   <ul className="mt-4">
-  <ul className="ml-6 mt-2">
-{/* Wallet Section */}
-<li className="py-2 flex items-center cursor-pointer" onClick={toggleWalletDropdown}>
-  <FaWallet className="w-5 h-5 mr-2" />
-  <span>Wallet(Coming Soon)</span>
-  <FaCaretDown
-    className={`ml-2 transition-transform ${isWalletDropdownOpen ? 'rotate-180' : 'rotate-0'}`}
-  />
-</li>
-{isWalletDropdownOpen && (
-  <ul className="ml-6 mt-2">
-    <Link to="/pending" className="hover:text-gray-400">
-      <li className="py-2">
-        <a href="#" className="hover:text-gray-400">Pending Deposit</a>
-      </li>
-    </Link>
-    <Link to="/approval" className="hover:text-gray-400">
-      <li className="py-2">
-        <a href="#" className="hover:text-gray-400">Approve Deposit</a>
-      </li>
-    </Link>
-    <Link to="/reject" className="hover:text-gray-400">
-      <li className="py-2">
-        <a href="#" className="hover:text-gray-400">Reject Deposit</a>
-      </li>
-    </Link>
-    <Link to="/refund" className="hover:text-gray-400">
-      <li className="py-2">
-        <a href="#" className="hover:text-gray-400">Wallet Transaction</a>
-      </li>
-    </Link>
-    <Link to="/coming-soon" className="hover:text-gray-400">
-      <li className="py-2">
-        <a href="#" className="hover:text-gray-400">Refund Request</a>
-      </li>
-    </Link>
-  </ul>
-)}
-{/* Accounts Section */}
-<li className="py-2 flex items-center cursor-pointer" onClick={toggleAccountsDropdown}>
-  <FaBook className="w-5 h-5 mr-2" />
-  <span>Accounts(Coming Soon)</span>
-  <FaCaretDown
-    className={`ml-2 transition-transform ${isAccountsDropdownOpen ? 'rotate-180' : 'rotate-0'}`}
-  />
-</li>
-{isAccountsDropdownOpen && (
-  <ul className="ml-6 mt-2">
-    <Link to="/profitloss" className="hover:text-gray-400">
-      <li className="py-2">
-        <a href="#" className="hover:text-gray-400">Profit & Loss</a>
-      </li>
-    </Link>
-    <Link to="/addincome" className="hover:text-gray-400">
-      <li className="py-2">
-        <a href="#" className="hover:text-gray-400">Income</a>
-      </li>
-    </Link>
-    <Link to="/addexpenses" className="hover:text-gray-400">
-      <li className="py-2">
-        <a href="#" className="hover:text-gray-400">Expense</a>
-      </li>
-    </Link>
-    <Link to="/chartofaccount" className="hover:text-gray-400">
-      <li className="py-2">
-        <a href="#" className="hover:text-gray-400">Chart Of Account</a>
-      </li>
-    </Link>
-    <Link to="/bankaccount" className="hover:text-gray-400">
-      <li className="py-2">
-        <a href="#" className="hover:text-gray-400">Bank Account</a>
-      </li>
-    </Link>
-    <Link to="/bankaccount" className="hover:text-gray-400">
-      <li className="py-2">
-        <a href="#" className="hover:text-gray-400">Fund Transfer</a>
-      </li>
-    </Link>
-  </ul>
-)}
-  </ul>
-</ul>
-
-{/* Report Section */}
-<h2 className="text-lg font mt-6 pb-2 pl-2 flex items-center">
-  <FaChartBar className="w-5 h-5 mr-2" /> Report(Coming Soon)
-</h2>
-<ul className="mt-4">
-  <ul className="ml-6 mt-2">
-  <li className="py-2">
-  <a href="/coming-soon" className="hover:text-gray-400">Student Report</a>
-</li>
-<li className="py-2">
-  <a href="/coming-soon" className="hover:text-gray-400">Exam Report</a>
-</li>
-<li className="py-2">
-  <a href="/coming-soon" className="hover:text-gray-400">Staff Report</a>
-</li>
-<li className="py-2">
-  <a href="/coming-soon" className="hover:text-gray-400">Fees Report</a>
-</li>
-<li className="py-2">
-  <a href="/coming-soon" className="hover:text-gray-400">Accounts Report</a>
-</li>
-    <li className="py-2">
-    <a href="/settings" className="hover:text-gray-400">Settings</a>
-  </li>  
-  </ul>
-</ul>
-
-      </div>
+      <ToastContainer />
     </div>
   );
 };

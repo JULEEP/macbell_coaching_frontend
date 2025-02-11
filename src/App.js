@@ -184,6 +184,16 @@ import ParentHolidayPage from './Parents/ParentHolidayPage';
 import HolidayPage from './Pages/Holidays';
 import StudentBusTracking from './Student/StudentBusTracking';
 import LiveClass from './Student/LiveClass';
+import Parents from './Pages/ParentList';
+import Staffs from './Pages/Staffs';
+import SubjectListPage from './Pages/SubjectList';
+import ClassListPage from './Pages/ClassList';
+import SectionListPage from './Pages/SectionList';
+import RoutineList from './Pages/RoutineList';
+import GenerateId from './Teacher/GenerateId';
+import RoomsVc from './Teacher/RoomsVc';
+import BusTracking from './Pages/BusTracker';
+import TeacherMeeting from './Teacher/TeacherMeetings';
 
 function App() {
   return (
@@ -339,6 +349,19 @@ function App() {
             <Route path="/holidays" element={<HolidayPage/>} />
             <Route path="/studentbus-tracking" element={<StudentBusTracking/>}/>
             <Route path="/live-class" element={<LiveClass/>}/>
+
+            <Route path="/parentlist" element={<Parents/>} />
+            <Route path="/staffs" element={<Staffs/>} />
+            <Route path="/subjectlist" element={<SubjectListPage/>} />
+            <Route path="/classlist" element={<ClassListPage/>} />
+            <Route path="/sections" element={<SectionListPage/>} />
+            <Route path="/vehicles" element={<VehiclePage/>} />
+            <Route path="/classroutinelist" element={<RoutineList/>} />
+            <Route path="/generateid" element={<GenerateId/>} />
+            <Route path="/generateid/room/:roomId" element={<RoomsVc/>} />
+            <Route path="/bus-tracking" element={<BusTracking />} />
+            <Route path="/managemeeting" element={<TeacherMeeting />} />
+            
 
 
 
