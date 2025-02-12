@@ -59,11 +59,6 @@ const Dashboard = () => {
     intro.setOptions({
       steps: [
         {
-          element: ".intro-step-bus-location",
-          intro: "This section helps you track bus locations in real-time.",
-          position: "top"
-        },
-        {
           element: ".intro-step-meeting",  
           intro: "This section allows you to manage and schedule meetings.",
           position: "top"
@@ -407,13 +402,6 @@ const Dashboard = () => {
         <div className="font-sans">
 
         <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 custom-grid">
-        {/* Bus Locations */}
-        <div className="intro-step-bus-location bg-white p-4 shadow-lg rounded-lg hover:bg-gray-200 transition-all duration-300 w-full">
-          <NavLink to="/bus-tracking" className="flex flex-col items-center mt-4">
-            <FaBus className="text-green-500 text-2xl mb-2" />
-            <h4 className="text-xs sm:text-xl font-semibold text-black mb-2 text-center">Bus Locations</h4>
-          </NavLink>
-        </div>
 
         {/* Meeting */}
         <div className="intro-step-meeting bg-white p-4 shadow-lg rounded-lg hover:bg-gray-200 transition-all duration-300 w-full">

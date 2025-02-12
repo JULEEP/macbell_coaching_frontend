@@ -22,7 +22,7 @@ import "intro.js/introjs.css"; // Intro.js CSS import
 // Importing images
 
 const book = "https://media1.tenor.com/images/107e39e6cccecb07771733a383291bd9/tenor.gif?itemid=12632259";
-const transport = "https://i.gifer.com/Wdf9.gif";
+
 const routine = 'https://www.bing.com/th/id/OGC.59346b4b5c80cc5cf0c483a27dfdcb36?pid=1.7&rurl=https%3a%2f%2fcdn.dribbble.com%2fusers%2f1129235%2fscreenshots%2f3344482%2fgif03.gif&ehk=681MYbrM%2fq597jBw5ssf54CgRSsfohettd%2fV%2fTKmT%2bs%3d';
 const result = 'https://www.bing.com/th/id/OGC.f536b251e81ef82960690777ee76d243?pid=1.7&rurl=https%3a%2f%2fi.pinimg.com%2foriginals%2f80%2f04%2fe7%2f8004e78d9a4d63d94f3cff837e27790c.gif&ehk=CismETbhBNRq0HUnf6OoZs2GFprNe%2fl7vs6XwOpk%2bTY%3d';
 const subject = 'https://media.baamboozle.com/uploads/images/398004/1652344734_36162_gif-url.gif';
@@ -43,7 +43,6 @@ const bestCategories = [
   { img: attendance, name: "Attendance", link: "/student-attendance" },
   { img: notice, name: "Notice", link: "/student-notice-board" },
   { img: book, name: "Books", link: "/student-booklist" },
-  { img: transport, name: "Transport", link: "/studentbus-tracking" },
   { img: routine, name: "Routines", link: "/class-routine" },
   { img: result, name: "Results", link: "/student-result" },
   { img: fee, name: "My Fees", link: "/student-fees" },
@@ -119,40 +118,6 @@ const StudentDashboard = () => {
 
 
   useEffect(() => {
-    const fetchTransportData = async () => {
-      try {
-        const response = await fetch("https://school-backend-1-2xki.onrender.com/api/admin/get-transport-route");
-        const data = await response.json();
-
-        // Log the full data to check its structure
-        console.log(data);
-
-        // Ensure 'data.routes' exists and is an array
-        if (data.routes && Array.isArray(data.routes)) {
-          // Get today's date in 'YYYY-MM-DD' format
-          const currentDate = new Date().toISOString().split('T')[0];
-          console.log("Current Date:", currentDate);
-
-          // Filter the transport data based on current date
-          const filteredRoutes = data.routes.filter(route => {
-            // Extract the date part from the route's date field
-            const routeDate = route.date.split('T')[0];
-            return routeDate === currentDate;
-          });
-
-          // Log the filtered routes to check if filtering is working
-          console.log("Filtered Routes:", filteredRoutes);
-
-          // Set the transport data state with filtered routes
-          setTransportData(filteredRoutes);
-        } else {
-          console.error("No routes data found or data is not in the expected format.");
-        }
-      } catch (error) {
-        console.error("Error fetching transport data:", error);
-      }
-    };
-
     const fetchFeeSummary = async () => {
       try {
         const response = await fetch("https://school-backend-1-2xki.onrender.com/api/students/fees-summary/676909bcd20deeaaeca9bc31");
@@ -355,44 +320,6 @@ const StudentDashboard = () => {
                         <TableCell>{row.students}</TableCell>
                       </TableRow>
                     ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Box>
-
-            <Box mb={4} style={{ backgroundColor: "#fff3e6", padding: "20px", borderRadius: "10px" }} className="intro-step-4">
-              <h3 style={{ marginBottom: "10px", fontWeight: "bold" }}>Transport Routes (Today)</h3>
-              <TableContainer component={Paper}>
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Route</TableCell>
-                      <TableCell>Driver</TableCell>
-                      <TableCell>Driver's Number</TableCell>
-                      <TableCell>Stop Name</TableCell>
-                      <TableCell>Arrival Time</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {transportData.length > 0 ? (
-                      transportData.map((route, index) =>
-                        route.stops.map((stop, stopIndex) => (
-                          <TableRow key={`${route._id}-${stopIndex}`}>
-                            <TableCell>{route.routeTitle}</TableCell>
-                            <TableCell>{route.driver.name}</TableCell>
-                            <TableCell>{route.driver.mobileNumber}</TableCell>
-                            <TableCell>{stop.stopName}</TableCell>
-                            <TableCell>{stop.arrivalTime}</TableCell>
-                          </TableRow>
-                        ))
-                      )
-                    ) : (
-                      <TableRow>
-                        <TableCell colSpan={5} style={{ textAlign: "center" }}>
-                          No transport routes available for today.
-                        </TableCell>
-                      </TableRow>
-                    )}
                   </TableBody>
                 </Table>
               </TableContainer>

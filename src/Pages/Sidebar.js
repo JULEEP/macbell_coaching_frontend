@@ -253,27 +253,7 @@ const Sidebar = () => {
                 )}
               </li>
 
-              {/* Transport Section */}
-              <li>
-                <div className="flex items-center cursor-pointer" onClick={() => setIsTransportSectionOpen(!isTransportSectionOpen)}>
-                  <span className="text-sm font-semibold text-gray-300">Transport</span>
-                  {isTransportSectionOpen ? <FaChevronDown className="ml-2 text-white" /> : <FaChevronRight className="ml-2 text-white" />}
-                </div>
-                {isTransportSectionOpen && (
-                  <ul className="pl-4 space-y-2">
-                    <li>
-                      <NavLink to="/add-driver" className="flex items-center text-sm text-white hover:text-gray-400">
-                        <span>Add Driver</span>
-                      </NavLink>
-                    </li>
-                    <li>
-                    <NavLink to="/bus-form" className="flex items-center text-sm text-white hover:text-gray-400">
-                      <span>Add Bus Route</span>
-                    </NavLink>
-                  </li>
-                  </ul>
-                )}
-              </li>
+              
 
               {/* Exams Section */}
               <li>
@@ -585,27 +565,7 @@ const Sidebar = () => {
                 )}
               </li>
 
-              {/* Transport Section */}
-              <li>
-                <div className="flex items-center cursor-pointer" onClick={() => setIsTransportSectionOpen(!isTransportSectionOpen)}>
-                  <span className="text-sm font-semibold text-gray-300">Transport</span>
-                  {isTransportSectionOpen ? <FaChevronDown className="ml-2 text-white" /> : <FaChevronRight className="ml-2 text-white" />}
-                </div>
-                {isTransportSectionOpen && (
-                  <ul className="pl-4 space-y-2">
-                    <li>
-                      <NavLink to="/driverlist" className="flex items-center text-sm text-white hover:text-gray-400">
-                        <span>View Drivers</span>
-                      </NavLink>
-                    </li>
-                    <li>
-                      <NavLink to="/transportlist" className="flex items-center text-sm text-white hover:text-gray-400">
-                        <span>View Transport Routes</span>
-                      </NavLink>
-                    </li>
-                  </ul>
-                )}
-              </li>
+              
 
               {/* Transport Section */}
               <li>
