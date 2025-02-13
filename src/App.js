@@ -194,6 +194,7 @@ import GenerateId from './Teacher/GenerateId';
 import RoomsVc from './Teacher/RoomsVc';
 import BusTracking from './Pages/BusTracker';
 import TeacherMeeting from './Teacher/TeacherMeetings';
+import UploadLecture from './Pages/UploadLecture';
 
 function App() {
   return (
@@ -349,6 +350,7 @@ function App() {
             <Route path="/holidays" element={<HolidayPage/>} />
             <Route path="/studentbus-tracking" element={<StudentBusTracking/>}/>
             <Route path="/live-class" element={<LiveClass/>}/>
+            <Route path="/uploadlecture" element={<UploadLecture/>}/>
 
             <Route path="/parentlist" element={<Parents/>} />
             <Route path="/staffs" element={<Staffs/>} />
