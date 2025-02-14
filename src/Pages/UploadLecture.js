@@ -23,7 +23,7 @@ const UploadLecture = () => {
 
     try {
       const response = await fetch(
-        "https://localhost:4000/api/admin/create-lecture",
+        "http://localhost:4000/api/admin/create-lecture",
         {
           method: "POST",
           headers: {
