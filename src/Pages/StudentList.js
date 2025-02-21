@@ -6,9 +6,13 @@ import { FaBars, FaTimes } from "react-icons/fa";
 const StudentList = () => {
   const [students, setStudents] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedClass, setSelectedClass] = useState("");
+  const [selectedSection, setSelectedSection] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [loading, setLoading] = useState(true);
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const studentsPerPage = 10;
+  
 
   // Fetch students
   useEffect(() => {
@@ -40,9 +44,11 @@ const StudentList = () => {
 
   const filteredStudents = students.filter(
     (student) =>
-      student.firstName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      student.lastName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      student.roll?.toString().includes(searchTerm)
+      (student.firstName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        student.lastName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        student.roll?.toString().includes(searchTerm)) &&
+      (selectedClass ? student.class === selectedClass : true) &&
+      (selectedSection ? student.section === selectedSection : true)
   );
 
   const exportToCSV = () => {
@@ -81,6 +87,15 @@ const StudentList = () => {
     document.body.removeChild(link);
   };
 
+  const indexOfLastStudent = currentPage * studentsPerPage;
+  const indexOfFirstStudent = indexOfLastStudent - studentsPerPage;
+  const currentStudents = filteredStudents.slice(
+    indexOfFirstStudent,
+    indexOfLastStudent
+  );
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  
   return (
     <div className="min-h-screen flex bg-gray-100">
       {/* Sidebar Overlay */}
@@ -118,20 +133,72 @@ const StudentList = () => {
         </div>
 
         {/* Search and Export */}
-        <div className="mb-6 flex justify-between items-center">
-          <button
-            onClick={exportToCSV}
-            className="ml-4 px-4 py-2 mt-4 bg-purple-600 text-white rounded-md hover:bg-purple-700"
-          >
-            Export CSV
-          </button>
+        <div className="mb-6 flex flex-wrap justify-between items-center">
+          {/* Search Filter */}
+          <div className="w-full sm:w-1/2 md:w-auto mb-4 sm:mb-0 mt-4">
+            <input
+              type="text"
+              placeholder="Search by Name, Roll"
+              className="ml-4 px-4 py-2 bg-white border rounded-md w-70"
+              value={searchTerm}
+              onChange={handleSearch}
+            />
+          </div>
+
+          {/* Class Filter */}
+          <div className="w-full sm:w-1/2 md:w-auto mb-4 sm:mb-0">
+            <select
+              className="ml-4 px-4 py-2 bg-white border rounded-md w-70"
+              value={selectedClass}
+              onChange={(e) => setSelectedClass(e.target.value)}
+            >
+              <option value="">All Classes</option>
+              {/* Add class options here */}
+              <option value="1">Class 1</option>
+              <option value="2">Class 2</option>
+              <option value="3">Class 3</option>
+              <option value="4">Class 4</option>
+              <option value="5">Class 5</option>
+              <option value="6">Class 6</option>
+              <option value="7">Class 7</option>
+              <option value="8">Class 8</option>
+              <option value="9">Class 9</option>
+              <option value="10">Class 10</option>
+
+            </select>
+          </div>
+
+          {/* Section Filter */}
+          <div className="w-full sm:w-1/2 md:w-auto mb-4 sm:mb-0">
+            <select
+              className="ml-4 px-4 py-2 bg-white border rounded-md w-70"
+              value={selectedSection}
+              onChange={(e) => setSelectedSection(e.target.value)}
+            >
+              <option value="">All Sections</option>
+              {/* Add section options here */}
+              <option value="A">Section A</option>
+              <option value="B">Section B</option>
+              <option value="C">Section C</option>
+            </select>
+          </div>
+
+          {/* Export Button */}
+          <div className="w-full sm:w-1/2 md:w-auto mb-4 sm:mb-0">
+            <button
+              onClick={exportToCSV}
+              className="ml-4 px-4 py-2 mt-4 bg-purple-600 text-white rounded-md hover:bg-purple-700 w-70"
+            >
+              Export CSV
+            </button>
+          </div>
         </div>
 
         {/* Student Table */}
         <div className="overflow-x-auto mb-8">
           <table className="w-full border-collapse border border-gray-300">
             <thead>
-              <tr className="bg-gray-100">
+              <tr className="bg-purple-600 text-white">
                 <th className="px-4 py-2 border-b">SL</th>
                 <th className="px-4 py-2 border-b">First Name</th>
                 <th className="px-4 py-2 border-b">Last Name</th>
@@ -150,9 +217,9 @@ const StudentList = () => {
             </thead>
             <tbody>
               {filteredStudents.length > 0 ? (
-                filteredStudents.map((student, index) => (
+                currentStudents.map((student, index) => (
                   <tr key={student._id}>
-                    <td className="px-4 py-2 border-b">{index + 1}</td>
+                    <td className="px-4 py-2 border-b">{indexOfFirstStudent + index + 1}</td>
                     <td className="px-4 py-2 border-b">{student.firstName}</td>
                     <td className="px-4 py-2 border-b">{student.lastName}</td>
                     <td className="px-4 py-2 border-b">{student.roll}</td>
@@ -174,13 +241,31 @@ const StudentList = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="14" className="text-center text-gray-500">
+                  <td colSpan="14" className="text-center py-4">
                     No students found.
                   </td>
                 </tr>
               )}
             </tbody>
           </table>
+        </div>
+        <div className="flex justify-center mt-4">
+          {Array.from(
+            { length: Math.ceil(filteredStudents.length / studentsPerPage) },
+            (_, index) => (
+              <button
+                key={index + 1}
+                onClick={() => paginate(index + 1)}
+                className={`mx-1 px-3 py-1 rounded ${
+                  currentPage === index + 1
+                    ? "bg-purple-600 text-white"
+                    : "bg-gray-300"
+                }`}
+              >
+                {index + 1}
+              </button>
+            )
+          )}
         </div>
       </div>
     </div>

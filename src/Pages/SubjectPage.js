@@ -1,6 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import Sidebar from './Sidebar';
-import { FaBars, FaTimes } from 'react-icons/fa';
+// AddSubjectPage.js
+import React, { useState } from 'react';
+import Sidebar from './Sidebar'; // Import Sidebar
+import { FaBars, FaTimes } from 'react-icons/fa'; // Import icons for the sidebar toggle
+import { toast, ToastContainer } from 'react-toastify'; // Importing toast and ToastContainer
+import 'react-toastify/dist/ReactToastify.css'; // Importing the toast styles
 
 const SubjectPage = () => {
   const [formData, setFormData] = useState({
@@ -8,33 +11,8 @@ const SubjectPage = () => {
     subjectType: 'Theory', // Default to Theory
     subjectCode: '',
   });
-
-  const [subjects, setSubjects] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [subjectsPerPage] = useState(5); // Show 5 subjects per page
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
-  // Fetch subjects when the component mounts
-  useEffect(() => {
-    const fetchSubjects = async () => {
-      try {
-        const response = await fetch(
-          'https://school-backend-1-2xki.onrender.com/api/admin/get-subjects'
-        );
-        const data = await response.json();
-        if (response.ok) {
-          setSubjects(data.subjects);
-        } else {
-          console.error('Failed to fetch subjects:', data.message);
-        }
-      } catch (error) {
-        console.error('Error fetching subjects:', error);
-      }
-    };
-
-    fetchSubjects();
-  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -53,7 +31,7 @@ const SubjectPage = () => {
 
   const handleSaveSubject = async () => {
     if (!formData.subjectName || !formData.subjectCode) {
-      alert('Please fill in all required fields.');
+      toast.error('Please fill in all required fields.'); // Toast error
       return;
     }
 
@@ -77,26 +55,18 @@ const SubjectPage = () => {
       const data = await response.json();
 
       if (response.ok) {
-        setSubjects([...subjects, data.subject]);
-        alert('Subject added successfully.');
+        toast.success('Subject added successfully.'); // Toast success
         setFormData({ subjectName: '', subjectType: 'Theory', subjectCode: '' }); // Reset form
       } else {
-        alert(data.message || 'Failed to add subject.');
+        toast.error(data.message || 'Failed to add subject.'); // Toast error
       }
     } catch (error) {
       console.error('Error adding subject:', error);
-      alert('An error occurred while adding the subject.');
+      toast.error('An error occurred while adding the subject.'); // Toast error
     } finally {
       setLoading(false);
     }
   };
-
-  // Pagination logic
-  const indexOfLastSubject = currentPage * subjectsPerPage;
-  const indexOfFirstSubject = indexOfLastSubject - subjectsPerPage;
-  const currentSubjects = subjects.slice(indexOfFirstSubject, indexOfLastSubject);
-
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -125,7 +95,7 @@ const SubjectPage = () => {
       <div className={`flex-1 transition-all duration-300 ${isSidebarOpen ? 'ml-64' : 'ml-0'}`}>
         {/* Mobile Header */}
         <div className="flex items-center justify-between bg-purple-700 text-white p-4 shadow-lg lg:hidden">
-          <h1 className="text-lg font-bold">Subjects</h1>
+          <h1 className="text-lg font-bold">Add Subject</h1>
           <button onClick={toggleSidebar} className="text-2xl focus:outline-none">
             {isSidebarOpen ? <FaTimes /> : <FaBars />}
           </button>
@@ -207,58 +177,10 @@ const SubjectPage = () => {
             </div>
           </form>
         </div>
-
-        {/* Subject List */}
-        <div className="bg-white p-6 rounded-md shadow-lg mx-4 lg:mx-0">
-          <h2 className="text-lg text-gray-700 mb-4">Subject List</h2>
-          <table className="min-w-full table-auto">
-            <thead>
-              <tr className="bg-gray-100">
-                <th className="px-4 py-2 text-gray-600">SL</th>
-                <th className="px-4 py-2 text-gray-600">Subject</th>
-                <th className="px-4 py-2 text-gray-600">Subject Type</th>
-                <th className="px-4 py-2 text-gray-600">Subject Code</th>
-              </tr>
-            </thead>
-            <tbody>
-              {currentSubjects.length === 0 ? (
-                <tr>
-                  <td colSpan="4" className="text-center text-gray-500">
-                    No Data Available In Table
-                  </td>
-                </tr>
-              ) : (
-                currentSubjects.map((subject, index) => (
-                  <tr key={subject._id || index} className="border-t border-gray-300">
-                    <td className="px-4 py-2 text-gray-600 text-center">{index + 1}</td>
-                    <td className="px-4 py-2 text-gray-600 text-center">{subject.subjectName}</td>
-                    <td className="px-4 py-2 text-gray-600 text-center">{subject.subjectType}</td>
-                    <td className="px-4 py-2 text-gray-600 text-center">{subject.subjectCode}</td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-
-          {/* Pagination */}
-          <div className="mt-4 flex justify-center">
-            <button
-              onClick={() => paginate(currentPage - 1)}
-              disabled={currentPage === 1}
-              className="px-4 py-2 bg-purple-600 text-white rounded-md mr-2"
-            >
-              Prev
-            </button>
-            <button
-              onClick={() => paginate(currentPage + 1)}
-              disabled={currentPage * subjectsPerPage >= subjects.length}
-              className="px-4 py-2 bg-purple-600 text-white rounded-md"
-            >
-              Next
-            </button>
-          </div>
-        </div>
       </div>
+
+      {/* Toast Notifications */}
+      <ToastContainer />
     </div>
   );
 };

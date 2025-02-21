@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import Sidebar from "./Sidebar";
 import { FaBars, FaTimes } from "react-icons/fa"; // Sidebar toggle icons
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AddAssignVehicle = () => {
   const [vehicleNumber, setVehicleNumber] = useState("");
@@ -28,28 +30,13 @@ const AddAssignVehicle = () => {
   const handleSaveVehicle = async () => {
     if (vehicleNumber && vehicleModel && yearMade && driver) {
       setLoading(true);
-      setError("");
-      setSuccessMessage("");
-
       try {
         const response = await fetch("https://school-backend-1-2xki.onrender.com/api/admin/add-vehicle", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            vehicleNumber,
-            vehicleModel,
-            yearMade,
-            driver,
-            note,
-          }),
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ vehicleNumber, vehicleModel, yearMade, driver, note })
         });
-
-        if (!response.ok) {
-          throw new Error("Failed to add vehicle");
-        }
-
+        if (!response.ok) throw new Error("Failed to add vehicle");
         const data = await response.json();
         setVehicleList([...vehicleList, { ...data.vehicle, id: vehicleList.length + 1 }]);
         setVehicleNumber("");
@@ -57,14 +44,14 @@ const AddAssignVehicle = () => {
         setYearMade("");
         setDriver("");
         setNote("");
-        setSuccessMessage(data.message);
+        toast.success(data.message);
       } catch (err) {
-        setError(err.message || "Something went wrong");
+        toast.error(err.message || "Something went wrong");
       } finally {
         setLoading(false);
       }
     } else {
-      setError("Please fill in all required fields.");
+      toast.error("Please fill in all required fields.");
     }
   };
 
@@ -130,13 +117,9 @@ const AddAssignVehicle = () => {
     }
   };
 
-  // Filter vehicle list based on search term
-  const filteredVehicles = vehicleList.filter((vehicle) =>
-    vehicle.vehicleNumber.toLowerCase().includes(search.toLowerCase())
-  );
-
   return (
     <div className="flex min-h-screen">
+    <ToastContainer />
       {/* Sidebar Overlay for Mobile */}
       <div
         className={`fixed inset-0 bg-gray-800 bg-opacity-50 transition-opacity lg:hidden ${isSidebarOpen ? "block" : "hidden"}`}
@@ -164,7 +147,7 @@ const AddAssignVehicle = () => {
         </div>
 
         {/* Main Form Section */}
-        <div className="space-y-4">
+        <div className="max-w-3xl mx-auto mt-4 p-6 bg-gray-100 rounded-lg shadow-lg">
           {/* Vehicle Form */}
           <div>
             <label className="block text-sm text-gray-600 mb-1 mt-2">Vehicle Number *</label>
@@ -227,33 +210,10 @@ const AddAssignVehicle = () => {
 
           <button
             onClick={handleSaveVehicle}
-            className="w-full bg-purple-500 text-white p-2 rounded hover:bg-purple-600"
+            className="w-32 bg-purple-500 text-white p-2 rounded hover:bg-purple-600 float-right mt-8"
           >
             Save Vehicle
           </button>
-        </div>
-
-        {/* Right Side - Vehicle List */}
-        <div className="w-full lg:w-2/3">
-          <div className="flex justify-between items-center mb-4 mt-4">
-            <h2 className="text-lg text-gray-600">Vehicle List</h2>
-            <div className="flex gap-4 items-center">
-              <input
-                type="text"
-                placeholder="Search by Vehicle Number"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
-              />
-            </div>
-          </div>
-          <ul>
-            {filteredVehicles.map((vehicle) => (
-              <li key={vehicle.id} className="p-4 border-b">
-                {vehicle.vehicleNumber} - {vehicle.vehicleModel} ({vehicle.yearMade})
-              </li>
-            ))}
-          </ul>
         </div>
       </div>
     </div>

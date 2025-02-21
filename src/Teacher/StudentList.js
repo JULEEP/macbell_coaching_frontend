@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
 import TeacherSidebar from "./TeacherSidebar";
@@ -303,4 +302,3 @@ const TeacherStudentsPage = () => {
 };
 
 export default TeacherStudentsPage;
-

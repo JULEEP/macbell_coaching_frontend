@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from 'react';
 import TeacherSidebar from "./TeacherSidebar";
 import { FaBars, FaTimes } from 'react-icons/fa';
@@ -107,4 +105,3 @@ const TeacherHolidayPage = () => {
 };
 
 export default TeacherHolidayPage;
-

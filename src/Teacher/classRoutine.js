@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from "react";
 import axios from "axios"; // Import axios for making API calls
 import TeacherSidebar from "./TeacherSidebar";
@@ -174,4 +172,3 @@ const TeacherClassRoutinePage = () => {
 };
 
 export default TeacherClassRoutinePage;
-

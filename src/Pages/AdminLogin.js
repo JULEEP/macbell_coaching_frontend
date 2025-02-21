@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { FaWhatsapp } from 'react-icons/fa';
 import axios from 'axios';
+import { toast, ToastContainer } from 'react-toastify'; // Import Toastify
+import 'react-toastify/dist/ReactToastify.css'; // Import Toastify CSS
 
 const AdminLogin = () => {
   const [email, setEmail] = useState('');
@@ -21,11 +24,16 @@ const AdminLogin = () => {
         localStorage.setItem('refreshToken', refreshToken); // Store refresh token
         localStorage.setItem('adminId', _id); // Store adminId (from _id)
         localStorage.setItem('firstName', response.data.firstName); // Store admin's first name
-        navigate('/Admin-dashboard'); // Redirect to admin dashboard
+
+        toast.success('Login successful! Redirecting to dashboard...');
+        setTimeout(() => {
+          navigate('/Admin-dashboard'); // Redirect to admin dashboard
+        }, 2000); // Delay the redirect to show the toast
       }
     } catch (err) {
       // Handle error: Show error message if login fails
       setError('Invalid credentials or something went wrong.');
+      toast.error('Invalid credentials or something went wrong.');
       console.error('Login error:', err);
     }
   };
@@ -68,17 +76,18 @@ const AdminLogin = () => {
             </button>
           </form>
 
-         {/* Additional Button */}
-<div className="mt-4 w-3/4 mx-auto">
-<a
-href="https://wa.me/919111897177?text=Hi,%20I%20need%20help%20with%20Teacher%20Login%20credentials."
-target="_blank"
-  rel="noopener noreferrer"
-  className="block text-center bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition duration-200"
->
-  Ask for Login ID/Password
-</a>
-</div>
+          {/* Additional Button */}
+          <div className="mt-4 mx-auto w-full sm:w-3/4">
+            <a
+              href="https://wa.me/919424977848?text=Hi,%20I%20need%20help%20with%20Admin%20Login%20id/password."
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block text-center bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition duration-200"
+            >
+              <FaWhatsapp size={20} className="mr-2 inline" />
+              Ask for Login ID/Password
+            </a>
+          </div>
         </div>
 
         {/* Right Side: Image */}
@@ -90,6 +99,9 @@ target="_blank"
           />
         </div>
       </div>
+
+      {/* Toast Notifications */}
+      <ToastContainer />
     </div>
   );
 };

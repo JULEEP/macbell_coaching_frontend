@@ -3,9 +3,12 @@ import Sidebar from "./Sidebar";
 import { FaBars, FaTimes } from "react-icons/fa"; // Mobile sidebar toggle icons
 
 
-const StudentAdmission = () => {
+const AddStudentForm = () => {
   const [activeSection, setActiveSection] = useState("personalInfo");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false); // State to manage sidebar visibility
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupMessage, setPopupMessage] = useState('');
+
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -59,32 +62,38 @@ const StudentAdmission = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const formDataToSend = new FormData();
-    for (const key in formData) {
-      formDataToSend.append(key, formData[key]);
-    }
-
     try {
       const response = await fetch("https://school-backend-1-2xki.onrender.com/api/admin/add-student", {
         method: "POST",
-        body: formDataToSend,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
       });
 
+      const data = await response.json();
+      console.log("Response:", data);
+
       if (response.ok) {
-        const result = await response.json();
-        alert("Student added successfully!");
-        // Reset the form data after successful submission
+        alert("Student added successfully");
         setFormData({
+          academicYear: "",
+          studentClass: "",
+          section: "",
+          admissionNumber: "",
+          admissionDate: "",
+          roll: "",
+          group: "",
           firstName: "",
           lastName: "",
           gender: "",
-          dob: "2024-12-16",
+          dateOfBirth: "",
           religion: "",
           caste: "",
+          studentPhoto: "",
           email: "",
           phone: "",
           address: "",
-          studentPhoto: null,
           fatherName: "",
           motherName: "",
           guardianName: "",
@@ -103,16 +112,47 @@ const StudentAdmission = () => {
           customField1: "",
         });
       } else {
-        const error = await response.json();
-        alert("Error: " + error.error);
+        alert("Error: " + data.message);
       }
     } catch (error) {
-      alert("Error: " + error.error);
+      console.error("Error submitting form:", error);
+      alert("An error occurred");
     }
   };
-
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen); // Toggle sidebar visibility
+  };
+
+  const saveSection = () => {
+    // Logic to save the section data, you can handle API call or local storage here
+    console.log('Saving section:', activeSection, formData);
+     // Show the popup with success message
+     setPopupMessage("Congratulations! You have successfully saved this section. Move to the next to fill the next section.");
+     setShowPopup(true);
+ 
+     // Optionally, auto-close the popup after 3 seconds
+     setTimeout(() => {
+       setShowPopup(false);
+     }, 3000);
+  };
+
+  // Navigate to next section
+  const nextSection = () => {
+    // Update the active section to move to the next section
+    switch (activeSection) {
+      case "documentInfo":
+        setActiveSection("previousCoachingInfo");
+        break;
+      case "previousCoachingInfo":
+        setActiveSection("otherInfo");
+        break;
+      case "otherInfo":
+        setActiveSection("customField");
+        break;
+      default:
+        setActiveSection("documentInfo"); // Default fallback
+        break;
+    }
   };
 
   return (
@@ -140,6 +180,20 @@ const StudentAdmission = () => {
           </button>
         </div>
 
+         {/* Popup Modal */}
+      {showPopup && (
+        <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white p-6 rounded shadow-lg text-center">
+            <div className="flex justify-center mb-4">
+              <svg className="w-16 h-16 text-green-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <p className="text-lg text-gray-700">{popupMessage}</p>
+          </div>
+        </div>
+      )}
+
 
        {/* Buttons: Add Student & Import Student */}
 <div className="flex flex-wrap gap-4 mt-4">
@@ -163,9 +217,9 @@ const StudentAdmission = () => {
 </button>
 <button
   className="flex-grow bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded text-sm sm:text-base"
-  onClick={() => handleSectionClick("previousSchoolInfo")}
+  onClick={() => handleSectionClick("previousCoachingInfo")}
 >
-  Previous School Info
+  Previous Coaching Info
 </button>
 <button
   className="flex-grow bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded text-sm sm:text-base"
@@ -182,7 +236,7 @@ const StudentAdmission = () => {
 </div>
 
 
-      {/* Show only the selected section */}
+ {/* Show only the selected section */}
 {activeSection === "personalInfo" && (
   <div className="bg-white p-6 shadow-md rounded space-y-6 mt-4">
     <h2 className="text-lg text-gray-700 mb-4">Personal Info</h2>
@@ -297,8 +351,25 @@ const StudentAdmission = () => {
         />
       </div>
     </div>
+
+    {/* Save and Next buttons */}
+    <div className="flex justify-end space-x-4 mt-6">
+      <button
+        onClick={saveSection}
+        className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition duration-200"
+      >
+        Save
+      </button>
+      <button
+        onClick={nextSection}
+        className="bg-purple-600 text-white px-6 py-2 rounded hover:bg-green-700 transition duration-200"
+      >
+        Next
+      </button>
+    </div>
   </div>
 )}
+
 
 {activeSection === "parentsInfo" && (
   <div className="bg-white p-6 shadow-md rounded space-y-6 mt-4">
@@ -371,6 +442,22 @@ const StudentAdmission = () => {
         />
       </div>
     </div>
+
+    {/* Save and Next buttons */}
+    <div className="flex justify-end space-x-4 mt-6">
+      <button
+        onClick={saveSection}
+        className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition duration-200"
+      >
+        Save
+      </button>
+      <button
+        onClick={nextSection}
+        className="bg-purple-600 text-white px-6 py-2 rounded hover:bg-green-700 transition duration-200"
+      >
+        Next
+      </button>
+    </div>
   </div>
 )}
 
@@ -421,19 +508,35 @@ const StudentAdmission = () => {
         />
       </div>
     </div>
+
+ {/* Save and Next buttons */}
+ <div className="flex justify-end space-x-4 mt-6">
+ <button
+   onClick={saveSection}
+   className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition duration-200"
+ >
+   Save
+ </button>
+ <button
+   onClick={nextSection}
+   className="bg-purple-600 text-white px-6 py-2 rounded hover:bg-green-700 transition duration-200"
+   >
+   Next
+ </button>
+</div>
   </div>
 )}
 
-{activeSection === "previousSchoolInfo" && (
+{activeSection === "previousCoachingInfo" && (
   <div className="bg-white p-4 sm:p-6 shadow-md rounded space-y-6 mt-4">
-    <h2 className="text-lg text-gray-700 mb-4">Previous School Info</h2>
+    <h2 className="text-lg text-gray-700 mb-4">Previous Coaching Info</h2>
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
       <div>
-        <label className="block text-gray-700 text-sm sm:text-base">Previous School Name</label>
+        <label className="block text-gray-700 text-sm sm:text-base">Previous Coaching Name</label>
         <input
           type="text"
           className="w-full border border-gray-300 rounded p-2 text-sm sm:text-base"
-          name="previousSchoolName"
+          name="previousCoachingName"
           value={formData.previousSchoolName}
           onChange={handleChange}
           placeholder="Enter previous school name"
@@ -451,27 +554,43 @@ const StudentAdmission = () => {
         />
       </div>
       <div>
-        <label className="block text-gray-700 text-sm sm:text-base">School Address</label>
+        <label className="block text-gray-700 text-sm sm:text-base">Coaching Address</label>
         <input
           type="text"
           className="w-full border border-gray-300 rounded p-2 text-sm sm:text-base"
           name="schoolAddress"
           value={formData.schoolAddress}
           onChange={handleChange}
-          placeholder="Enter school address"
+          placeholder="Enter coaching address"
         />
       </div>
       <div>
-        <label className="block text-gray-700 text-sm sm:text-base">School Contact</label>
+        <label className="block text-gray-700 text-sm sm:text-base">Coaching Contact</label>
         <input
           type="text"
           className="w-full border border-gray-300 rounded p-2 text-sm sm:text-base"
           name="schoolContact"
           value={formData.schoolContact}
           onChange={handleChange}
-          placeholder="Enter school contact"
+          placeholder="Enter coaching contact"
         />
       </div>
+    </div>
+
+    {/* Save and Next buttons */}
+    <div className="flex justify-end space-x-4 mt-6">
+      <button
+        onClick={saveSection}
+        className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition duration-200"
+      >
+        Save
+      </button>
+      <button
+        onClick={nextSection}
+        className="bg-purple-600 text-white px-6 py-2 rounded hover:bg-green-700 transition duration-200"
+      >
+        Next
+      </button>
     </div>
   </div>
 )}
@@ -490,8 +609,25 @@ const StudentAdmission = () => {
         rows="4"
       />
     </div>
+
+    {/* Save and Next buttons */}
+    <div className="flex justify-end space-x-4 mt-6">
+      <button
+        onClick={saveSection}
+        className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition duration-200"
+      >
+        Save
+      </button>
+      <button
+        onClick={nextSection}
+        className="bg-purple-600 text-white px-6 py-2 rounded hover:bg-green-700 transition duration-200"
+      >
+        Next
+      </button>
+    </div>
   </div>
 )}
+
 
 {activeSection === "customField" && (
   <div className="bg-white p-4 sm:p-6 shadow-md rounded space-y-6 mt-4">
@@ -510,20 +646,21 @@ const StudentAdmission = () => {
   </div>
 )}
 
-{/* Submit Button: Only Show on the Last Section */}
-{(activeSection === "customField" || activeSection === "otherInfo") && (
+{/* Submit Button: Only Show on the Custom Field Section */}
+{activeSection === "customField" && (
   <div className="flex justify-center sm:justify-end mt-6">
     <button
       onClick={handleSubmit}
-      className="bg-purple-500 hover:bg-blue-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded text-sm sm:text-base"
+      className="bg-purple-500 hover:bg-blue-600 mr-2 text-white px-4 sm:px-6 py-2 sm:py-3 rounded text-sm sm:text-base"
     >
       Submit
     </button>
   </div>
 )}
+
       </div>
     </div>
   );
 };
 
-export default StudentAdmission;
+export default AddStudentForm;

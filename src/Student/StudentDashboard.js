@@ -22,7 +22,7 @@ import "intro.js/introjs.css"; // Intro.js CSS import
 // Importing images
 
 const book = "https://media1.tenor.com/images/107e39e6cccecb07771733a383291bd9/tenor.gif?itemid=12632259";
-
+const transport = "https://i.gifer.com/Wdf9.gif";
 const routine = 'https://www.bing.com/th/id/OGC.59346b4b5c80cc5cf0c483a27dfdcb36?pid=1.7&rurl=https%3a%2f%2fcdn.dribbble.com%2fusers%2f1129235%2fscreenshots%2f3344482%2fgif03.gif&ehk=681MYbrM%2fq597jBw5ssf54CgRSsfohettd%2fV%2fTKmT%2bs%3d';
 const result = 'https://www.bing.com/th/id/OGC.f536b251e81ef82960690777ee76d243?pid=1.7&rurl=https%3a%2f%2fi.pinimg.com%2foriginals%2f80%2f04%2fe7%2f8004e78d9a4d63d94f3cff837e27790c.gif&ehk=CismETbhBNRq0HUnf6OoZs2GFprNe%2fl7vs6XwOpk%2bTY%3d';
 const subject = 'https://media.baamboozle.com/uploads/images/398004/1652344734_36162_gif-url.gif';
@@ -33,7 +33,11 @@ const exam = 'https://cdn.dribbble.com/users/957210/screenshots/2475142/untitled
 const attendance = 'https://cdn.dribbble.com/users/1244169/screenshots/4494753/attendance_final.gif';
 const fee = 'https://cdn-icons-gif.flaticon.com/9908/9908553.gif';
 const holidays = 'https://media.tenor.com/KnM_tzEvCrQAAAAC/holiday-season.gif';
-const liveClass = 'https://cdn.dribbble.com/users/1681709/screenshots/4735856/gif.gif'
+const liveClass = 'https://cdn.dribbble.com/users/1681709/screenshots/4735856/gif.gif';
+const idCard = 'https://media.lordicon.com/icons/wired/lineal/734-id-business-card-1.gif';
+const lecture = 'https://cdn-icons-gif.flaticon.com/12525/12525332.gif'
+
+
 
 const bestCategories = [
   { img: subject, name: "Subjects", link: "/student-subject-details" },
@@ -48,6 +52,10 @@ const bestCategories = [
   { img: fee, name: "My Fees", link: "/student-fees" },
   { img: holidays, name: "Holidays", link: "/student-holidays" },
   { img: liveClass, name: "Live Class", link: "/live-class" },
+  { img: idCard, name: "My IdCard", link: "/studentcard" },
+  { img: lecture, name: "ClassLecture", link: "/student-lecture" },
+
+
 ];
 
 
@@ -86,10 +94,6 @@ const StudentDashboard = () => {
           intro: 'This is the classes table.',
         },
         {
-          element: '.intro-step-4',
-          intro: 'This is the transport routes table.',
-        },
-        {
           element: '.intro-step-5',
           intro: 'This is the fee summary table.',
         },
@@ -118,6 +122,40 @@ const StudentDashboard = () => {
 
 
   useEffect(() => {
+    const fetchTransportData = async () => {
+      try {
+        const response = await fetch("https://school-backend-1-2xki.onrender.com/api/admin/get-transport-route");
+        const data = await response.json();
+
+        // Log the full data to check its structure
+        console.log(data);
+
+        // Ensure 'data.routes' exists and is an array
+        if (data.routes && Array.isArray(data.routes)) {
+          // Get today's date in 'YYYY-MM-DD' format
+          const currentDate = new Date().toISOString().split('T')[0];
+          console.log("Current Date:", currentDate);
+
+          // Filter the transport data based on current date
+          const filteredRoutes = data.routes.filter(route => {
+            // Extract the date part from the route's date field
+            const routeDate = route.date.split('T')[0];
+            return routeDate === currentDate;
+          });
+
+          // Log the filtered routes to check if filtering is working
+          console.log("Filtered Routes:", filteredRoutes);
+
+          // Set the transport data state with filtered routes
+          setTransportData(filteredRoutes);
+        } else {
+          console.error("No routes data found or data is not in the expected format.");
+        }
+      } catch (error) {
+        console.error("Error fetching transport data:", error);
+      }
+    };
+
     const fetchFeeSummary = async () => {
       try {
         const response = await fetch("https://school-backend-1-2xki.onrender.com/api/students/fees-summary/676909bcd20deeaaeca9bc31");
@@ -324,7 +362,6 @@ const StudentDashboard = () => {
                 </Table>
               </TableContainer>
             </Box>
-
             {/* Fee Summary Section */}
             <Box className="intro-step-fee-summary" mt={5} style={{ backgroundColor: "#f0f8ff", padding: "20px", borderRadius: "10px" }}>
               <h3 style={{ marginBottom: "10px", fontWeight: "bold" }}>Fee Summary</h3>

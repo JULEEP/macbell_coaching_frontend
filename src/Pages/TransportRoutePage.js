@@ -1,46 +1,73 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Sidebar from "./Sidebar";
 import axios from "axios";
 import { FaBars, FaTimes } from "react-icons/fa"; // Sidebar toggle icons
+import { MdCheckCircle } from "react-icons/md"; // Success icon for the modal
 
 const TransportRoutePage = () => {
   const [routeTitle, setRouteTitle] = useState("");
-  const [fare, setFare] = useState("");
-  const [search, setSearch] = useState("");
-  const [routeList, setRouteList] = useState([]);
+  const [driverName, setDriverName] = useState("");
+  const [driverMobile, setDriverMobile] = useState("");
+  const [drivers, setDrivers] = useState([]); // Drivers list
+  const [stops, setStops] = useState([{ stopName: "", arrivalTime: "" }]);
+  const [date, setDate] = useState("");
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Sidebar state
+  const [isModalOpen, setIsModalOpen] = useState(false); // Modal state
+
+  // Fetch the list of drivers from the API
+  useEffect(() => {
+    const fetchDrivers = async () => {
+      try {
+        const response = await axios.get("https://school-backend-1-2xki.onrender.com/api/admin/drivers");
+        setDrivers(response.data); // Assuming the response contains a list of drivers
+      } catch (error) {
+        console.error("Error fetching drivers:", error);
+      }
+    };
+    fetchDrivers();
+  }, []);
+
+  // Handle adding a stop
+  const handleAddStop = () => {
+    setStops([...stops, { stopName: "", arrivalTime: "" }]);
+  };
+
+  // Handle remove stop
+  const handleRemoveStop = (index) => {
+    const updatedStops = stops.filter((_, i) => i !== index);
+    setStops(updatedStops);
+  };
 
   // Handle save route
   const handleSaveRoute = async () => {
-    if (routeTitle && fare) {
+    if (routeTitle && driverName && driverMobile && stops.length > 0 && date) {
       try {
         const response = await axios.post(
           "https://school-backend-1-2xki.onrender.com/api/admin/add-transport-route",
           {
             routeTitle,
-            fare,
+            driver: { name: driverName, mobileNumber: driverMobile },
+            stops,
+            date,
           }
         );
 
         if (response.status === 201) {
-          // If the route is successfully added, update the route list
-          setRouteList([...routeList, response.data.route]);
           setRouteTitle("");
-          setFare("");
+          setDriverName("");
+          setDriverMobile("");
+          setStops([{ stopName: "", arrivalTime: "" }]);
+          setDate("");
+          setIsModalOpen(true); // Show modal on success
         }
       } catch (error) {
         console.error("Error adding route:", error);
+        alert("Error adding route. Please try again.");
       }
     } else {
-      alert("Please provide both route title and fare.");
+      alert("Please fill all fields properly.");
     }
   };
-
-  // Filter routes based on search term
-  const filteredRoutes = routeList.filter((route) =>
-    route.routeTitle.toLowerCase().includes(search.toLowerCase())
-  );
-
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Sidebar state
 
   return (
     <div className="flex min-h-screen">
@@ -71,7 +98,6 @@ const TransportRoutePage = () => {
         </div>
 
         {/* Title */}
-
         <div className="flex flex-wrap gap-8 px-6">
           {/* Left Side - Add Route Form */}
           <div className="w-full sm:w-1/3 bg-gray-50 p-4 rounded shadow mt-4">
@@ -89,12 +115,95 @@ const TransportRoutePage = () => {
               </div>
 
               <div>
-                <label className="block text-sm text-gray-600 mb-1">Fare *</label>
+              <label className="block text-sm text-gray-600 mb-1">Driver Name *</label>
+              <select
+                value={driverName}
+                onChange={(e) => {
+                  const selectedDriver = drivers.find(driver => driver.name === e.target.value);
+                  setDriverName(e.target.value);
+                  setDriverMobile(selectedDriver ? selectedDriver.mobileNumber : "");
+                }}
+                className="w-full border border-gray-300 p-2 rounded"
+              >
+                <option value="">Select a driver</option>
+                {drivers.map((driver) => (
+                  <option key={driver.name} value={driver.name}>
+                    {driver.name} {/* Only show name here */}
+                  </option>
+                ))}
+              </select>
+            </div>
+            
+            <div>
+              <label className="block text-sm text-gray-600 mb-1">Driver Mobile Number *</label>
+              <input
+                type="text"
+                value={driverMobile}
+                readOnly
+                className="w-full border border-gray-300 p-2 rounded"
+              />
+            </div>
+            
+
+              <div>
+                <label className="block text-sm text-gray-600 mb-1">Stops *</label>
+                {stops.map((stop, index) => (
+                  <div key={index} className="flex gap-2">
+                    <input
+                      type="text"
+                      value={stop.stopName}
+                      onChange={(e) => {
+                        const newStops = [...stops];
+                        newStops[index].stopName = e.target.value;
+                        setStops(newStops);
+                      }}
+                      placeholder="Enter stop name"
+                      className="w-1/2 border border-gray-300 p-2 rounded"
+                    />
+                   {/* Arrival Time */}
+<div className="flex flex-col">
+<label htmlFor={`arrivalTime-${index}`} className="text-gray-600 mb-1">
+  Arrival Time
+</label>
+<input
+  type="time"
+  id={`arrivalTime-${index}`}
+  name="arrivalTime"
+  value={stop.arrivalTime}
+  onChange={(e) => {
+    const updatedStops = [...stops];
+    updatedStops[index].arrivalTime = e.target.value;
+    setStops(updatedStops);
+  }}
+  className="border border-gray-300 p-2 rounded"
+  required
+/>
+</div>
+
+                    {stops.length > 1 && (
+                      <button
+                        onClick={() => handleRemoveStop(index)}
+                        className="text-red-500"
+                      >
+                        Remove
+                      </button>
+                    )}
+                  </div>
+                ))}
+                <button
+                  onClick={handleAddStop}
+                  className="text-blue-500 text-sm"
+                >
+                  Add Stop
+                </button>
+              </div>
+
+              <div>
+                <label className="block text-sm text-gray-600 mb-1">Date *</label>
                 <input
-                  type="number"
-                  value={fare}
-                  onChange={(e) => setFare(e.target.value)}
-                  placeholder="Enter fare amount"
+                  type="date"
+                  value={date}
+                  onChange={(e) => setDate(e.target.value)}
                   className="w-full border border-gray-300 p-2 rounded"
                 />
               </div>
@@ -107,62 +216,35 @@ const TransportRoutePage = () => {
               </button>
             </div>
           </div>
-
-          {/* Right Side - Route List */}
-          <div className="w-full sm:w-2/3">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-lg text-gray-600">Route List</h2>
-              <input
-                type="text"
-                placeholder="Search"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="border border-gray-300 p-2 rounded w-full sm:w-1/3"
-              />
-            </div>
-
-            <div className="overflow-x-auto bg-white shadow-md p-4 rounded-md">
-              <table className="min-w-full table-auto border border-gray-200">
-                <thead className="bg-gray-200">
-                  <tr>
-                    <th className="px-4 py-2 text-left text-gray-600">SL</th>
-                    <th className="px-4 py-2 text-left text-gray-600">Route Title</th>
-                    <th className="px-4 py-2 text-left text-gray-600">Fare</th>
-                    <th className="px-4 py-2 text-left text-gray-600">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredRoutes.length === 0 ? (
-                    <tr>
-                      <td colSpan="4" className="text-center py-4 text-gray-500">
-                        No Data Available In Table
-                      </td>
-                    </tr>
-                  ) : (
-                    filteredRoutes.map((route, index) => (
-                      <tr key={route.id} className="border-t">
-                        <td className="px-4 py-2">{index + 1}</td>
-                        <td className="px-4 py-2">{route.routeTitle}</td>
-                        <td className="px-4 py-2">{route.fare}</td>
-                        <td className="px-4 py-2">
-                          <button className="text-red-500 hover:underline">
-                            Delete
-                          </button>
-                        </td>
-                      </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
-            </div>
-
-            {/* Footer */}
-            <div className="mt-4 text-gray-500 text-sm px-6">
-              Showing {filteredRoutes.length} entries
-            </div>
-          </div>
         </div>
       </div>
+
+      {/* Success Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+          <div className="bg-white p-6 rounded shadow-lg w-1/3">
+            <div className="flex items-center justify-between">
+              <h2 className="text-lg font-semibold">Success!</h2>
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="text-2xl text-gray-500"
+              >
+                <FaTimes />
+              </button>
+            </div>
+            <div className="flex items-center justify-center mt-4">
+              <MdCheckCircle className="text-green-500 text-4xl" />
+            </div>
+            <p className="text-center mt-4">You have created the route successfully!</p>
+            <button
+              onClick={() => setIsModalOpen(false)}
+              className="w-full bg-green-500 text-white p-2 rounded mt-4"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

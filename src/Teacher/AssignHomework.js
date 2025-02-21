@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
 import axios from "axios";
@@ -234,5 +233,3 @@ const AddHomeworkByTeacher = () => {
 };
 
 export default AddHomeworkByTeacher;
-
-

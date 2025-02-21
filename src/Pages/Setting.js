@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import axios from "axios"; // For making API requests
 import Sidebar from "./Sidebar";
 import { FaBars, FaTimes } from "react-icons/fa"; // For sidebar toggle icons
+import { toast, ToastContainer } from "react-toastify"; // Importing toast and ToastContainer
+import "react-toastify/dist/ReactToastify.css"; // Importing the toast styles
 
 const Setting = () => {
   const [schoolName, setSchoolName] = useState("");
@@ -56,9 +58,7 @@ const Setting = () => {
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
-      setSuccessMessage("School details updated successfully!");
-      setErrorMessage("");
-  
+      toast.success("School details updated successfully!"); // Success toast
       // Clear form fields after successful submission
       setSchoolName("");
       setAddress("");
@@ -67,11 +67,9 @@ const Setting = () => {
       setDescription("");
       setLogo(null);
       setSchoolImage(null);
-  
     } catch (error) {
       console.error("Error updating school details:", error);
-      setErrorMessage("Failed to update school details.");
-      setSuccessMessage("");
+      toast.error("Failed to update school details."); // Error toast
     } finally {
       setLoading(false);
     }
@@ -96,7 +94,7 @@ const Setting = () => {
       <div className={`flex-1 overflow-y-auto transition-all duration-300 ${isSidebarOpen ? "ml-64" : "ml-0"}`}>
         {/* Mobile Header */}
         <div className="flex items-center justify-between bg-purple-700 text-white p-4 shadow-lg lg:hidden">
-          <h1 className="text-lg font-bold">Settingss</h1>
+          <h1 className="text-lg font-bold">Coaching Details</h1>
           <button
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
             className="text-2xl focus:outline-none"
@@ -106,7 +104,6 @@ const Setting = () => {
         </div>
 
         {/* Title */}
-        <h1 className="text-2xl font-semibold text-gray-700 mb-6 p-4 lg:p-6">Coaching Details</h1>
 
         {/* Success/Error Message */}
         {successMessage && (
@@ -124,11 +121,11 @@ const Setting = () => {
               <label htmlFor="schoolName" className="block text-sm text-gray-600 mb-1">Coaching Name</label>
               <input
                 type="text"
-                id="coachingName"
+                id="schoolName"
                 value={schoolName}
                 onChange={(e) => setSchoolName(e.target.value)}
                 className="w-full border border-gray-300 p-2 rounded"
-                placeholder="Enter School Name"
+                placeholder="Enter Coaching Name"
                 required
               />
             </div>
@@ -182,7 +179,7 @@ const Setting = () => {
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 className="w-full border border-gray-300 p-2 rounded"
-                placeholder="Enter School Description"
+                placeholder="Enter Coaching Description"
                 required
               />
             </div>
@@ -213,7 +210,7 @@ const Setting = () => {
               <label htmlFor="schoolImage" className="block text-sm text-gray-600 mb-1">Upload Coaching Image</label>
               <input
                 type="file"
-                id="coachingImage"
+                id="schoolImage"
                 onChange={handleSchoolImageChange}
                 className="w-full mt-2 border-2 border-dashed border-gray-300 p-6 text-center rounded-md cursor-pointer"
                 accept="image/*"
@@ -242,6 +239,7 @@ const Setting = () => {
           </div>
         </form>
       </div>
+      <ToastContainer />
     </div>
   );
 };

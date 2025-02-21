@@ -1,33 +1,40 @@
 import React, { useState, useEffect } from 'react';
-import Sidebar from './Sidebar';  // Make sure you have Sidebar component
+import Sidebar from './Sidebar';
 import { FaBars, FaTimes } from 'react-icons/fa';
 
 const HolidayPage = () => {
-  const [fromDate, setFromDate] = useState('');
-  const [toDate, setToDate] = useState('');
-  const [holidayName, setHolidayName] = useState('');
-  const [holidayMessage, setHolidayMessage] = useState('');
-  const [holidays, setHolidays] = useState([]);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [holidays, setHolidays] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [holidaysPerPage] = useState(5);
 
-  // Function to handle adding a new holiday
-  const handleAddHoliday = (e) => {
-    e.preventDefault();
+  useEffect(() => {
+    const fetchHolidays = async () => {
+      try {
+        const response = await fetch('https://school-backend-1-2xki.onrender.com/api/admin/holidays');
+        if (!response.ok) {
+          throw new Error('Failed to fetch holidays');
+        }
+        const data = await response.json();
+        setHolidays(data.holidays);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchHolidays();
+  }, []);
 
-    if (holidayName && holidayMessage && fromDate && toDate) {
-      const newHoliday = { fromDate, toDate, holidayName, holidayMessage };
-      setHolidays((prevHolidays) => [...prevHolidays, newHoliday]);
+  // Get current holidays for the current page
+  const indexOfLastHoliday = currentPage * holidaysPerPage;
+  const indexOfFirstHoliday = indexOfLastHoliday - holidaysPerPage;
+  const currentHolidays = holidays.slice(indexOfFirstHoliday, indexOfLastHoliday);
 
-      // Reset form fields after adding
-      setFromDate('');
-      setToDate('');
-      setHolidayName('');
-      setHolidayMessage('');
-      alert('Holiday added successfully!');
-    } else {
-      alert('Please fill in all fields');
-    }
-  };
+  // Change page
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <div className="flex min-h-screen bg-gray-100">
@@ -48,7 +55,7 @@ const HolidayPage = () => {
       <div className={`flex-1 overflow-y-auto transition-all duration-300 ${isSidebarOpen ? 'ml-64' : 'ml-0'}`}>
         {/* Mobile Header */}
         <div className="flex items-center justify-between bg-purple-700 text-white p-4 shadow-lg lg:hidden">
-          <h1 className="text-lg font-bold">Holidays</h1>
+          <h1 className="text-lg font-bold">Holiday List</h1>
           <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="text-2xl focus:outline-none">
             {isSidebarOpen ? <FaTimes /> : <FaBars />}
           </button>
@@ -56,98 +63,54 @@ const HolidayPage = () => {
 
         {/* Page Content */}
         <div className="p-6">
-          <h1 className="text-xl font-bold text-center text-blue-600 mb-8">Add Holidays</h1>
-
-          {/* Form to add a new holiday */}
-          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-4xl">
-            <form onSubmit={handleAddHoliday}>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {/* From Date */}
-                <div className="mb-4">
-                  <label className="block text-lg font-medium mb-2">Holiday From Date</label>
-                  <input
-                    type="date"
-                    value={fromDate}
-                    onChange={(e) => setFromDate(e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  />
-                </div>
-
-                {/* To Date */}
-                <div className="mb-4">
-                  <label className="block text-lg font-medium mb-2">Holiday To Date</label>
-                  <input
-                    type="date"
-                    value={toDate}
-                    onChange={(e) => setToDate(e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  />
-                </div>
-
-                {/* Holiday Name */}
-                <div className="w-full max-w-4xl mr-4">
-                <label className="block text-lg font-medium mb-2">Holiday Name</label>
-                  <input
-                    type="text"
-                    value={holidayName}
-                    onChange={(e) => setHolidayName(e.target.value)}
-                    placeholder="Enter holiday name"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  />
-                </div>
-
-                {/* Holiday Message */}
-                <div className="mb-4">
-                  <label className="block text-lg font-medium mb-2">Holiday Message</label>
-                  <textarea
-                    value={holidayMessage}
-                    onChange={(e) => setHolidayMessage(e.target.value)}
-                    placeholder="Enter holiday message"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  />
-                </div>
-              </div>
-
-              <div className="flex justify-end mt-6">
-                <button
-                  type="submit"
-                  className="px-6 py-2 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 transition duration-300"
-                >
-                  Add Holiday
-                </button>
-              </div>
-            </form>
-          </div>
-
-          {/* Holiday List Table */}
-          <div className="mt-8">
-            <h2 className="text-xl font-bold text-center text-blue-600 mb-4">Holiday List</h2>
-            <table className="min-w-full bg-white shadow-md rounded-lg">
-              <thead>
-                <tr className="bg-purple-500 text-white">
-                  <th className="px-6 py-3 text-left">Holiday Name</th>
-                  <th className="px-6 py-3 text-left">From Date</th>
-                  <th className="px-6 py-3 text-left">To Date</th>
-                  <th className="px-6 py-3 text-left">Message</th>
-                </tr>
-              </thead>
-              <tbody>
-                {holidays.length === 0 ? (
-                  <tr>
-                    <td colSpan="4" className="text-center p-4">No holidays added</td>
+          <h1 className="text-xl font-bold text-center text-blue-600 mb-8">Holiday List</h1>
+          {loading ? (
+            <p className="text-center">Loading holidays...</p>
+          ) : error ? (
+            <p className="text-center text-red-500">{error}</p>
+          ) : (
+            <div className="overflow-x-auto shadow-md rounded-lg">
+              <table className="min-w-full bg-white">
+                <thead>
+                  <tr className="bg-purple-500 text-white">
+                    <th className="px-6 py-3 text-left">Holiday Name</th>
+                    <th className="px-6 py-3 text-left">From Date</th>
+                    <th className="px-6 py-3 text-left">To Date</th>
+                    <th className="px-6 py-3 text-left">Message</th>
+                    <th className="px-6 py-3 text-left">Created At</th>
                   </tr>
-                ) : (
-                  holidays.map((holiday, index) => (
-                    <tr key={index} className="border-t">
+                </thead>
+                <tbody>
+                  {currentHolidays.map((holiday) => (
+                    <tr key={holiday._id} className="border-t">
                       <td className="px-6 py-4">{holiday.holidayName}</td>
-                      <td className="px-6 py-4">{holiday.fromDate}</td>
-                      <td className="px-6 py-4">{holiday.toDate}</td>
+                      <td className="px-6 py-4">{new Date(holiday.fromDate).toLocaleDateString()}</td>
+                      <td className="px-6 py-4">{new Date(holiday.toDate).toLocaleDateString()}</td>
                       <td className="px-6 py-4">{holiday.holidayMessage}</td>
+                      <td className="px-6 py-4">{new Date(holiday.createdAt).toLocaleDateString()}</td>
                     </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          {/* Pagination */}
+          <div className="mt-4 flex justify-center">
+            <button
+              className="px-4 py-2 bg-purple-500 text-white rounded-l"
+              onClick={() => paginate(currentPage - 1)}
+              disabled={currentPage === 1}
+            >
+              Prev
+            </button>
+            <button
+              className="px-4 py-2 bg-purple-500 text-white"
+              onClick={() => paginate(currentPage + 1)}
+              disabled={currentPage * holidaysPerPage >= holidays.length}
+            >
+              Next
+            </button>
           </div>
         </div>
       </div>

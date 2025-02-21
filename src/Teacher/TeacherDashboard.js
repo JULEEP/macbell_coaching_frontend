@@ -1,6 +1,3 @@
-
-import introJs from 'intro.js';
-import 'intro.js/introjs.css';
 import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { GoDotFill } from "react-icons/go";
@@ -13,7 +10,8 @@ import {
   FaTimes,
   FaQuestionCircle,
   FaCalendarAlt,
-  FaLaptopCode
+  FaLaptopCode,
+  FaBusAlt
 } from "react-icons/fa";
 import { motion } from "framer-motion";
 import TeacherSidebar from "./TeacherSidebar";
@@ -26,6 +24,21 @@ const TeacherDashboard = () => {
   const [transportData, setTransportData] = useState([]);
 
   useEffect(() => {
+    // Fetch transport data and initialize IntroJs steps
+    const fetchTransportData = async () => {
+      try {
+        const response = await fetch("https://school-backend-1-2xki.onrender.com/api/admin/get-transport-route");
+        const data = await response.json();
+        const currentDate = new Date().toISOString().split('T')[0];
+        const filteredRoutes = data.routes.filter(route => route.date.split('T')[0] === currentDate);
+        setTransportData(filteredRoutes);
+      } catch (error) {
+        console.error("Error fetching transport data:", error);
+      }
+    };
+
+    fetchTransportData();
+
     const steps = [
       { title: "Total Students", element: ".category-box-0", intro: "This is the Total Students section." },
       { title: "Total Homework", element: ".category-box-1", intro: "This is the Total Homework section." },
@@ -38,7 +51,6 @@ const TeacherDashboard = () => {
       { title: "Total Feedback", element: ".category-box-8", intro: "This is the Total Feedback section." },
       { title: "Total Queries", element: ".category-box-9", intro: "This is the Total Queries section." },
       { title: "Total Holidays", element: ".category-box-10", intro: "This is the Total Holidays section." },
-      { title: "Teacher Transport", element: ".category-box-11", intro: "This is the Teacher Transport section." },
     ];
 
     const intro = IntroJs();
@@ -51,11 +63,6 @@ const TeacherDashboard = () => {
           position: "top"
         },
         {
-          element: ".intro-step-transport", // Highlight the Transport Routes Table
-          intro: "This section shows the transport routes, drivers, and stops for today.",
-          position: "top"
-        },
-        {
           element: ".intro-step-grades", // Highlight the Student Grades Table
           intro: "This section shows the student grades, subject, and their status.",
           position: "top"
@@ -65,8 +72,6 @@ const TeacherDashboard = () => {
       nextLabel: "Next",
       prevLabel: "Previous",
       overlayOpacity: 0.8,
-      showStepNumbers: true,
-      disableInteraction: true,
     });
 
     intro.onbeforechange(() => {
@@ -89,33 +94,30 @@ const TeacherDashboard = () => {
   };
 
   return (
-    <div className="flex min-h-screen">
-      {/* Sidebar */}
-      <div
-        className={`fixed top-0 left-0 h-full z-20 bg-white shadow-lg transition-transform transform ${
-          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } lg:translate-x-0 lg:static lg:shadow-none w-64`}
-      >
-        <TeacherSidebar />
+    <div className="min-h-screen flex bg-gray-100">
+    {/* Sidebar Overlay */}
+    <div
+      className={`fixed inset-0 bg-gray-800 bg-opacity-50 transition-opacity lg:hidden ${isSidebarOpen ? "block" : "hidden"}`}
+      onClick={toggleSidebar}
+    ></div>
+  
+    {/* Sidebar */}
+    <div
+      className={`fixed inset-y-0 left-0 bg-white shadow-lg transform lg:transform-none lg:relative w-64 transition-transform duration-300 ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}`}
+    >
+      <TeacherSidebar />
+    </div>
+  
+    {/* Main Content */}
+    <div className={`flex-grow overflow-y-auto transition-all duration-300 ${isSidebarOpen ? "ml-64" : "ml-0"} h-screen`}>
+      {/* Mobile Header */}
+      <div className="flex items-center justify-between bg-purple-700 text-white p-4 shadow-lg lg:hidden">
+        <h1 className="text-lg font-bold">Teacher Dashboard</h1>
+        <button onClick={toggleSidebar} className="text-2xl focus:outline-none">
+          {isSidebarOpen ? <FaTimes /> : <FaBars />}
+        </button>
       </div>
 
-      {/* Overlay for small screens */}
-      {isSidebarOpen && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-10 lg:hidden"
-          onClick={toggleSidebar}
-        ></div>
-      )}
-
-      {/* Main Content */}
-      <div className="flex-grow overflow-y-auto lg:ml-64">
-        {/* Header */}
-        <div className="flex items-center justify-between bg-purple-700 text-white p-4 shadow-lg lg:hidden">
-          <h1 className="text-lg font-bold">Teacher Board</h1>
-          <button onClick={toggleSidebar} className="text-2xl focus:outline-none">
-            {isSidebarOpen ? <FaTimes /> : <FaBars />}
-          </button>
-        </div>
 
         {/* Title */}
         <div className="p-4 sm:p-6 bg-gray-100 flex-1">
@@ -126,17 +128,19 @@ const TeacherDashboard = () => {
 
           {/* Statistics Grid */}
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 mb-6">
-            {[{ title: "Total Students", value: "120", icon: <FaUserGraduate className="text-3xl" />, link: "/teacher-students" },
-              { title: "Total Homework", value: "45", icon: <FaTasks className="text-3xl" />, link: "/teacher-homeworklist" },
-              { title: "Total Attendance", value: "98%", icon: <FaClipboardList className="text-3xl" />, link: "/teacher-attendance" },
-              { title: "Total Leave", value: "12", icon: <FaPlaneDeparture className="text-3xl" />, link: "/teacher-leave" },
-              { title: "Total Subjects", value: "6", icon: <FaClipboardList className="text-3xl" />, link: "/teacher-subjects" },
-              { title: "Total Projects", value: "5", icon: <FaTasks className="text-3xl" />, link: "/teacher-coming-soon" },
-              { title: "Total Meetings", value: "15", icon: <FaPlaneDeparture className="text-3xl" />, link: "/teacher-coming-soon" },
-              { title: "Total Reports", value: "22", icon: <FaTasks className="text-3xl" />, link: "/teacher-coming-soon" },
-              { title: "Total Feedback", value: "30", icon: <FaClipboardList className="text-3xl" />, link: "/teacher-coming-soon" },
-              { title: "Total Queries", value: "50", icon: <FaQuestionCircle className="text-3xl" />, link: "/teacher-queries" },
-              { title: "Total Holidays", value: "5", icon: <FaCalendarAlt className="text-3xl" />, link: "/teacher-holidays" },
+            {[{ title: "Total Students", value: "0", icon: <FaUserGraduate className="text-3xl" />, link: "/teacher-students" },
+              { title: "Total Homework", value: "0", icon: <FaTasks className="text-3xl" />, link: "/teacher-homeworklist" },
+              { title: "Total Attendance", value: "0", icon: <FaClipboardList className="text-3xl" />, link: "/teacher-attendance" },
+              { title: "Total Leave", value: "0", icon: <FaPlaneDeparture className="text-3xl" />, link: "/teacher-leave" },
+              { title: "Total Subjects", value: "0", icon: <FaClipboardList className="text-3xl" />, link: "/teacher-subjects" },
+              { title: "Total Projects", value: "0", icon: <FaTasks className="text-3xl" />, link: "/teacher-coming-soon" },
+              { title: "Total Meetings", value: "0", icon: <FaPlaneDeparture className="text-3xl" />, link: "/teacher-coming-soon" },
+              { title: "Total Reports", value: "0", icon: <FaTasks className="text-3xl" />, link: "/teacher-coming-soon" },
+              { title: "Total Feedback", value: "0", icon: <FaClipboardList className="text-3xl" />, link: "/teacher-coming-soon" },
+              { title: "Total Queries", value: "0", icon: <FaQuestionCircle className="text-3xl" />, link: "/teacher-queries" },
+              { title: "Total Holidays", value: "0", icon: <FaCalendarAlt className="text-3xl" />, link: "/teacher-holidays" },
+              { title: "Live Classes", value: "0", icon: <FaLaptopCode className="text-3xl" />, link: "/generateid" },
+
 
 
             ].map((item, index) => (

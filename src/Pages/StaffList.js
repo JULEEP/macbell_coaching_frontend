@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Sidebar from "./Sidebar";
 import { FaBars, FaTimes } from "react-icons/fa";
+import { toast, ToastContainer } from "react-toastify"; // Importing toast and ToastContainer
+import "react-toastify/dist/ReactToastify.css"; // Importing the toast styles
 
 const StaffList = () => {
   const [staffList, setStaffList] = useState([]);
@@ -19,7 +21,7 @@ const StaffList = () => {
         setStaffList(response.data.staff || []);
       } catch (error) {
         console.error("Error fetching staff:", error);
-        alert("Error fetching staff. Please try again.");
+        toast.error("Error fetching staff. Please try again."); // Error toast
       } finally {
         setLoading(false);
       }
@@ -79,53 +81,56 @@ const StaffList = () => {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+
+    toast.success("CSV Exported Successfully!"); // Success toast
   };
 
   return (
     <div className="min-h-screen flex bg-gray-100">
-      {/* Sidebar Overlay */}
-      <div
-        className={`fixed inset-0 bg-gray-800 bg-opacity-50 transition-opacity lg:hidden ${
-          isSidebarOpen ? "block" : "hidden"
-        }`}
-        onClick={toggleSidebar}
-      ></div>
-
-      {/* Sidebar */}
-      <div
-        className={`fixed inset-y-0 left-0 bg-white shadow-lg transform lg:transform-none lg:relative w-64 transition-transform duration-300 ${
-          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
-      >
-        <Sidebar />
+    {/* Sidebar Overlay */}
+    <div
+      className={`fixed inset-0 bg-gray-800 bg-opacity-50 transition-opacity lg:hidden ${isSidebarOpen ? "block" : "hidden"}`}
+      onClick={toggleSidebar}
+    ></div>
+  
+    {/* Sidebar */}
+    <div
+      className={`fixed inset-y-0 left-0 bg-white shadow-lg transform lg:transform-none lg:relative w-64 transition-transform duration-300 ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}`}
+    >
+      <Sidebar />
+    </div>
+  
+    {/* Main Content */}
+    <div className={`flex-grow overflow-y-auto transition-all duration-300 ${isSidebarOpen ? "ml-64" : "ml-0"} h-screen`}>
+      {/* Mobile Header */}
+      <div className="flex items-center justify-between bg-purple-700 text-white p-4 shadow-lg lg:hidden">
+        <h1 className="text-lg font-bold">Staff List</h1>
+        <button onClick={toggleSidebar} className="text-2xl focus:outline-none">
+          {isSidebarOpen ? <FaTimes /> : <FaBars />}
+        </button>
       </div>
-
-      {/* Main Content */}
-      <div
-        className={`flex-grow overflow-y-auto transition-all duration-300 ${
-          isSidebarOpen ? "ml-64" : "ml-0"
-        }`}
-      >
-        {/* Mobile View: Header and Sidebar Toggle Icon */}
-        <div className="flex items-center justify-between bg-purple-700 text-white p-4 shadow-lg lg:hidden">
-          <h1 className="text-lg font-bold">Staff List</h1>
-          <button
-            onClick={toggleSidebar}
-            className="text-2xl focus:outline-none"
-          >
-            {isSidebarOpen ? <FaTimes /> : <FaBars />}
-          </button>
-        </div>
-
         {/* Search and Export */}
         <div className="mb-6 flex justify-between items-center">
+          {/* Search Filter */}
+          <div className="w-full sm:w-1/2 md:w-1/3 mt-2">
+            <input
+              type="text"
+              placeholder="Search by Name or Email"
+              className="ml-4 px-4 py-2 bg-white border rounded-md w-70"
+              value={searchTerm}
+              onChange={handleSearch}
+            />
+          </div>
 
-          <button
-            onClick={exportToCSV}
-            className="ml-4 px-4 py-2 bg-purple-600 mt-4 text-white rounded-md hover:bg-purple-700"
-          >
-            Export CSV
-          </button>
+          {/* Export Button */}
+          <div className="w-full sm:w-1/3 md:w-1/4 mr-8">
+            <button
+              onClick={exportToCSV}
+              className="ml-4 px-4 py-2 mt-4 bg-purple-600 text-white rounded-md hover:bg-purple-700 w-full"
+            >
+              Export CSV
+            </button>
+          </div>
         </div>
 
         {/* Staff Table */}
@@ -184,6 +189,9 @@ const StaffList = () => {
           </table>
         </div>
       </div>
+
+      {/* ToastContainer to display toasts */}
+      <ToastContainer />
     </div>
   );
 };

@@ -13,7 +13,7 @@ const LiveClass = () => {
       setLoading(true);
       setError("");
       try {
-        const response = await fetch("https://school-backend-1-2xki.onrender.com/api/students/my-meetings/67a48cb67d7494c75f3c59ec");
+        const response = await fetch("https://school-backend-1-2xki.onrender.com/api/students/my-meetings/677904859d0da6e3bee4ba2e");
         const data = await response.json();
         setLiveClasses(
           data.meetings.map(meeting => ({

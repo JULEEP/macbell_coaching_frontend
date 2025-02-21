@@ -37,9 +37,10 @@ const ClassRoutineCreate = () => {
         setSubjects(subjectResponse.data.subjectNames || []);
 
         // Fetching teacher data
-        const teacherResponse = await axios.get('https://school-backend-1-2xki.onrender.com/api/admin/get-teacher');
-        const teacherData = teacherResponse.data.data.map((teacher) => teacher.teacher);
+        const teacherResponse = await axios.get('https://school-backend-1-2xki.onrender.com/api/admin/teachers');
+        const teacherData = teacherResponse.data.map((teacher) => teacher.name);
         setTeachers(teacherData || []);
+
 
         setIsDataLoaded(true);
       } catch (error) {
@@ -52,12 +53,15 @@ const ClassRoutineCreate = () => {
   }, []);
 
   const handleClassChange = (e) => {
-    setSelectedClass(e.target.value);
+    const selected = classes.find(cls => cls._id === e.target.value);
+    setSelectedClass(selected ? selected.className : '');
   };
-
+  
   const handleSectionChange = (e) => {
-    setSelectedSection(e.target.value);
+    const selected = sections.find(sec => sec._id === e.target.value);
+    setSelectedSection(selected ? selected.name : '');
   };
+  
 
   const handleRoutineChange = (index, e) => {
     const { name, value } = e.target;
@@ -146,30 +150,33 @@ const ClassRoutineCreate = () => {
     }
   };
 
+  const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
+
+
   return (
-    <div className="flex min-h-screen bg-gray-100">
-      {/* Sidebar Overlay */}
-      <div
-        className={`fixed inset-0 bg-gray-800 bg-opacity-50 transition-opacity lg:hidden ${isSidebarOpen ? 'block' : 'hidden'}`}
-        onClick={() => setIsSidebarOpen(false)}
-      ></div>
-
-      {/* Sidebar */}
-      <div
-        className={`fixed inset-y-0 left-0 bg-white shadow-lg transform lg:transform-none lg:relative w-64 transition-transform duration-300 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}
-      >
-        <Sidebar />
+    <div className="min-h-screen flex bg-gray-100">
+    {/* Sidebar Overlay */}
+    <div
+      className={`fixed inset-0 bg-gray-800 bg-opacity-50 transition-opacity lg:hidden ${isSidebarOpen ? "block" : "hidden"}`}
+      onClick={toggleSidebar}
+    ></div>
+  
+    {/* Sidebar */}
+    <div
+      className={`fixed inset-y-0 left-0 bg-white shadow-lg transform lg:transform-none lg:relative w-64 transition-transform duration-300 ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}`}
+    >
+      <Sidebar />
+    </div>
+  
+    {/* Main Content */}
+    <div className={`flex-grow overflow-y-auto transition-all duration-300 ${isSidebarOpen ? "ml-64" : "ml-0"} h-screen`}>
+      {/* Mobile Header */}
+      <div className="flex items-center justify-between bg-purple-700 text-white p-4 shadow-lg lg:hidden">
+        <h1 className="text-lg font-bold">Studnet Class Routine</h1>
+        <button onClick={toggleSidebar} className="text-2xl focus:outline-none">
+          {isSidebarOpen ? <FaTimes /> : <FaBars />}
+        </button>
       </div>
-
-      {/* Main Content */}
-      <div className={`flex-1 overflow-y-auto transition-all duration-300 ${isSidebarOpen ? 'ml-64' : 'ml-0'}`}>
-        {/* Mobile Header */}
-        <div className="flex items-center justify-between bg-purple-700 text-white p-4 shadow-lg lg:hidden">
-          <h1 className="text-lg font-bold">Class Routine Create</h1>
-          <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="text-2xl focus:outline-none">
-            {isSidebarOpen ? <FaTimes /> : <FaBars />}
-          </button>
-        </div>
 
         <div className="max-w-6xl mx-auto">
           {/* Form Section */}
@@ -192,7 +199,7 @@ const ClassRoutineCreate = () => {
                   >
                     <option value="">Select Class</option>
                     {classes.map((cls, idx) => (
-                      <option key={idx} value={cls._id}>{cls.className}</option> 
+                      <option key={idx} value={cls._id}>{cls.className}</option>
                     ))}
                   </select>
                 </div>
@@ -210,7 +217,7 @@ const ClassRoutineCreate = () => {
                   >
                     <option value="">Select Section</option>
                     {sections.map((section, idx) => (
-                      <option key={idx} value={section._id}>{section.name}</option> 
+                      <option key={idx} value={section._id}>{section.name}</option>
                     ))}
                   </select>
                 </div>
@@ -248,8 +255,8 @@ const ClassRoutineCreate = () => {
                         required
                       >
                         <option value="">Select Time</option>
-                        {[ 
-                          "09:00 AM - 09:45 AM", "10:00 AM - 10:45 AM", "11:00 AM - 11:45 AM", 
+                        {[
+                          "09:00 AM - 09:45 AM", "10:00 AM - 10:45 AM", "11:00 AM - 11:45 AM",
                           "12:00 PM - 12:45 PM", "01:00 PM - 01:45 PM", "02:00 PM - 02:45 PM"
                         ].map((time, idx) => (
                           <option key={idx} value={time}>{time}</option>
@@ -325,44 +332,6 @@ const ClassRoutineCreate = () => {
                 </button>
               </div>
             </div>
-          </div>
-
-          {/* Routine List Section */}
-          <div className="bg-white p-6 rounded-lg shadow-md mt-8">
-            <h2 className="text-lg text-gray-700 mb-4">Existing Routines</h2>
-            <table className="min-w-full table-auto">
-              <thead>
-                <tr className="bg-gray-100">
-                  <th className="px-4 py-2 text-gray-600">Class</th>
-                  <th className="px-4 py-2 text-gray-600">Section</th>
-                  <th className="px-4 py-2 text-gray-600">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {routines.length === 0 ? (
-                  <tr>
-                    <td colSpan="3" className="text-center text-gray-500">
-                      No Routine Available
-                    </td>
-                  </tr>
-                ) : (
-                  routines.map((routine, index) => (
-                    <tr key={index} className="border-t border-gray-300">
-                      <td className="px-4 py-2 text-gray-600 text-center">{routine.class}</td>
-                      <td className="px-4 py-2 text-gray-600 text-center">{routine.section}</td>
-                      <td className="px-4 py-2 text-center">
-                        <button
-                          onClick={() => handleRemoveRoutine(routine._id)} // Pass routine ID to remove
-                          className="text-red-600 hover:text-red-800"
-                        >
-                          Remove
-                        </button>
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
           </div>
         </div>
       </div>
